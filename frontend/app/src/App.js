@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import styled from "styled-components";
 
+import { initializePosts } from "./reducers/postsReducer";
+
 import PostList from "./components/PostList";
+import PostView from "./components/PostView";
 
 import postService from "./services/posts";
 
@@ -31,22 +36,33 @@ const Branding = styled.h1`
 `;
 
 const App = () => {
-  const [posts, setPosts] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(async () => {
-    const posts = await postService.getAll();
-    setPosts(posts);
+    dispatch(initializePosts());
   }, []);
 
   return (
-    <Body>
-      <div className="App">
-        <Wrapper>
-          <Branding>Hello! ^_^</Branding>
-          <PostList posts={posts} />
-        </Wrapper>
-      </div>
-    </Body>
+    <Router>
+      <Body>
+        <div className="App">
+          <Wrapper>
+            <Link to="/">
+              <Branding>Hello! ^_^</Branding>
+            </Link>
+
+            <Switch>
+              <Route exact path="/">
+                <PostList />
+              </Route>
+              <Route path="/groups/:group/:id">
+                <PostView />
+              </Route>
+            </Switch>
+          </Wrapper>
+        </div>
+      </Body>
+    </Router>
   );
 };
 
