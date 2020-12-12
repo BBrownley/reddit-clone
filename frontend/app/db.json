@@ -1,0 +1,54 @@
+{
+  "posts": [
+    {
+      "title": "Handmade Frozen Shoes",
+      "author": "Alford Rutherford",
+      "content": "Necessitatibus at est nobis ut ab dicta quibusdam optio doloremque. Culpa nobis sunt cum voluptas laudantium ea. Dolorem repellat nihil amet ut corrupti aut. Beatae iure et tempora facere. Inventore dolore quas culpa. Numquam aperiam dolores. Explicabo ut sunt quaerat. Recusandae cum vero placeat ipsa et. Doloribus vel molestiae harum. Et minus laborum enim illum qui facilis. Sunt a recusandae excepturi sit. Iusto pariatur ipsa quia eius illum quo nesciunt sit quos.",
+      "votes": 12,
+      "followers": 3,
+      "comments": [],
+      "group": "general",
+      "id": 1
+    },
+    {
+      "title": "Handmade Frozen Shoes",
+      "author": "Darrin O'Hara",
+      "content": "Dolorem quidem quia nobis sit aliquid alias. Tenetur et quis quidem incidunt nulla est nihil dignissimos sapiente. Et dolorem eos quo accusantium sed praesentium facere. Sapiente consequatur nesciunt. In et fugiat ab et omnis. Id iste eum laudantium corrupti aut. Quos eos omnis exercitationem ex laboriosam sequi incidunt totam nulla. Est dolor nihil et veritatis dolores ut. Sequi laboriosam tempore iste. Ut unde et quasi. Odit et occaecati beatae.",
+      "votes": 3,
+      "followers": 2,
+      "comments": ["wasuuppp"],
+      "group": "general",
+      "id": 2
+    },
+    {
+      "title": "This is my app",
+      "author": "Sallie Abernathy DVM",
+      "content": "Repellat ratione est in. Provident doloremque perspiciatis fugiat nemo libero architecto et. Occaecati enim magnam illum consequuntur illum repudiandae odit reiciendis. Sed ut libero laudantium odio. Nostrum hic ipsam. Voluptate praesentium mollitia sit eum dolor earum commodi nam. Laborum corrupti magnam ut ut ut fugiat qui autem. Laborum voluptatem culpa et. Quo tempore omnis repellat exercitationem amet illum dolorem mollitia. Et optio iusto. Quae maxime ipsa debitis minima numquam quae nostrum illum. Saepe et dolores. Cum nemo libero quas molestias iure.",
+      "votes": 7,
+      "followers": 9,
+      "comments": [],
+      "group": "sports",
+      "id": 3
+    },
+    {
+      "title": "This is my app",
+      "author": "Art Russel",
+      "content": "Commodi praesentium expedita et neque dicta. Rerum voluptas illo est. Officia laboriosam molestiae incidunt laudantium suscipit in quidem quo. Ullam delectus incidunt ratione ipsum magnam sed magnam animi. Sint sequi aut excepturi placeat quo aperiam sequi. Pariatur necessitatibus sunt officia officia. Porro maiores vel. Accusamus fugit aliquid fugit sit dolores repudiandae. Blanditiis cumque enim ea. Ut provident dolores. Necessitatibus voluptatem vero. Maxime similique dolores numquam nemo asperiores nesciunt eum omnis. Fuga quia quibusdam perferendis magnam maiores non quia nam cupiditate. Itaque vel ut tempora id sed molestiae cum tempore. Quo doloribus a natus velit perspiciatis ut enim reiciendis rerum. Itaque quis consequatur sint quo illo.",
+      "votes": 2,
+      "followers": 12,
+      "comments": [],
+      "group": "general",
+      "id": 4
+    },
+    {
+      "title": "This is my app",
+      "author": "Matt D'Amore Sr.",
+      "content": "Et dolorem sit sed dignissimos. Quis velit repellendus et. Eveniet enim neque. Officiis in soluta aspernatur aperiam doloribus natus sit sed. Consequuntur vero numquam iusto praesentium dolores molestiae. Fugiat deleniti vel ad sit cum. Asperiores autem quisquam qui quod nisi. Iusto quo repudiandae placeat quos. Sequi expedita minima saepe quia fugiat quo et voluptas non. Corporis perferendis voluptas sequi repellendus nobis ipsam nulla. Necessitatibus maiores consequatur et corporis voluptate tempora doloribus excepturi est. Nam temporibus aut blanditiis nisi esse non.",
+      "votes": 1,
+      "followers": 7,
+      "comments": [],
+      "group": "gaming",
+      "id": 5
+    }
+  ]
+}
