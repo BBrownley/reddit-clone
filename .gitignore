@@ -1,1 +1,6 @@
 notes
+frontend/app/.eslintcache
+node_modules
+server/.env
+server/node_modules
+.eslintcache

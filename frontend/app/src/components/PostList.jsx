@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
 
 import { useSelector } from "react-redux";
@@ -92,9 +92,19 @@ const PostOptions = styled.div`
 `;
 
 const PostList = () => {
-  const posts = useSelector(state => state.posts);
+  const match = useRouteMatch("/groups/:group");
 
-  return posts.map(post => (
+  const postsToDisplay = useSelector(state => {
+    if (match.params.group === "all") {
+      return state.posts;
+    } else {
+      return state.posts.filter(post => {
+        return post.group === match.params.group;
+      });
+    }
+  });
+
+  return postsToDisplay.map(post => (
     <Post>
       <VoteContainer>
         <FontAwesome name="plus-square" className="upvote" />
@@ -109,7 +119,9 @@ const PostList = () => {
           posted <FontAwesome name="history" className="fa-history" /> 10 hours
           ago in{" "}
           <a href="#">
-            <strong>{post.group}</strong>
+            <Link to={`/groups/${post.group}`}>
+              <strong>{post.group}</strong>
+            </Link>
           </a>{" "}
           by{" "}
           <a href="#">

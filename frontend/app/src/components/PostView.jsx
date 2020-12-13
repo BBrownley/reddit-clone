@@ -30,7 +30,7 @@ const PostMain = styled.div`
 const Title = styled.div`
   color: #222;
   font-weight: bold;
-  font-size: 24px;
+  font-size: 1.5rem;
   display: inline-block;
   &:hover {
     cursor: pointer;
@@ -41,7 +41,7 @@ const Title = styled.div`
 const Content = styled.div`
   max-width: 80ch;
   border: 1px solid #777;
-  border-radius: 5px;
+  /* border-radius: 5px; */
   background-color: #fafafa;
   padding: 10px;
 `;
@@ -53,7 +53,7 @@ const VoteContainer = styled.div`
   align-items: center;
   margin-right: 20px;
   color: #777;
-  font-size: 20px;
+  font-size: 1.25rem;
   .upvote {
     color: saturate(blue, 30%);
   }
@@ -73,7 +73,6 @@ const VoteContainer = styled.div`
 `;
 
 const PostOptions = styled.div`
-  font-size: 16px;
   color: #777;
   margin-top: 10px;
   & > span {
