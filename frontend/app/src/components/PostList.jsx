@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
+import moment from "moment";
 
 import { useSelector } from "react-redux";
 
@@ -91,10 +92,10 @@ const PostOptions = styled.div`
   }
 `;
 
-const PostList = () => {
+const PostList = ({ sortBy }) => {
   const match = useRouteMatch("/groups/:group");
 
-  const postsToDisplay = useSelector(state => {
+  let postsToDisplay = useSelector(state => {
     if (match.params.group === "all") {
       return state.posts;
     } else {
@@ -103,6 +104,30 @@ const PostList = () => {
       });
     }
   });
+
+  postsToDisplay = postsToDisplay.sort((a, b) => {
+    switch (sortBy) {
+      case "new":
+        return a.age - b.age;
+      case "top":
+        return b.votes - a.votes;
+      case "followers":
+        return b.followers - a.followers;
+
+      case "commentsAsc":
+        return a.comments.length - b.comments.length;
+      case "commentsDesc":
+        return b.comments.length - a.comments.length;
+      default:
+        return null;
+    }
+  });
+
+  console.log(
+    moment()
+      .seconds(-1500)
+      .fromNow()
+  );
 
   return postsToDisplay.map(post => (
     <Post>
@@ -116,8 +141,11 @@ const PostList = () => {
           <Link to={`/groups/${post.group}/${post.id}`}>
             <Title>{post.title}</Title>{" "}
           </Link>
-          posted <FontAwesome name="history" className="fa-history" /> 10 hours
-          ago in{" "}
+          posted <FontAwesome name="history" className="fa-history" />{" "}
+          {moment()
+            .seconds(post.age * -1)
+            .fromNow()}{" "}
+          in{" "}
           <a href="#">
             <Link to={`/groups/${post.group}`}>
               <strong>{post.group}</strong>

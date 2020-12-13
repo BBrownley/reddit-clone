@@ -76,10 +76,13 @@ const App = () => {
 
             <div>
               <strong>Sort posts by:</strong>
-              <select name="sortBy" id="sort-by" onChange={handleSortBy}>
-                <option value="new" selected>
-                  New
-                </option>
+              <select
+                name="sortBy"
+                id="sort-by"
+                onChange={handleSortBy}
+                value={sortBy}
+              >
+                <option value="new">New</option>
                 <option value="top">Top</option>
                 <option value="followers">Followers</option>
                 <option value="commentsDesc">Comments (high to low)</option>
@@ -88,11 +91,11 @@ const App = () => {
             </div>
 
             <Switch>
-              <Route path="/groups/:group">
-                <PostList />
-              </Route>
               <Route path="/groups/:group/:id">
                 <PostView />
+              </Route>
+              <Route path="/groups/:group">
+                <PostList sortBy={sortBy} />
               </Route>
             </Switch>
           </Wrapper>
