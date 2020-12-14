@@ -7,7 +7,9 @@ import {
   Link,
   useRouteMatch
 } from "react-router-dom";
+
 import styled from "styled-components";
+import FontAwesome from "react-fontawesome";
 
 import { initializePosts } from "./reducers/postsReducer";
 
@@ -21,7 +23,7 @@ const Wrapper = styled.div`
   margin: auto;
   background-color: white;
   min-height: 100vh;
-  padding: 10px;
+  padding: 30px;
 `;
 
 const Body = styled.div`
@@ -42,9 +44,63 @@ const Branding = styled.h1`
 `;
 
 const GroupInfo = styled.div`
+  /* background-color: #888; */
+  /* text-align: center;
+  margin: 20px 0;
+  font-size: 1.1rem; */
+  /* display: flex; */
   text-align: center;
-  margin-bottom: 20px;
-  font-size: 1.1rem;
+
+  .group-desc {
+    max-width: 80ch;
+    margin: auto;
+    margin-top: 10px;
+  }
+  .group-info-main {
+    /* background-color: red; */
+    /* text-align: left; */
+    /* flex: 2; */
+  }
+  .group-actions {
+    /* background-color: green; */
+    display: flex;
+    margin: 30px 0;
+
+    justify-content: space-between;
+    & > * {
+      flex: 1;
+      margin-right: 2rem;
+    }
+    & > *:last-child {
+      margin-right: 0;
+    }
+  }
+`;
+
+const Navigation = styled.nav`
+  /* background-color: #555; */
+  display: flex;
+  justify-content: space-between;
+  ul {
+    display: flex;
+    li {
+      margin: 10px 20px;
+      font-weight: bold;
+      color: #4385f5;
+      font-size: 1.25rem;
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+  }
+`;
+
+const StyledLink = styled(Link)`
+  color: #4385f5;
+  font-weight: bold;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const App = () => {
@@ -66,29 +122,78 @@ const App = () => {
       <Body>
         <div className="App">
           <Wrapper>
-            <Link to="/groups/all">
-              <Branding>Hello! ^_^</Branding>
-            </Link>
-            <GroupInfo>
-              <h1>General</h1>
-              <p>1272 subscribers</p>
-            </GroupInfo>
+            <Navigation>
+              <StyledLink to="/groups/all">
+                <Branding>Hello! ^_^</Branding>
+              </StyledLink>
+              <ul>
+                <li>
+                  <StyledLink>Groups</StyledLink>
+                </li>
+                <li>
+                  <StyledLink>Log in</StyledLink>
+                </li>
+                <li>
+                  <StyledLink>Register</StyledLink>
+                </li>
+              </ul>
+            </Navigation>
 
-            <div>
-              <strong>Sort posts by:</strong>
-              <select
-                name="sortBy"
-                id="sort-by"
-                onChange={handleSortBy}
-                value={sortBy}
-              >
-                <option value="new">New</option>
-                <option value="top">Top</option>
-                <option value="followers">Followers</option>
-                <option value="commentsDesc">Comments (high to low)</option>
-                <option value="commentsAsc">Comments (low to high)</option>
-              </select>
-            </div>
+            <Switch>
+              <Route exact path="/groups/:group">
+                <GroupInfo>
+                  <div className="group-info-main">
+                    <h1>General</h1>
+                    <p>1272 subscribers</p>
+                    <p className="group-desc">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Etiam dapibus turpis nec libero ornare, ut pharetra orci
+                      bibendum. Sed nec eros aliquet, sodales nunc sit amet,
+                      fringilla purus. Aliquam ac nunc aliquam, sollicitudin
+                      lorem sit amet, dapibus arcu. Donec mollis diam id lorem
+                      vestibulum.
+                    </p>
+                  </div>
+                  <div className="group-actions">
+                    <button>
+                      <FontAwesome name="paper-plane"></FontAwesome> Submit a
+                      new post
+                    </button>
+                    <button>
+                      <FontAwesome name="bell"></FontAwesome> Subscribe
+                    </button>
+                    <button>
+                      <FontAwesome name="info-circle"></FontAwesome> More Info
+                    </button>
+                  </div>
+                </GroupInfo>
+
+                <div>
+                  <strong>Sort posts by:</strong>
+                  <select
+                    name="sortBy"
+                    id="sort-by"
+                    onChange={handleSortBy}
+                    value={sortBy}
+                  >
+                    <option value="new">New</option>
+                    <option value="top">Top</option>
+                    <option value="followers">Followers</option>
+                    <option value="commentsDesc">Comments (high to low)</option>
+                    <option value="commentsAsc">Comments (low to high)</option>
+                  </select>
+                  <strong>
+                    Search posts by{" "}
+                    <select name="searchOption" id="search-option">
+                      <option>Title</option>
+                      <option>Content</option>
+                    </select>
+                    :{" "}
+                  </strong>
+                  <input></input>
+                </div>
+              </Route>
+            </Switch>
 
             <Switch>
               <Route path="/groups/:group/:id">

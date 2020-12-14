@@ -48,3 +48,25 @@ select {
 select:hover {
   cursor: pointer;
 }
+
+button {
+  padding: 10px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  border: 1px solid #333;
+  -webkit-box-shadow: 3px 3px 8px 1px rgba(0, 0, 0, 0.7);
+  box-shadow: 3px 3px 8px 1px rgba(0, 0, 0, 0.7);
+  background-color: #4385f5;
+  color: white;
+  transition: 0.2s all ease-out;
+  /* border-radius: 5px; */
+}
+
+button:hover {
+  background-color: #5c95f6;
+  cursor: pointer;
+}
+
+input {
+  padding: 3px;
+}

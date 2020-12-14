@@ -10,6 +10,7 @@ import FontAwesome from "react-fontawesome";
 const Post = styled.div`
   border-bottom: 1px solid #ddd;
   padding: 10px;
+  padding-left: 0;
   line-height: 1.5;
   display: flex;
   &:hover {

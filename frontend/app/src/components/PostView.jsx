@@ -127,7 +127,9 @@ const PostView = () => {
             posted <FontAwesome name="history" className="fa-history" /> 10
             hours ago in{" "}
             <a href="#">
-              <strong>{post.group}</strong>
+              <Link to={`/groups/${post.group}`}>
+                <strong>{post.group}</strong>
+              </Link>
             </a>{" "}
             by{" "}
             <a href="#">
