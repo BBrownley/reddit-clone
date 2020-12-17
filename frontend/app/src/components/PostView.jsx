@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
+
+import { upvote, downvote } from "../reducers/postsReducer";
 
 import styled from "styled-components";
 import FontAwesome from "react-fontawesome";
@@ -99,6 +101,7 @@ const FollowButton = styled.span`
 
 const PostView = () => {
   const posts = useSelector(state => state.posts);
+  const dispatch = useDispatch();
 
   const match = useRouteMatch("/groups/:group/:id");
   const post = match
@@ -111,12 +114,28 @@ const PostView = () => {
     return null;
   }
 
+  const handleUpvotePost = post => {
+    dispatch(upvote(post));
+  };
+
+  const handleDownvotePost = post => {
+    dispatch(downvote(post));
+  };
+
   return (
     <Post>
       <VoteContainer>
-        <FontAwesome name="plus-square" className="upvote" />
-        <span>{post.votes}</span>
-        <FontAwesome name="minus-square" className="downvote" />
+        <FontAwesome
+          name="plus-square"
+          className="upvote"
+          onClick={() => handleUpvotePost(post)}
+        />
+        <span>{post.votes <= 0 ? 0 : post.votes}</span>
+        <FontAwesome
+          name="minus-square"
+          className="downvote"
+          onClick={() => handleDownvotePost(post)}
+        />
       </VoteContainer>
       <div>
         <PostMain>
