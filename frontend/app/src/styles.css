@@ -67,6 +67,21 @@ button:hover {
   cursor: pointer;
 }
 
+button:disabled {
+  cursor: default;
+  background-color: gray;
+  color: #ddd;
+}
+
+.button-small {
+  font-size: 1rem;
+  padding: 5px;
+}
+
 input {
   padding: 3px;
+}
+
+.ml-10 {
+  margin-left: 10px;
 }

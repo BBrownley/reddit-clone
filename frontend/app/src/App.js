@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import styled from "styled-components";
 import FontAwesome from "react-fontawesome";
@@ -15,8 +9,6 @@ import { initializePosts } from "./reducers/postsReducer";
 
 import PostList from "./components/PostList";
 import PostView from "./components/PostView";
-
-import postService from "./services/posts";
 
 const Wrapper = styled.div`
   max-width: 1260px;
@@ -44,11 +36,6 @@ const Branding = styled.h1`
 `;
 
 const GroupInfo = styled.div`
-  /* background-color: #888; */
-  /* text-align: center;
-  margin: 20px 0;
-  font-size: 1.1rem; */
-  /* display: flex; */
   text-align: center;
 
   .group-desc {
@@ -56,13 +43,8 @@ const GroupInfo = styled.div`
     margin: auto;
     margin-top: 10px;
   }
-  .group-info-main {
-    /* background-color: red; */
-    /* text-align: left; */
-    /* flex: 2; */
-  }
+
   .group-actions {
-    /* background-color: green; */
     display: flex;
     margin: 30px 0;
 
@@ -78,7 +60,6 @@ const GroupInfo = styled.div`
 `;
 
 const Navigation = styled.nav`
-  /* background-color: #555; */
   display: flex;
   justify-content: space-between;
   ul {
@@ -107,6 +88,8 @@ const App = () => {
   const dispatch = useDispatch();
 
   const [sortBy, setSortBy] = useState("new");
+  const [searchBy, setSearchBy] = useState("title");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(async () => {
     dispatch(initializePosts());
@@ -115,6 +98,21 @@ const App = () => {
   const handleSortBy = e => {
     const sortValue = e.target.value;
     setSortBy(sortValue);
+  };
+
+  const handleSearchBy = e => {
+    const searchByValue = e.target.value;
+    setSearchBy(searchByValue);
+  };
+
+  const handleSearchTerm = e => {
+    const searchByValue = e.target.value;
+    setSearchTerm(searchByValue);
+  };
+
+  const resetFilters = () => {
+    setSearchBy("title");
+    setSearchTerm("");
   };
 
   return (
@@ -184,13 +182,21 @@ const App = () => {
                   </select>
                   <strong>
                     Search posts by{" "}
-                    <select name="searchOption" id="search-option">
-                      <option>Title</option>
-                      <option>Content</option>
+                    <select
+                      name="searchOption"
+                      id="search-option"
+                      onChange={handleSearchBy}
+                      value={searchBy}
+                    >
+                      <option value="title">Title</option>
+                      <option value="content">Content</option>
                     </select>
                     :{" "}
                   </strong>
-                  <input></input>
+                  <input onChange={handleSearchTerm} value={searchTerm}></input>
+                  <button className="button-small ml-10" onClick={resetFilters}>
+                    Clear search
+                  </button>
                 </div>
               </Route>
             </Switch>
@@ -200,7 +206,11 @@ const App = () => {
                 <PostView />
               </Route>
               <Route path="/groups/:group">
-                <PostList sortBy={sortBy} />
+                <PostList
+                  sortBy={sortBy}
+                  searchBy={searchBy}
+                  searchTerm={searchTerm}
+                />
               </Route>
             </Switch>
           </Wrapper>

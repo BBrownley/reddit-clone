@@ -94,7 +94,7 @@ const PostOptions = styled.div`
   }
 `;
 
-const PostList = ({ sortBy }) => {
+const PostList = ({ sortBy, searchBy, searchTerm }) => {
   const match = useRouteMatch("/groups/:group");
   const dispatch = useDispatch();
 
@@ -107,6 +107,17 @@ const PostList = ({ sortBy }) => {
       });
     }
   });
+
+  // Filter results if search is used
+  if (!!searchTerm) {
+    postsToDisplay = postsToDisplay.filter(post => {
+      if (searchBy === "title") {
+        return post.title.toLowerCase().includes(searchTerm.toLowerCase());
+      } else if (searchBy === "content") {
+        return post.content.toLowerCase().includes(searchTerm.toLowerCase());
+      }
+    });
+  }
 
   postsToDisplay = postsToDisplay.sort((a, b) => {
     switch (sortBy) {
