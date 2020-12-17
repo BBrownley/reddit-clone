@@ -3,14 +3,15 @@ import { Link, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
 import moment from "moment";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { upvote, downvote } from "../reducers/postsReducer";
 
 import FontAwesome from "react-fontawesome";
 
 const Post = styled.div`
   border-bottom: 1px solid #ddd;
   padding: 10px;
-  padding-left: 0;
+  padding-left: 5px;
   line-height: 1.5;
   display: flex;
   &:hover {
@@ -95,6 +96,7 @@ const PostOptions = styled.div`
 
 const PostList = ({ sortBy }) => {
   const match = useRouteMatch("/groups/:group");
+  const dispatch = useDispatch();
 
   let postsToDisplay = useSelector(state => {
     if (match.params.group === "all") {
@@ -124,18 +126,28 @@ const PostList = ({ sortBy }) => {
     }
   });
 
-  console.log(
-    moment()
-      .seconds(-1500)
-      .fromNow()
-  );
+  const handleUpvotePost = post => {
+    dispatch(upvote(post));
+  };
+
+  const handleDownvotePost = post => {
+    dispatch(downvote(post));
+  };
 
   return postsToDisplay.map(post => (
     <Post>
       <VoteContainer>
-        <FontAwesome name="plus-square" className="upvote" />
-        <span>{post.votes}</span>
-        <FontAwesome name="minus-square" className="downvote" />
+        <FontAwesome
+          name="plus-square"
+          className="upvote"
+          onClick={() => handleUpvotePost(post)}
+        />
+        <span>{post.votes <= 0 ? 0 : post.votes}</span>
+        <FontAwesome
+          name="minus-square"
+          className="downvote"
+          onClick={() => handleDownvotePost(post)}
+        />
       </VoteContainer>
       <div>
         <PostMain>

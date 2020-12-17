@@ -11,10 +11,49 @@ export const initializePosts = () => {
   };
 };
 
+export const upvote = upvotedPost => {
+  return async dispatch => {
+    const updatedPost = await postService.upvote(upvotedPost);
+    dispatch({
+      type: "UPVOTE_POST",
+      upvotedPost,
+      updatedPost
+    });
+  };
+};
+
+export const downvote = downvotedPost => {
+  return async dispatch => {
+    const updatedPost = await postService.downvote(downvotedPost);
+    dispatch({
+      type: "DOWNVOTE_POST",
+      downvotedPost,
+      updatedPost
+    });
+  };
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "INITIALIZE_POSTS":
       return action.data;
+    case "UPVOTE_POST":
+      return state.map(post => {
+        if (post.id !== action.upvotedPost.id) {
+          return post;
+        } else {
+          return action.updatedPost;
+        }
+      });
+    case "DOWNVOTE_POST":
+      return state.map(post => {
+        if (post.id !== action.downvotedPost.id) {
+          return post;
+        } else {
+          return action.updatedPost;
+        }
+      });
+
     default:
       return state;
   }
