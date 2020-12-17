@@ -7,6 +7,23 @@ const getAll = async () => {
   return req.data;
 };
 
+const createPost = async post => {
+  const dummyDefaultData = {
+    ...post.data,
+    author: "Admin",
+    votes: 1,
+    followers: 0,
+    comments: [],
+    group: "general",
+    age: 60
+  };
+
+  const postInfo = { ...post, ...dummyDefaultData };
+
+  const req = await axios.post("http://localhost:3001/posts", postInfo);
+  return req.data;
+};
+
 const upvote = async post => {
   const newPostData = { ...post, votes: post.votes + 1 };
   const req = await axios.put(
@@ -27,6 +44,7 @@ const downvote = async post => {
 
 export default {
   getAll,
+  createPost,
   upvote,
   downvote
 };

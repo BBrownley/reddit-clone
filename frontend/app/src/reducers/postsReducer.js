@@ -11,6 +11,16 @@ export const initializePosts = () => {
   };
 };
 
+export const createPost = post => {
+  return async dispatch => {
+    const data = await postService.createPost(post);
+    dispatch({
+      type: "CREATE_POST",
+      data
+    });
+  };
+};
+
 export const upvote = upvotedPost => {
   return async dispatch => {
     const updatedPost = await postService.upvote(upvotedPost);
@@ -37,6 +47,8 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "INITIALIZE_POSTS":
       return action.data;
+    case "CREATE_POST":
+      return state.concat(action.data);
     case "UPVOTE_POST":
       return state.map(post => {
         if (post.id !== action.upvotedPost.id) {

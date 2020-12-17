@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useHistory
+} from "react-router-dom";
 
 import styled from "styled-components";
-import FontAwesome from "react-fontawesome";
 
 import { initializePosts } from "./reducers/postsReducer";
 
 import PostList from "./components/PostList";
 import PostView from "./components/PostView";
+import PostForm from "./components/PostForm";
+import GroupActions from "./components/GroupActions";
 
 const Wrapper = styled.div`
   max-width: 1260px;
@@ -86,6 +93,7 @@ const StyledLink = styled(Link)`
 
 const App = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [sortBy, setSortBy] = useState("new");
   const [searchBy, setSearchBy] = useState("title");
@@ -152,18 +160,7 @@ const App = () => {
                       vestibulum.
                     </p>
                   </div>
-                  <div className="group-actions">
-                    <button>
-                      <FontAwesome name="paper-plane"></FontAwesome> Submit a
-                      new post
-                    </button>
-                    <button>
-                      <FontAwesome name="bell"></FontAwesome> Subscribe
-                    </button>
-                    <button>
-                      <FontAwesome name="info-circle"></FontAwesome> More Info
-                    </button>
-                  </div>
+                  <GroupActions />
                 </GroupInfo>
 
                 <div>
@@ -202,6 +199,9 @@ const App = () => {
             </Switch>
 
             <Switch>
+              <Route path="/create">
+                <PostForm />
+              </Route>
               <Route path="/groups/:group/:id">
                 <PostView />
               </Route>

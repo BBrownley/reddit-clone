@@ -73,6 +73,17 @@
       "group": "gaming",
       "age": 1000,
       "id": 5
+    },
+    {
+      "title": "My first post ^_^",
+      "content": "Hello! :)",
+      "author": "Admin",
+      "votes": 10,
+      "followers": 0,
+      "comments": [],
+      "group": "general",
+      "age": 60,
+      "id": 6
     }
   ]
 }
