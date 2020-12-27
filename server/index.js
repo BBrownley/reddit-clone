@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const PORT = 3306; // Make it use .env variable later
+const PORT = 5000; // Make it use .env variable later
 
 const posts = require("./db/posts");
 
