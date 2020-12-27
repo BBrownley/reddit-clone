@@ -1,0 +1,22 @@
+{
+  "sqltools.connections": [
+    {
+      "askForPassword": false,
+      "database": "reddit-clone",
+      "dialect": "MySQL",
+      "name": "MySQL Connection",
+      "port": 3306,
+      "server": "localhost",
+      "username": "root"
+    },
+    {
+      "askForPassword": false,
+      "database": "reddit-clone",
+      "dialect": "MySQL",
+      "name": "reddit-clone",
+      "port": 3306,
+      "server": "localhost",
+      "username": "root"
+    }
+  ]
+}
