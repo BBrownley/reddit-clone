@@ -145,6 +145,8 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
     dispatch(downvote(post));
   };
 
+  console.log(moment("2018-07-16T10:17:20.000Z").fromNow());
+
   return postsToDisplay.map(post => (
     <Post>
       <VoteContainer>
@@ -166,10 +168,7 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
             <Title>{post.title}</Title>{" "}
           </Link>
           posted <FontAwesome name="history" className="fa-history" />{" "}
-          {moment()
-            .seconds(post.age * -1)
-            .fromNow()}{" "}
-          in{" "}
+          {moment(post.createdAt).fromNow()} in{" "}
           <a href="#">
             <Link to={`/groups/${post.group_id}`}>
               <strong>{post.groupName}</strong>
