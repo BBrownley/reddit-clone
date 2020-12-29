@@ -9,7 +9,7 @@ const config = {
 };
 
 const getAll = async () => {
-  const req = await axios.get("http://localhost:5000/groups/all", config);
+  const req = await axios.get("http://localhost:5000/", config);
   console.log(req.data);
   return req.data;
 };

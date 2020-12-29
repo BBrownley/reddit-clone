@@ -82,6 +82,11 @@ button:focus {
   padding: 5px;
 }
 
+.no-shadow {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
 input {
   padding: 3px;
 }
@@ -89,4 +94,3 @@ input {
 .ml-10 {
   margin-left: 10px;
 }
-

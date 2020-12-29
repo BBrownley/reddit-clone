@@ -6,14 +6,16 @@ const PORT = 5000; // Make it use .env variable later
 app.use(cors());
 
 const postsDB = require("./db/posts");
+const groupsDB = require("./db/groups");
 
-app.get("/", (req, res) => {
-  res.json("world :)");
-});
-
-app.get("/groups/all", async (req, res) => {
+app.get("/", async (req, res) => {
   let posts = await postsDB.all();
   res.json(posts);
+});
+
+app.get("/groups", async (req, res) => {
+  let groups = await groupsDB.all();
+  res.json(groups);
 });
 
 app.listen(PORT, () => {

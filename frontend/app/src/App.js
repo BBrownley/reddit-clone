@@ -11,11 +11,13 @@ import {
 import styled from "styled-components";
 
 import { initializePosts } from "./reducers/postsReducer";
+import { initializeGroups } from "./reducers/groupsReducer";
 
 import PostList from "./components/PostList";
 import PostView from "./components/PostView";
 import PostForm from "./components/PostForm";
 import GroupActions from "./components/GroupActions";
+import GroupList from "./components/GroupList";
 
 const Wrapper = styled.div`
   max-width: 1260px;
@@ -101,6 +103,7 @@ const App = () => {
 
   useEffect(async () => {
     dispatch(initializePosts());
+    dispatch(initializeGroups());
   }, []);
 
   const handleSortBy = e => {
@@ -134,7 +137,7 @@ const App = () => {
               </StyledLink>
               <ul>
                 <li>
-                  <StyledLink>Groups</StyledLink>
+                  <StyledLink to="/groups">Groups</StyledLink>
                 </li>
                 <li>
                   <StyledLink>Log in</StyledLink>
@@ -203,7 +206,10 @@ const App = () => {
                     :{" "}
                   </strong>
                   <input onChange={handleSearchTerm} value={searchTerm}></input>
-                  <button className="button-small ml-10" onClick={resetFilters}>
+                  <button
+                    className="button-small no-shadow ml-10"
+                    onClick={resetFilters}
+                  >
                     Clear search
                   </button>
                 </div>
@@ -217,12 +223,15 @@ const App = () => {
               <Route path="/groups/:group/:id">
                 <PostView />
               </Route>
-              <Route path={["/groups/:group", "/"]}>
+              <Route exact path={["/groups/:group", "/"]}>
                 <PostList
                   sortBy={sortBy}
                   searchBy={searchBy}
                   searchTerm={searchTerm}
                 />
+              </Route>
+              <Route exact path="/groups">
+                <GroupList />
               </Route>
             </Switch>
           </Wrapper>
