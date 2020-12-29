@@ -122,7 +122,10 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
   postsToDisplay = postsToDisplay.sort((a, b) => {
     switch (sortBy) {
       case "new":
-        return a.age - b.age;
+        const timestampA = moment(a.createdAt);
+        const timestampB = moment(b.createdAt);
+
+        return timestampA.isAfter(timestampB) ? -1 : 1;
       case "top":
         return b.votes - a.votes;
       case "followers":
@@ -144,8 +147,6 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
   const handleDownvotePost = post => {
     dispatch(downvote(post));
   };
-
-  console.log(moment("2018-07-16T10:17:20.000Z").fromNow());
 
   return postsToDisplay.map(post => (
     <Post>
