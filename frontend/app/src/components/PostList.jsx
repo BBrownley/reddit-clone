@@ -128,10 +128,10 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
       case "followers":
         return b.followers - a.followers;
 
-      case "commentsAsc":
-        return a.comments.length - b.comments.length;
-      case "commentsDesc":
-        return b.comments.length - a.comments.length;
+      // case "commentsAsc":
+      //   return a.comments.length - b.comments.length;
+      // case "commentsDesc":
+      //   return b.comments.length - a.comments.length;
       default:
         return null;
     }
@@ -171,20 +171,20 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
             .fromNow()}{" "}
           in{" "}
           <a href="#">
-            <Link to={`/groups/${post.group}`}>
-              <strong>{post.group}</strong>
+            <Link to={`/groups/${post.group_id}`}>
+              <strong>{post.groupName}</strong>
             </Link>
           </a>{" "}
           by{" "}
           <a href="#">
-            <strong>{post.author}</strong>
+            <strong>{post.username}</strong>
           </a>
         </PostMain>
 
         <Content>{post.content}</Content>
         <PostOptions>
           <span>
-            <FontAwesome name="comments" /> {post.comments.length} comments
+            {/* <FontAwesome name="comments" /> {post.comments.length} comments */}
           </span>
           <span className={Math.random() > 0.5 ? "favorite-active" : ""}>
             <FontAwesome name="heart" className="fa-heart" /> {post.followers}{" "}

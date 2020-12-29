@@ -84,6 +84,17 @@
       "group": "general",
       "age": 60,
       "id": 6
+    },
+    {
+      "title": "1",
+      "content": "1",
+      "author": "Admin",
+      "votes": 1,
+      "followers": 0,
+      "comments": [],
+      "group": "general",
+      "age": 60,
+      "id": 7
     }
   ]
 }
