@@ -4,7 +4,9 @@ const q = `
   SELECT 
     title, 
     posts.created_at AS createdAt, 
+    posts.id AS postID,
     group_name AS groupName,
+    group_id AS groupID,
     username,
     content FROM posts
   JOIN users ON users.id = posts.submitter_id

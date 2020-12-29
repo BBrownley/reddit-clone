@@ -99,11 +99,12 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
   const dispatch = useDispatch();
 
   let postsToDisplay = useSelector(state => {
-    if (match.params.group === "all") {
+    if (!match) {
       return state.posts;
     } else {
       return state.posts.filter(post => {
-        return post.group === match.params.group;
+        console.log(post);
+        return post.groupName.toLowerCase() === match.params.group;
       });
     }
   });
@@ -165,13 +166,13 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
       </VoteContainer>
       <div>
         <PostMain>
-          <Link to={`/groups/${post.group}/${post.id}`}>
+          <Link to={`/groups/${post.groupName.toLowerCase()}/${post.postID}`}>
             <Title>{post.title}</Title>{" "}
           </Link>
           posted <FontAwesome name="history" className="fa-history" />{" "}
           {moment(post.createdAt).fromNow()} in{" "}
           <a href="#">
-            <Link to={`/groups/${post.group_id}`}>
+            <Link to={`/groups/${post.groupName.toLowerCase()}`}>
               <strong>{post.groupName}</strong>
             </Link>
           </a>{" "}

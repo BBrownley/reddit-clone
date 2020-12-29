@@ -105,7 +105,7 @@ const PostView = () => {
 
   const match = useRouteMatch("/groups/:group/:id");
   const post = match
-    ? posts.find(post => post.id.toString() === match.params.id.toString())
+    ? posts.find(post => post.postID.toString() === match.params.id.toString())
     : null;
 
   console.log(posts.find(post => post.id === match.params.id));
@@ -139,20 +139,20 @@ const PostView = () => {
       </VoteContainer>
       <div>
         <PostMain>
-          <Link to={`/groups/${post.group}/${post.id}`}>
+          <Link to={`/groups/${post.groupName.toLowerCase()}/${post.id}`}>
             <Title>{post.title}</Title>{" "}
           </Link>
           <div>
             posted <FontAwesome name="history" className="fa-history" /> 10
             hours ago in{" "}
             <a href="#">
-              <Link to={`/groups/${post.group}`}>
-                <strong>{post.group}</strong>
+              <Link to={`/groups/${post.groupName.toLowerCase()}`}>
+                <strong>{post.groupName}</strong>
               </Link>
             </a>{" "}
             by{" "}
             <a href="#">
-              <strong>{post.author}</strong>
+              <strong>{post.username}</strong>
             </a>
           </div>
         </PostMain>
@@ -160,7 +160,7 @@ const PostView = () => {
         <Content>{post.content}</Content>
         <PostOptions>
           <span>
-            <FontAwesome name="comments" /> {post.comments.length} comments
+            {/* <FontAwesome name="comments" /> {post.comments.length} comments */}
           </span>
           <FollowButton>
             <FontAwesome name="heart" className="fa-heart" /> Follow

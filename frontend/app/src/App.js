@@ -129,7 +129,7 @@ const App = () => {
         <div className="App">
           <Wrapper>
             <Navigation>
-              <StyledLink to="/groups/all">
+              <StyledLink to="/">
                 <Branding>Hello! ^_^</Branding>
               </StyledLink>
               <ul>
@@ -146,6 +146,12 @@ const App = () => {
             </Navigation>
 
             <Switch>
+              <Route exact path="/">
+                <h2>Welcome to my Reddit clone! :)</h2>
+              </Route>
+            </Switch>
+
+            <Switch>
               <Route exact path="/groups/:group">
                 <GroupInfo>
                   <div className="group-info-main">
@@ -160,9 +166,15 @@ const App = () => {
                       vestibulum.
                     </p>
                   </div>
+                </GroupInfo>
+              </Route>
+            </Switch>
+
+            <Switch>
+              <Route exact path={["/", "/groups/:group"]}>
+                <GroupInfo>
                   <GroupActions />
                 </GroupInfo>
-
                 <div>
                   <strong>Sort posts by:</strong>
                   <select
@@ -205,7 +217,7 @@ const App = () => {
               <Route path="/groups/:group/:id">
                 <PostView />
               </Route>
-              <Route path="/groups/:group">
+              <Route path={["/groups/:group", "/"]}>
                 <PostList
                   sortBy={sortBy}
                   searchBy={searchBy}
