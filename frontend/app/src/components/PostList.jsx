@@ -99,11 +99,11 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
   const dispatch = useDispatch();
 
   let postsToDisplay = useSelector(state => {
+    console.log(state);
     if (!match) {
       return state.posts;
     } else {
       return state.posts.filter(post => {
-        console.log(post);
         return post.groupName.toLowerCase() === match.params.group;
       });
     }
@@ -150,7 +150,7 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
   };
 
   return postsToDisplay.map(post => (
-    <Post>
+    <Post key={post.postID}>
       <VoteContainer>
         <FontAwesome
           name="plus-square"

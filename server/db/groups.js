@@ -3,7 +3,8 @@ const connection = require("./index").connection;
 const q = `
   SELECT 
     group_name AS groupName,
-    created_at AS createdAt
+    created_at AS createdAt,
+    id
   FROM groups
 `;
 

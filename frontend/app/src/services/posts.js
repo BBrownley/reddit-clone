@@ -1,5 +1,4 @@
 import axios from "axios";
-const baseUrl = "/";
 
 const config = {
   headers: {
@@ -15,20 +14,23 @@ const getAll = async () => {
 };
 
 const createPost = async post => {
-  const dummyDefaultData = {
-    ...post.data,
-    author: "Admin",
-    votes: 1,
-    followers: 0,
-    comments: [],
-    group: "general",
-    age: 60
-  };
+  console.log(post);
 
-  const postInfo = { ...post, ...dummyDefaultData };
+  const req = await axios.post("http://localhost:5000/posts", post);
 
-  const req = await axios.post("http://localhost:3001/posts", postInfo);
+  console.log(req.data);
   return req.data;
+
+  // console.log(post)
+
+  // const postData = {
+  //   submitter_id: 10, // Replace this with the actual submitter ID later
+  // };
+
+  // //const postInfo = { ...post, ...dummyDefaultData };
+
+  // const req = await axios.post("http://localhost:5000/posts", postData);
+  // return req.data;
 };
 
 const upvote = async post => {

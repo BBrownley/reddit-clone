@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useHistory
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import styled from "styled-components";
 
@@ -95,7 +89,6 @@ const StyledLink = styled(Link)`
 
 const App = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const [sortBy, setSortBy] = useState("new");
   const [searchBy, setSearchBy] = useState("title");

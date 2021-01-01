@@ -11,9 +11,10 @@ export const initializePosts = () => {
   };
 };
 
-export const createPost = post => {
+export const createPost = formData => {
   return async dispatch => {
-    const data = await postService.createPost(post);
+    const data = await postService.createPost(formData);
+    console.log(data);
     dispatch({
       type: "CREATE_POST",
       data
