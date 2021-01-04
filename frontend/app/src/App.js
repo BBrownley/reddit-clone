@@ -12,6 +12,7 @@ import PostView from "./components/PostView/PostView";
 import PostForm from "./components/PostForm/PostForm";
 import GroupActions from "./components/GroupActions/GroupActions";
 import GroupList from "./components/GroupList/GroupList";
+import RegisterForm from "./components/RegisterForm/RegisterForm";
 
 const Wrapper = styled.div`
   max-width: 1260px;
@@ -136,7 +137,7 @@ const App = () => {
                   <StyledLink>Log in</StyledLink>
                 </li>
                 <li>
-                  <StyledLink>Register</StyledLink>
+                  <StyledLink to="/register">Register</StyledLink>
                 </li>
               </ul>
             </Navigation>
@@ -144,6 +145,12 @@ const App = () => {
             <Switch>
               <Route exact path="/">
                 <h2>Welcome to my Reddit clone! :)</h2>
+              </Route>
+            </Switch>
+
+            <Switch>
+              <Route exact path="/register">
+                <RegisterForm />
               </Route>
             </Switch>
 

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { createPost } from "../../reducers/postsReducer";
 
-import { FormContainer, FormField } from "../shared/Form.elements";
+import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 
 const PostForm = () => {
   const [title, setTitle] = useState("");
@@ -45,6 +45,7 @@ const PostForm = () => {
 
   return (
     <FormContainer>
+      <FormHeader>Create a new post</FormHeader>
       <form onSubmit={addPost} id="post-form">
         <FormField>
           <label htmlFor="title">Title: </label>
