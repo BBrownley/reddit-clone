@@ -9,6 +9,7 @@ app.use(bodyParser());
 
 const postsDB = require("./db/posts");
 const groupsDB = require("./db/groups");
+const usersDB = require("./db/users");
 
 app.get("/", async (req, res) => {
   let posts = await postsDB.all();
@@ -21,12 +22,16 @@ app.get("/groups", async (req, res) => {
 });
 
 app.post("/posts", async (req, res) => {
+  const data = await postsDB.create(req.body);
+  console.log(data);
+  res.json(data);
+});
+
+app.post("/users", async (req, res) => {
   console.log("~~~~req.body~~~~");
   console.log(req.body);
   console.log("~~~~~~~");
-
-  const data = await postsDB.create(req.body);
-  console.log(data);
+  const data = await usersDB.register(req.body);
   res.json(data);
 });
 
