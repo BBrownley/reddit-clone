@@ -1,5 +1,6 @@
 const connection = require("./index").connection;
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const register = userInfo => {
   return new Promise(async (resolve, reject) => {
@@ -66,6 +67,43 @@ const register = userInfo => {
   });
 };
 
+const login = userInfo => {
+  return new Promise((resolve, reject) => {
+    const username = userInfo.username;
+    const password = userInfo.password;
+
+    // Check to make sure all fields were filled in
+
+    if (!username || !password) {
+      return reject({
+        error: "All fields must be filled in"
+      });
+    }
+
+    // Compare hashed password with given password to see if it matches
+    connection.query(
+      "SELECT * FROM users WHERE username = ?",
+      [username],
+      async (error, results) => {
+        if (
+          !results ||
+          !(await bcrypt.compare(password, results[0].hashed_password))
+        ) {
+          reject({ error: "Invalid username or password" });
+        } else {
+          console.log("User login successful");
+
+          const userInfo = { username, id: results[0].id };
+          const token = jwt.sign(userInfo, process.env.SECRET);
+
+          resolve({ username, token });
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
-  register
+  register,
+  login
 };
