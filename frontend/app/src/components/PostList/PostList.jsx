@@ -1,98 +1,16 @@
 import React from "react";
 import { Link, useRouteMatch } from "react-router-dom";
-import styled from "styled-components";
+
 import moment from "moment";
 
 import { useSelector, useDispatch } from "react-redux";
-import { upvote, downvote } from "../reducers/postsReducer";
+import { upvote, downvote } from "../../reducers/postsReducer";
 
 import FontAwesome from "react-fontawesome";
 
-const Post = styled.div`
-  border-bottom: 1px solid #ddd;
-  padding: 10px;
-  padding-left: 5px;
-  line-height: 1.5;
-  display: flex;
-  &:hover {
-    background-color: #f5f5f5;
-  }
-`;
+import { Post, VoteContainer, Content, PostOptions } from "./PostList.elements";
 
-const PostMain = styled.span`
-  .fa-history {
-    color: #999;
-  }
-  a {
-    color: #4385f5;
-    &:hover {
-      cursor: pointer;
-      text-decoration: underline;
-    }
-  }
-`;
-
-const Title = styled.div`
-  color: #222;
-  font-weight: bold;
-  font-size: 24px;
-  display: inline-block;
-  &:hover {
-    cursor: pointer;
-    text-decoration: underline;
-  }
-`;
-
-const Content = styled.div`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 80ch;
-`;
-
-const VoteContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding-top: 8px;
-  align-items: center;
-  margin-right: 20px;
-  color: #777;
-  font-size: 20px;
-  .upvote:hover,
-  .downvote:hover {
-    cursor: pointer;
-  }
-  .upvote:hover {
-    color: #4385f5;
-  }
-  .downvote:hover {
-    color: #ff3548;
-  }
-`;
-
-const PostOptions = styled.div`
-  font-size: 14px;
-  color: #777;
-  margin-top: 10px;
-  & > span {
-    margin-right: 10px;
-    padding: 4px;
-    border-radius: 5px;
-    &:hover {
-      background-color: #eee;
-      cursor: pointer;
-    }
-  }
-  .favorite-active {
-    background-color: #eee;
-    color: #333;
-    font-weight: bold;
-    .fa-heart {
-      color: #fc74a4;
-    }
-  }
-`;
+import PostHeader from "../shared/PostHeader";
 
 const PostList = ({ sortBy, searchBy, searchTerm }) => {
   const match = useRouteMatch("/groups/:group");
@@ -165,22 +83,14 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
         />
       </VoteContainer>
       <div>
-        <PostMain>
-          <Link to={`/groups/${post.groupName.toLowerCase()}/${post.postID}`}>
-            <Title>{post.title}</Title>{" "}
-          </Link>
-          posted <FontAwesome name="history" className="fa-history" />{" "}
-          {moment(post.createdAt).fromNow()} in{" "}
-          <a href="#">
-            <Link to={`/groups/${post.groupName.toLowerCase()}`}>
-              <strong>{post.groupName}</strong>
-            </Link>
-          </a>{" "}
-          by{" "}
-          <a href="#">
-            <strong>{post.username}</strong>
-          </a>
-        </PostMain>
+        <PostHeader
+          postLink={`/groups/${post.groupName.toLowerCase()}/${post.postID}`}
+          title={post.title}
+          postAge={moment(post.createdAt).fromNow()}
+          groupLink={`/groups/${post.groupName.toLowerCase()}`}
+          groupName={post.groupName}
+          author={post.username}
+        />
 
         <Content>{post.content}</Content>
         <PostOptions>

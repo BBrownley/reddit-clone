@@ -1,47 +1,12 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 
 import Select from "react-select";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { createPost } from "../reducers/postsReducer";
+import { createPost } from "../../reducers/postsReducer";
 
-const FormContainer = styled.div`
-  /* background-color: #ccc; */
-  display: block;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 1rem;
-
-  & button {
-    width: 100%;
-    margin-top: 1rem;
-  }
-`;
-
-const FormField = styled.div`
-  /* background-color: #aaa; */
-  display: flex;
-  flex-direction: column;
-  font-size: 1.5rem;
-  & input {
-    font-size: 1.5rem;
-    padding: 1rem;
-  }
-  & textarea {
-    font-size: 1.5rem;
-    padding: 1rem;
-
-    width: 100%;
-    min-width: 50%;
-    max-width: 100%;
-
-    height: 400px;
-    min-height: 100px;
-    max-height: 1000px;
-  }
-`;
+import { FormContainer, FormField } from "../shared/Form.elements";
 
 const PostForm = () => {
   const [title, setTitle] = useState("");
@@ -72,10 +37,8 @@ const PostForm = () => {
   };
 
   const addPost = e => {
-    console.log("#################################");
     e.preventDefault();
     const data = { title, groupID: groupQuery.id, content };
-    console.log(data);
     dispatch(createPost(data));
     history.push(`/groups/${groupQuery.label}`);
   };

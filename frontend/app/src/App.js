@@ -7,11 +7,11 @@ import styled from "styled-components";
 import { initializePosts } from "./reducers/postsReducer";
 import { initializeGroups } from "./reducers/groupsReducer";
 
-import PostList from "./components/PostList";
-import PostView from "./components/PostView";
-import PostForm from "./components/PostForm";
-import GroupActions from "./components/GroupActions";
-import GroupList from "./components/GroupList";
+import PostList from "./components/PostList/PostList";
+import PostView from "./components/PostView/PostView";
+import PostForm from "./components/PostForm/PostForm";
+import GroupActions from "./components/GroupActions/GroupActions";
+import GroupList from "./components/GroupList/GroupList";
 
 const Wrapper = styled.div`
   max-width: 1260px;
