@@ -1,5 +1,15 @@
 import axios from "axios";
 
+import usersService from "./users";
+
+let storedToken = null;
+
+const setToken = token => {
+  console.log("Setting token...");
+  storedToken = `bearer ${token}`;
+  console.log(`Updated token: ${token}`);
+};
+
 const config = {
   headers: {
     "Content-Type": "application/json",
@@ -14,23 +24,19 @@ const getAll = async () => {
 };
 
 const createPost = async post => {
-  console.log(post);
+  console.log(storedToken);
 
-  const req = await axios.post("http://localhost:5000/posts", post);
+  const config = {
+    headers: {
+      Authorization: storedToken
+    }
+  };
 
-  console.log(req.data);
+  console.log(config);
+
+  const req = await axios.post("http://localhost:5000/posts", post, config);
+
   return req.data;
-
-  // console.log(post)
-
-  // const postData = {
-  //   submitter_id: 10, // Replace this with the actual submitter ID later
-  // };
-
-  // //const postInfo = { ...post, ...dummyDefaultData };
-
-  // const req = await axios.post("http://localhost:5000/posts", postData);
-  // return req.data;
 };
 
 const upvote = async post => {
@@ -55,5 +61,6 @@ export default {
   getAll,
   createPost,
   upvote,
-  downvote
+  downvote,
+  setToken
 };

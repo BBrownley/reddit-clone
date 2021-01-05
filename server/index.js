@@ -24,8 +24,8 @@ app.get("/groups", async (req, res) => {
 });
 
 app.post("/posts", async (req, res) => {
-  const data = await postsDB.create(req.body);
-  console.log(data);
+  const token = req.headers.authorization;
+  const data = await postsDB.create(req.body, token);
   res.json(data);
 });
 

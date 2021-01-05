@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 
 import { login } from "../../reducers/userReducer";
+
+import postService from "../../services/posts";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -12,6 +14,8 @@ const LoginForm = () => {
   const dispatch = useDispatch();
 
   const history = useHistory();
+
+  const user = useSelector(state => state.user);
 
   const handleSetUsername = e => {
     setUsername(e.target.value);
@@ -26,6 +30,7 @@ const LoginForm = () => {
     const data = { username, password };
     console.log(data);
     dispatch(login(data));
+    console.log(user);
     history.push(`/`);
   };
 

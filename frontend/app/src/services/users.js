@@ -1,11 +1,5 @@
 import axios from "axios";
 
-let token = null;
-
-const setToken = token => {
-  token = `bearer ${token}`;
-};
-
 const config = {
   headers: {
     "Content-Type": "application/json",
@@ -27,4 +21,4 @@ const login = async data => {
   return req.data;
 };
 
-export default { register, login, setToken };
+export default { register, login };

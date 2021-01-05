@@ -1,11 +1,13 @@
 import userService from "../services/users";
+import postService from "../services/posts";
 
 const initialState = null;
 
 export const login = credentials => {
   return async dispatch => {
     const data = await userService.login(credentials);
-    console.log(data);
+    console.log(data.token);
+    postService.setToken(data.token);
     dispatch({
       type: "LOGIN",
       data
