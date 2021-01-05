@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
+import { login } from "../../reducers/userReducer";
+
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 import usersService from "../../services/users";
 
@@ -7,6 +12,10 @@ const RegisterForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const dispatch = useDispatch();
+
+  const history = useHistory();
 
   const handleSetUsername = e => {
     setUsername(e.target.value);
@@ -24,17 +33,22 @@ const RegisterForm = () => {
     setConfirmPassword(e.target.value);
   };
 
-  const handleSubmitForm = e => {
+  const handleRegistration = async e => {
     e.preventDefault();
     const data = { username, email, password, confirmPassword };
     console.log(data);
-    usersService.register(data);
+    await usersService.register(data);
+
+    // If account creation successful, automatically log them in
+    dispatch(login({ username: data.username, password: data.password }));
+
+    history.push(`/`);
   };
 
   return (
     <FormContainer>
       <FormHeader>Register</FormHeader>
-      <form id="register-form" onSubmit={handleSubmitForm}>
+      <form id="register-form" onSubmit={handleRegistration}>
         <FormField>
           <label htmlFor="username">Username:</label>
           <input

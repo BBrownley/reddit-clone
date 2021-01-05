@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import styled from "styled-components";
 
 import { initializePosts } from "./reducers/postsReducer";
 import { initializeGroups } from "./reducers/groupsReducer";
+import { logout } from "./reducers/userReducer";
 
 import PostList from "./components/PostList/PostList";
 import PostView from "./components/PostView/PostView";
@@ -13,6 +14,7 @@ import PostForm from "./components/PostForm/PostForm";
 import GroupActions from "./components/GroupActions/GroupActions";
 import GroupList from "./components/GroupList/GroupList";
 import RegisterForm from "./components/RegisterForm/RegisterForm";
+import LoginForm from "./components/LoginForm/LoginForm";
 
 const Wrapper = styled.div`
   max-width: 1260px;
@@ -71,7 +73,6 @@ const Navigation = styled.nav`
     li {
       margin: 10px 20px;
       font-weight: bold;
-      color: #4385f5;
       font-size: 1.25rem;
       &:last-of-type {
         margin-right: 0;
@@ -94,6 +95,8 @@ const App = () => {
   const [sortBy, setSortBy] = useState("new");
   const [searchBy, setSearchBy] = useState("title");
   const [searchTerm, setSearchTerm] = useState("");
+
+  const user = useSelector(state => state.user);
 
   useEffect(async () => {
     dispatch(initializePosts());
@@ -120,6 +123,10 @@ const App = () => {
     setSearchTerm("");
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
   return (
     <Router>
       <Body>
@@ -133,12 +140,22 @@ const App = () => {
                 <li>
                   <StyledLink to="/groups">Groups</StyledLink>
                 </li>
-                <li>
-                  <StyledLink>Log in</StyledLink>
-                </li>
-                <li>
-                  <StyledLink to="/register">Register</StyledLink>
-                </li>
+                {user === null && (
+                  <>
+                    <li>
+                      <StyledLink to="/login">Log in</StyledLink>
+                    </li>
+                    <li>
+                      <StyledLink to="/register">Register</StyledLink>
+                    </li>
+                  </>
+                )}
+                {user !== null && (
+                  <li>
+                    Signed in as {user.username}{" "}
+                    <StyledLink onClick={handleLogout}> Logout</StyledLink>
+                  </li>
+                )}
               </ul>
             </Navigation>
 
@@ -151,6 +168,9 @@ const App = () => {
             <Switch>
               <Route exact path="/register">
                 <RegisterForm />
+              </Route>
+              <Route exact path="/login">
+                <LoginForm />
               </Route>
             </Switch>
 

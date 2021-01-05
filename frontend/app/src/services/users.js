@@ -1,5 +1,11 @@
 import axios from "axios";
 
+let token = null;
+
+const setToken = token => {
+  token = `bearer ${token}`;
+};
+
 const config = {
   headers: {
     "Content-Type": "application/json",
@@ -7,9 +13,18 @@ const config = {
   }
 };
 
-const register = async () => {
-  const req = await axios.post("http://localhost:5000/users", config);
+const register = async data => {
+  const req = await axios.post("http://localhost:5000/users", data, config);
   console.log(req.data);
 };
 
-export default { register };
+const login = async data => {
+  const req = await axios.post(
+    "http://localhost:5000/users/login",
+    data,
+    config
+  );
+  return req.data;
+};
+
+export default { register, login, setToken };
