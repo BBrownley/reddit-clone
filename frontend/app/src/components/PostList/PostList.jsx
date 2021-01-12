@@ -4,7 +4,12 @@ import { Link, useRouteMatch } from "react-router-dom";
 import moment from "moment";
 
 import { useSelector, useDispatch } from "react-redux";
-import { upvote, downvote } from "../../reducers/postsReducer";
+import {
+  initializeVotes,
+  addVote,
+  removeVote
+} from "../../reducers/userPostVotesReducer";
+import { initializePosts } from "../../reducers/postsReducer";
 
 import FontAwesome from "react-fontawesome";
 
@@ -16,15 +21,31 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
   const match = useRouteMatch("/groups/:group");
   const dispatch = useDispatch();
 
+  const userPostVotes = useSelector(state => state.userPostVotes);
+
   let postsToDisplay = useSelector(state => {
-    console.log(state);
+    let posts = [];
+
     if (!match) {
-      return state.posts;
+      posts = state.posts;
     } else {
-      return state.posts.filter(post => {
+      posts = state.posts.filter(post => {
         return post.groupName.toLowerCase() === match.params.group;
       });
     }
+
+    // Map posts that user voted on to the post list
+    userPostVotes.forEach(vote => {
+      if (posts.filter(post => post.postID === vote.post_id)) {
+        const votedPost = posts.indexOf(
+          posts.find(post => post.postID === vote.post_id)
+        );
+
+        posts[votedPost] = { vote: vote.vote_value, ...posts[votedPost] };
+      }
+    });
+
+    return posts;
   });
 
   // Filter results if search is used
@@ -46,7 +67,7 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
 
         return timestampA.isAfter(timestampB) ? -1 : 1;
       case "top":
-        return b.votes - a.votes;
+        return b.score - a.score;
       case "followers":
         return b.followers - a.followers;
 
@@ -59,12 +80,21 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
     }
   });
 
-  const handleUpvotePost = post => {
-    dispatch(upvote(post));
+  const handleUpvotePost = async postID => {
+    console.log("upvoting post");
+
+    await dispatch(addVote(postID, 1));
+
+    dispatch(initializeVotes());
+    dispatch(initializePosts());
   };
 
-  const handleDownvotePost = post => {
-    dispatch(downvote(post));
+  const handleDownvotePost = async postID => {
+    console.log("downvoting post");
+    await dispatch(addVote(postID, -1));
+
+    dispatch(initializeVotes());
+    dispatch(initializePosts());
   };
 
   return postsToDisplay.map(post => (
@@ -73,13 +103,15 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
         <FontAwesome
           name="plus-square"
           className="upvote"
-          onClick={() => handleUpvotePost(post)}
+          onClick={() => handleUpvotePost(post.postID)}
+          style={post.vote === 1 ? { color: "blue" } : {}} // Refactor this later
         />
-        <span>{post.votes <= 0 ? 0 : post.votes}</span>
+        <span>{post.score}</span>
         <FontAwesome
           name="minus-square"
           className="downvote"
-          onClick={() => handleDownvotePost(post)}
+          onClick={() => handleDownvotePost(post.postID)}
+          style={post.vote === -1 ? { color: "red" } : {}} // Refactor this later
         />
       </VoteContainer>
       <div>

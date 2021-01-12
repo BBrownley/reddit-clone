@@ -5,7 +5,12 @@ import { useRouteMatch } from "react-router-dom";
 
 import moment from "moment";
 
-import { upvote, downvote } from "../../reducers/postsReducer";
+import {
+  initializeVotes,
+  addVote,
+  removeVote
+} from "../../reducers/userPostVotesReducer";
+import { initializePosts } from "../../reducers/postsReducer";
 
 import FontAwesome from "react-fontawesome";
 
@@ -23,6 +28,7 @@ import PostHeader from "../shared/PostHeader";
 
 const PostView = () => {
   const posts = useSelector(state => state.posts);
+  const userPostVotes = useSelector(state => state.userPostVotes);
   const dispatch = useDispatch();
 
   const match = useRouteMatch("/groups/:group/:id");
@@ -34,12 +40,35 @@ const PostView = () => {
     return null;
   }
 
-  const handleUpvotePost = post => {
-    dispatch(upvote(post));
+  const handleUpvotePost = async postID => {
+    console.log("upvoting post");
+
+    await dispatch(addVote(postID, 1));
+
+    dispatch(initializeVotes());
+    dispatch(initializePosts());
   };
 
-  const handleDownvotePost = post => {
-    dispatch(downvote(post));
+  const handleDownvotePost = async postID => {
+    console.log("downvoting post");
+    await dispatch(addVote(postID, -1));
+
+    dispatch(initializeVotes());
+    dispatch(initializePosts());
+  };
+
+  const styleVoteButton = type => {
+    const userPostVote = userPostVotes.find(
+      vote => vote.post_id.toString() === post.postID.toString()
+    );
+
+    if (userPostVote === undefined) {
+      return;
+    } else if (userPostVote.vote_value === 1 && type === "upvote") {
+      return { color: "blue" };
+    } else if (userPostVote.vote_value === -1 && type === "downvote") {
+      return { color: "red" };
+    }
   };
 
   return (
@@ -48,13 +77,15 @@ const PostView = () => {
         <FontAwesome
           name="plus-square"
           className="upvote"
-          onClick={() => handleUpvotePost(post)}
+          onClick={() => handleUpvotePost(post.postID)}
+          style={styleVoteButton("upvote")}
         />
-        <span>{post.votes <= 0 ? 0 : post.votes}</span>
+        <span>{post.score}</span>
         <FontAwesome
           name="minus-square"
           className="downvote"
           onClick={() => handleDownvotePost(post)}
+          style={styleVoteButton("downvote")}
         />
       </VoteContainer>
       <div>

@@ -14,7 +14,6 @@ const all = () => {
       if (err) {
         return reject(err);
       }
-      console.log(results);
       resolve(results);
     });
   });

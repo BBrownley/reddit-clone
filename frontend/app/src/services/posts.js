@@ -19,7 +19,6 @@ const config = {
 
 const getAll = async () => {
   const req = await axios.get("http://localhost:5000/", config);
-  console.log(req.data);
   return req.data;
 };
 
@@ -39,28 +38,27 @@ const createPost = async post => {
   return req.data;
 };
 
-const upvote = async post => {
-  const newPostData = { ...post, votes: post.votes + 1 };
-  const req = await axios.put(
-    `http://localhost:3001/posts/${post.id}`,
-    newPostData
+const vote = async (postID, value) => {
+  const config = {
+    headers: {
+      Authorization: storedToken
+    }
+  };
+  const body = {
+    value
+  };
+  const data = await axios.post(
+    `http://localhost:5000/posts/${postID}/vote`,
+    body,
+    config
   );
-  return req.data;
-};
-
-const downvote = async post => {
-  const newPostData = { ...post, votes: post.votes - 1 };
-  const req = await axios.put(
-    `http://localhost:3001/posts/${post.id}`,
-    newPostData
-  );
-  return req.data;
+  console.log(data);
+  return data;
 };
 
 export default {
   getAll,
   createPost,
-  upvote,
-  downvote,
-  setToken
+  setToken,
+  vote
 };

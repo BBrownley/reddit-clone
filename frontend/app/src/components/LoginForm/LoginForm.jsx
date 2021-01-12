@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 
 import { login } from "../../reducers/userReducer";
+import { initializeVotes } from "../../reducers/userPostVotesReducer";
 
 import postService from "../../services/posts";
 
@@ -30,6 +31,10 @@ const LoginForm = () => {
     const data = { username, password };
     console.log(data);
     dispatch(login(data));
+    setTimeout(() => {
+      dispatch(initializeVotes()); // Do this better!
+    }, 2000);
+
     console.log(user);
     history.push(`/`);
   };

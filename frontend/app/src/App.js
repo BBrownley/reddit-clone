@@ -6,6 +6,7 @@ import styled from "styled-components";
 
 import { initializePosts } from "./reducers/postsReducer";
 import { initializeGroups } from "./reducers/groupsReducer";
+import { initializeVotes } from "./reducers/userPostVotesReducer";
 import { logout } from "./reducers/userReducer";
 
 import PostList from "./components/PostList/PostList";
@@ -101,7 +102,16 @@ const App = () => {
   useEffect(async () => {
     dispatch(initializePosts());
     dispatch(initializeGroups());
-  }, []);
+
+    if (user) {
+      dispatch(initializeVotes());
+    }
+
+    // if (user) {
+    //   console.log(user);
+    //   dispatch(initializeVotes());
+    // }
+  }, [PostList]);
 
   const handleSortBy = e => {
     const sortValue = e.target.value;
