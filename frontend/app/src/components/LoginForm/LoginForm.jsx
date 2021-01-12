@@ -26,16 +26,14 @@ const LoginForm = () => {
     setPassword(e.target.value);
   };
 
-  const handleLogin = e => {
+  const handleLogin = async e => {
     e.preventDefault();
     const data = { username, password };
     console.log(data);
-    dispatch(login(data));
-    setTimeout(() => {
-      dispatch(initializeVotes()); // Do this better!
-    }, 2000);
+    await dispatch(login(data));
 
-    console.log(user);
+    dispatch(initializeVotes()); 
+
     history.push(`/`);
   };
 

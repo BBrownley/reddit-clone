@@ -28,13 +28,18 @@ import PostHeader from "../shared/PostHeader";
 
 const PostView = () => {
   const posts = useSelector(state => state.posts);
-  const userPostVotes = useSelector(state => state.userPostVotes);
-  const dispatch = useDispatch();
-
   const match = useRouteMatch("/groups/:group/:id");
   const post = match
     ? posts.find(post => post.postID.toString() === match.params.id.toString())
     : null;
+  const userPostVote = useSelector(state =>
+    state.userPostVotes.find(vote => {
+      const x = vote.post_id;
+      const y = post.postID;
+      return vote.post_id === post.postID;
+    })
+  );
+  const dispatch = useDispatch();
 
   if (!post) {
     return null;
@@ -58,10 +63,6 @@ const PostView = () => {
   };
 
   const styleVoteButton = type => {
-    const userPostVote = userPostVotes.find(
-      vote => vote.post_id.toString() === post.postID.toString()
-    );
-
     if (userPostVote === undefined) {
       return;
     } else if (userPostVote.vote_value === 1 && type === "upvote") {
@@ -84,7 +85,7 @@ const PostView = () => {
         <FontAwesome
           name="minus-square"
           className="downvote"
-          onClick={() => handleDownvotePost(post)}
+          onClick={() => handleDownvotePost(post.postID)}
           style={styleVoteButton("downvote")}
         />
       </VoteContainer>
