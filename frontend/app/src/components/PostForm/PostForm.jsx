@@ -5,6 +5,8 @@ import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { createPost } from "../../reducers/postsReducer";
+import { initializeVotes } from "../../reducers/userPostVotesReducer";
+import { initializePosts } from "../../reducers/postsReducer";
 
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 
@@ -40,6 +42,8 @@ const PostForm = () => {
     e.preventDefault();
     const data = { title, groupID: groupQuery.id, content };
     dispatch(createPost(data));
+    dispatch(initializeVotes());
+    dispatch(initializePosts());
     history.push(`/groups/${groupQuery.label}`);
   };
 
