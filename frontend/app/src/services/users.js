@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useDispatch } from "react-redux";
 
 const config = {
   headers: {
@@ -13,12 +14,18 @@ const register = async data => {
 };
 
 const login = async data => {
-  const req = await axios.post(
-    "http://localhost:5000/users/login",
-    data,
-    config
-  );
-  return req.data;
+  try {
+    const req = await axios.post(
+      "http://localhost:5000/users/login",
+      data,
+      config
+    );
+    return req.data;
+  } catch (error) {
+    console.log(error.response); // https://stackoverflow.com/a/46339608
+    // store.dispatch(timedNotification(error.response.data.error, 5000));
+    return {error: error.response.data.error};
+  }
 };
 
 export default { register, login };

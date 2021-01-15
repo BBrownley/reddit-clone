@@ -75,9 +75,7 @@ const login = userInfo => {
     // Check to make sure all fields were filled in
 
     if (!username || !password) {
-      return reject({
-        error: "All fields must be filled in"
-      });
+      return reject(new Error("All fields must be filled in"));
     }
 
     // Compare hashed password with given password to see if it matches
@@ -85,19 +83,53 @@ const login = userInfo => {
       "SELECT * FROM users WHERE username = ?",
       [username],
       async (error, results) => {
-        if (
-          !results ||
-          !(await bcrypt.compare(password, results[0].hashed_password))
-        ) {
-          reject({ error: "Invalid username or password" });
-        } else {
-          console.log("User login successful");
+        // const loginSuccess = await bcrypt.compare(
+        //   password,
+        //   results[0].hashed_password
+        // );
 
-          const userInfo = { username, id: results[0].id };
-          const token = jwt.sign(userInfo, process.env.SECRET);
+        // if (loginSuccess) {
+        //   console.log("Login succeeded");
 
-          resolve({ username, token });
+        //   const userInfo = { username, id: results[0].id };
+        //   const token = jwt.sign(userInfo, process.env.SECRET);
+
+        //   resolve({ username, token });
+        // } else {
+        //   return reject(new Error("Invalid username or password"));
+        // }
+
+        try {
+          const comparePW = await bcrypt.compare(
+            password,
+            results[0].hashed_password
+          );
+
+          if (comparePW) {
+            console.log("Login succeeded");
+
+            const userInfo = { username, id: results[0].id };
+            const token = jwt.sign(userInfo, process.env.SECRET);
+
+            resolve({ username, token });
+          } else {
+            return reject(new Error("Invalid username or password"));
+          }
+        } catch (exception) {
+          return reject(new Error("Invalid username or password"));
         }
+
+        // if (
+        //   !results ||
+        //   !(await bcrypt.compare(password, results[0].hashed_password))
+        // ) {
+        //   return reject(new Error("Invalid username or password"));
+        // } else {
+        //   const userInfo = { username, id: results[0].id };
+        //   const token = jwt.sign(userInfo, process.env.SECRET);
+
+        //   resolve({ username, token });
+        // }
       }
     );
   });

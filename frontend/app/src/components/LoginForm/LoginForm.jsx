@@ -5,8 +5,14 @@ import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 
 import { login } from "../../reducers/userReducer";
 import { initializeVotes } from "../../reducers/userPostVotesReducer";
+import {
+  setNotification,
+  timedNotification
+} from "../../reducers/notificationReducer";
 
-import postService from "../../services/posts";
+import Notification from "../../components/Notification/Notification";
+
+import userService from "../../services/users";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -27,14 +33,27 @@ const LoginForm = () => {
   };
 
   const handleLogin = async e => {
+    // e.preventDefault();
+    // const data = { username, password };
+    // console.log(data);
+    // await dispatch(login(data));
+
+    // dispatch(initializeVotes());
+
+    // history.push(`/`);
+
     e.preventDefault();
     const data = { username, password };
-    console.log(data);
-    await dispatch(login(data));
 
-    dispatch(initializeVotes()); 
-
-    history.push(`/`);
+    try {
+      dispatch(login(data));
+      dispatch(initializeVotes());
+      // dispatch(timedNotification("Attempting to log in", 3000));
+      // history.push(`/`);
+    } catch (exception) {
+      // dispatch(timedNotification("Error!", 3000));
+      console.log(exception);
+    }
   };
 
   return (
@@ -62,9 +81,11 @@ const LoginForm = () => {
           ></input>
         </FormField>
       </form>
+
       <button type="submit" form="login-form">
         Login
       </button>
+      <Notification />
     </FormContainer>
   );
 };

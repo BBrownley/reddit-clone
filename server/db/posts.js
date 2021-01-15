@@ -23,6 +23,7 @@ const q = `
 `;
 
 const all = () => {
+  console.log("Fetching posts");
   return new Promise((resolve, reject) => {
     connection.query(q, (err, results) => {
       if (err) {

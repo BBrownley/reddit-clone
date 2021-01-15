@@ -26,6 +26,8 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
   let postsToDisplay = useSelector(state => {
     let posts = [];
 
+    console.log(state);
+
     if (!match) {
       posts = state.posts;
     } else {
@@ -47,6 +49,8 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
 
     return posts;
   });
+
+  console.log(postsToDisplay);
 
   // Filter results if search is used
   if (!!searchTerm) {

@@ -18,7 +18,9 @@ const config = {
 };
 
 const getAll = async () => {
+  console.log("Fetching posts (from services/posts)");
   const req = await axios.get("http://localhost:5000/", config);
+  console.log(req);
   return req.data;
 };
 
@@ -34,6 +36,8 @@ const createPost = async post => {
   console.log(config);
 
   const req = await axios.post("http://localhost:5000/posts", post, config);
+
+  console.log(req.data);
 
   return req.data;
 };

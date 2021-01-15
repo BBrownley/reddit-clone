@@ -20,6 +20,11 @@ const getPostScore = postID => {
 
 const getUserPostVotes = token => {
   return new Promise((resolve, reject) => {
+    console.log(`The token value is: ${token}`);
+
+    if (token !== null) {
+      return reject(new Error("No JWT provided - cannot load user post votes"));
+    }
 
     const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
     const userId = decodedToken.id;
@@ -32,7 +37,7 @@ const getUserPostVotes = token => {
       [userId],
       (err, results) => {
         if (err) {
-          reject(err);
+          return reject(new Error("An unexpected error has occured"));
         } else {
           resolve(results);
         }

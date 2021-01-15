@@ -10,6 +10,8 @@ import { initializePosts } from "../../reducers/postsReducer";
 
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 
+import postService from "../../services/posts";
+
 const PostForm = () => {
   const [title, setTitle] = useState("");
   const [groupQuery, setGroupQuery] = useState("");
@@ -38,9 +40,12 @@ const PostForm = () => {
     setContent(e.target.value);
   };
 
-  const addPost = e => {
+  const addPost = async e => {
     e.preventDefault();
     const data = { title, groupID: groupQuery.id, content };
+
+    const newPost = await postService.createPost(data);
+
     dispatch(createPost(data));
     dispatch(initializeVotes());
     dispatch(initializePosts());
