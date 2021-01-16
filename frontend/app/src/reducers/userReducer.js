@@ -12,14 +12,16 @@ export const login = credentials => {
 
     if (data.error) {
       dispatch(timedNotification(data.error, 3000));
+      return false;
+    } else {
+      postService.setToken(data.token);
+      userPostVoteService.setToken(data.token);
+      dispatch({
+        type: "LOGIN",
+        data
+      });
+      return true;
     }
-
-    postService.setToken(data.token);
-    userPostVoteService.setToken(data.token);
-    dispatch({
-      type: "LOGIN",
-      data
-    });
   };
 };
 

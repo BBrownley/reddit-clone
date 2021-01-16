@@ -33,26 +33,16 @@ const LoginForm = () => {
   };
 
   const handleLogin = async e => {
-    // e.preventDefault();
-    // const data = { username, password };
-    // console.log(data);
-    // await dispatch(login(data));
-
-    // dispatch(initializeVotes());
-
-    // history.push(`/`);
-
     e.preventDefault();
     const data = { username, password };
 
-    try {
-      dispatch(login(data));
+    const loginSuccess = await dispatch(login(data));
+
+    console.log(loginSuccess);
+
+    if (loginSuccess) {
       dispatch(initializeVotes());
-      // dispatch(timedNotification("Attempting to log in", 3000));
-      // history.push(`/`);
-    } catch (exception) {
-      // dispatch(timedNotification("Error!", 3000));
-      console.log(exception);
+      history.push(`/`);
     }
   };
 
