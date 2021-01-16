@@ -11,7 +11,7 @@ export const login = credentials => {
     const data = await userService.login(credentials);
 
     if (data.error) {
-      dispatch(timedNotification("hello", 3000));
+      dispatch(timedNotification(data.error, 3000));
       return false;
     } else {
       postService.setToken(data.token);
