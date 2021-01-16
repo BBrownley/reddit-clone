@@ -25,21 +25,19 @@ const getAll = async () => {
 };
 
 const createPost = async post => {
-  console.log(storedToken);
-
   const config = {
     headers: {
       Authorization: storedToken
     }
   };
 
-  console.log(config);
-
-  const req = await axios.post("http://localhost:5000/posts", post, config);
-
-  console.log(req.data);
-
-  return req.data;
+  try {
+    const req = await axios.post("http://localhost:5000/posts", post, config);
+    console.log(req);
+    return req.data;
+  } catch (error) {
+    return { error: error.response.data.error };
+  }
 };
 
 const vote = async (postID, value) => {

@@ -25,10 +25,14 @@ app.get("/groups", async (req, res) => {
   res.json(groups);
 });
 
-app.post("/posts", async (req, res) => {
-  const token = req.headers.authorization;
-  const data = await postsDB.create(req.body, token);
-  res.json(data);
+app.post("/posts", async (req, res, next) => {
+  try {
+    const token = req.headers.authorization;
+    const data = await postsDB.create(req.body, token);
+    res.json(data);
+  } catch (exception) {
+    next(exception);
+  }
 });
 
 app.post("/users", async (req, res) => {
@@ -41,9 +45,6 @@ app.post("/users/login", async (req, res, next) => {
     const data = await usersDB.login(req.body);
     res.json(data);
   } catch (exception) {
-    // console.log("##### FROM THE TRY-CATCH BLOCK #####");
-    // console.log(exception);
-    // console.log("##### FROM THE TRY-CATCH BLOCK #####");
     next(exception);
   }
 });
@@ -79,18 +80,6 @@ const errorHandler = (err, req, res, next) => {
   console.log("##### FROM THE ERROR HANDLER #####");
 
   return res.status(400).json({ error: err.message });
-  // if (err.name === "ValidationError") {
-  //   console.log("hey");
-  //   return res.status(400).json({ error: err.message });
-  // } else {
-  //   return res.status(401).json({ error: err.message });
-  // }
-
-  // try {
-
-  // } catch (err) {
-  //   next(err)
-  // }
 };
 
 app.use(errorHandler);

@@ -39,6 +39,20 @@ const create = (data, token) => {
     // Verify user
     const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
 
+    // Ensure title and group are filled in, content can be empty
+    console.log(data);
+
+    const title = data.title;
+    const groupID = data.groupID;
+
+    if (!title) {
+      return reject(new Error("Post must contain a title"));
+    }
+
+    if (!groupID) {
+      return reject(new Error("Post must be assigned to a group"));
+    }
+
     connection.query(
       `INSERT INTO posts SET ? `,
       {
@@ -49,7 +63,7 @@ const create = (data, token) => {
       },
       (err, results) => {
         if (err) {
-          reject(err);
+          return reject(new Error("An unexpected error has occured"));
         } else {
           // Retrieve created object
           connection.query(
@@ -66,10 +80,11 @@ const create = (data, token) => {
               WHERE posts.id = ?`,
             [results.insertId],
             (err, results) => {
+              console.log(results[0]);
               if (err) {
-                reject(err);
+                return reject(new Error("An unexpected error has occured"));
               } else {
-                resolve(results);
+                resolve(results[0]);
               }
             }
           );
