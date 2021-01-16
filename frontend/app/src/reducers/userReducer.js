@@ -6,9 +6,28 @@ import { timedNotification } from "../reducers/notificationReducer";
 
 const initialState = null;
 
+export const register = credentials => {
+  return async dispatch => {
+    const data = await userService.register(credentials);
+    console.log(data);
+
+    if (data.error) {
+      dispatch(timedNotification(data.error, 3000));
+      return false;
+    } else {
+      dispatch({
+        type: "LOGIN",
+        data
+      });
+      return true;
+    }
+  };
+};
+
 export const login = credentials => {
   return async dispatch => {
     const data = await userService.login(credentials);
+    console.log(data);
 
     if (data.error) {
       dispatch(timedNotification(data.error, 3000));

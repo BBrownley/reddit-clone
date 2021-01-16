@@ -9,18 +9,16 @@ const register = userInfo => {
     const password = userInfo.password;
     const confirmPassword = userInfo.confirmPassword;
 
+    console.log(userInfo);
+
     // Check to make sure all fields were filled in
 
     if (!username || !email || !password || !confirmPassword) {
-      return reject({
-        error: "All fields must be filled in"
-      });
+      return reject(new Error("All fields must be filled in"));
     }
     // Validate confirm password
     if (password !== confirmPassword) {
-      return reject({
-        error: "Passwords do not match"
-      });
+      return reject(new Error("Passwords do not match"));
     }
     // Check to make sure username or email isn't in use
     connection.query(
@@ -31,7 +29,7 @@ const register = userInfo => {
           console.log(error);
         }
         if (results.length > 0) {
-          reject({ error: "Username already in use" });
+          return reject(new Error("Username already in use"));
         }
       }
     );
@@ -44,7 +42,7 @@ const register = userInfo => {
           console.log(error);
         }
         if (results.length > 0) {
-          reject({ error: "Email already in use" });
+          return reject(new Error("Email already in use"));
         }
       }
     );
@@ -83,7 +81,6 @@ const login = userInfo => {
       "SELECT * FROM users WHERE username = ?",
       [username],
       async (error, results) => {
-
         try {
           const comparePW = await bcrypt.compare(
             password,
@@ -103,7 +100,6 @@ const login = userInfo => {
         } catch (exception) {
           return reject(new Error("Invalid username or password"));
         }
-
       }
     );
   });

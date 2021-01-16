@@ -27,17 +27,23 @@ app.get("/groups", async (req, res) => {
 
 app.post("/posts", async (req, res, next) => {
   try {
+    
     const token = req.headers.authorization;
     const data = await postsDB.create(req.body, token);
+
     res.json(data);
   } catch (exception) {
     next(exception);
   }
 });
 
-app.post("/users", async (req, res) => {
-  const data = await usersDB.register(req.body);
-  res.json(data);
+app.post("/users", async (req, res, next) => {
+  try {
+    const data = await usersDB.register(req.body.data);
+    res.json(data);
+  } catch (exception) {
+    next(exception);
+  }
 });
 
 app.post("/users/login", async (req, res, next) => {

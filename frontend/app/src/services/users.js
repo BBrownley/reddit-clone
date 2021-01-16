@@ -9,8 +9,12 @@ const config = {
 };
 
 const register = async data => {
-  const req = await axios.post("http://localhost:5000/users", data, config);
-  console.log(req.data);
+  try {
+    const req = await axios.post("http://localhost:5000/users", data, config);
+    return req.data
+  } catch (error) {
+    return {error: error.response.data.error};
+  }
 };
 
 const login = async data => {

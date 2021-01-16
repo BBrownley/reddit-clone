@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-import { login } from "../../reducers/userReducer";
+import { login, register } from "../../reducers/userReducer";
+
+import Notification from "../../components/Notification/Notification";
 
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 import usersService from "../../services/users";
@@ -37,12 +39,13 @@ const RegisterForm = () => {
     e.preventDefault();
     const data = { username, email, password, confirmPassword };
     console.log(data);
-    await usersService.register(data);
+    const success = await dispatch(register({ data }));
 
-    // If account creation successful, automatically log them in
-    dispatch(login({ username: data.username, password: data.password }));
-
-    history.push(`/`);
+    if (success) {
+      // If account creation successful, automatically log them in
+      dispatch(login({ username: data.username, password: data.password }));
+      history.push(`/`);
+    }
   };
 
   return (
@@ -93,6 +96,7 @@ const RegisterForm = () => {
       <button type="submit" form="register-form">
         Register
       </button>
+      <Notification />
     </FormContainer>
   );
 };
