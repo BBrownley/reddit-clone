@@ -83,21 +83,6 @@ const login = userInfo => {
       "SELECT * FROM users WHERE username = ?",
       [username],
       async (error, results) => {
-        // const loginSuccess = await bcrypt.compare(
-        //   password,
-        //   results[0].hashed_password
-        // );
-
-        // if (loginSuccess) {
-        //   console.log("Login succeeded");
-
-        //   const userInfo = { username, id: results[0].id };
-        //   const token = jwt.sign(userInfo, process.env.SECRET);
-
-        //   resolve({ username, token });
-        // } else {
-        //   return reject(new Error("Invalid username or password"));
-        // }
 
         try {
           const comparePW = await bcrypt.compare(
@@ -119,17 +104,6 @@ const login = userInfo => {
           return reject(new Error("Invalid username or password"));
         }
 
-        // if (
-        //   !results ||
-        //   !(await bcrypt.compare(password, results[0].hashed_password))
-        // ) {
-        //   return reject(new Error("Invalid username or password"));
-        // } else {
-        //   const userInfo = { username, id: results[0].id };
-        //   const token = jwt.sign(userInfo, process.env.SECRET);
-
-        //   resolve({ username, token });
-        // }
       }
     );
   });

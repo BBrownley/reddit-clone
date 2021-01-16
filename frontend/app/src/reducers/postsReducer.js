@@ -1,12 +1,13 @@
 import postService from "../services/posts";
 import userPostVoteService from "../services/userPostVotes";
+
+import { timedNotification } from "../reducers/notificationReducer";
+
 const initialState = [];
 
 export const initializePosts = () => {
-  console.log("hi");
   return async dispatch => {
     const data = await postService.getAll();
-    console.log(data);
     dispatch({
       type: "INITIALIZE_POSTS",
       data
@@ -18,10 +19,17 @@ export const createPost = formData => {
   return async dispatch => {
     const data = await postService.createPost(formData);
     console.log(data);
-    dispatch({
-      type: "CREATE_POST",
-      data
-    });
+
+    if (data.error) {
+      dispatch(timedNotification(data.error, 3000));
+      return false;
+    } else {
+      dispatch({
+        type: "CREATE_POST",
+        data
+      });
+      return data;
+    }
   };
 };
 
