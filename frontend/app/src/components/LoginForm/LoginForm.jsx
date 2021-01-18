@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 
@@ -14,13 +14,14 @@ import Notification from "../../components/Notification/Notification";
 
 import userService from "../../services/users";
 
-const LoginForm = () => {
+const LoginForm = props => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
 
   const history = useHistory();
+  const location = useLocation();
 
   const user = useSelector(state => state.user);
 
@@ -31,6 +32,8 @@ const LoginForm = () => {
   const handleSetPassword = e => {
     setPassword(e.target.value);
   };
+
+  console.log(location);
 
   const handleLogin = async e => {
     e.preventDefault();
@@ -46,9 +49,21 @@ const LoginForm = () => {
     }
   };
 
+  let headerMessage;
+  let creatingPost; // Did the user end up here from attempting to make a new post when not logged in?
+
+  // TODO: Make this more concise!
+  try {
+    headerMessage = location.state.headerMessage;
+    creatingPost = location.state.creatingPost;
+  } catch (e) {
+    headerMessage = "Login";
+    creatingPost = false;
+  }
+
   return (
     <FormContainer>
-      <FormHeader>Login</FormHeader>
+      <FormHeader>{headerMessage}</FormHeader>
       <form id="login-form" onSubmit={handleLogin}>
         <FormField>
           <label htmlFor="username">Username:</label>
@@ -71,6 +86,25 @@ const LoginForm = () => {
           ></input>
         </FormField>
       </form>
+
+      {/* <Link to={{
+      pathname: '/template',
+      search: '?query=abc',
+      state: { detail: response.data }
+    }}> My Link </Link> */}
+
+      <p>
+        New user? Register{" "}
+        <Link
+          to={{
+            pathname: "/register",
+            state: { creatingPost }
+          }}
+        >
+          here
+        </Link>
+        .
+      </p>
 
       <button type="submit" form="login-form">
         Login

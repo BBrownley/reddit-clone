@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import { login, register } from "../../reducers/userReducer";
@@ -18,6 +18,7 @@ const RegisterForm = () => {
   const dispatch = useDispatch();
 
   const history = useHistory();
+  const location = useLocation();
 
   const handleSetUsername = e => {
     setUsername(e.target.value);
@@ -35,6 +36,15 @@ const RegisterForm = () => {
     setConfirmPassword(e.target.value);
   };
 
+  // TODO: Make this more concise!
+  let creatingPost;
+
+  try {
+    creatingPost = location.state.creatingPost;
+  } catch (e) {
+    creatingPost = false;
+  }
+
   const handleRegistration = async e => {
     e.preventDefault();
     const data = { username, email, password, confirmPassword };
@@ -44,7 +54,11 @@ const RegisterForm = () => {
     if (success) {
       // If account creation successful, automatically log them in
       dispatch(login({ username: data.username, password: data.password }));
-      history.push(`/`);
+      if (creatingPost) {
+        history.push("/create");
+      } else {
+        history.push(`/`);
+      }
     }
   };
 

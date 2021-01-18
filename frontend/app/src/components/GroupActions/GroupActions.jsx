@@ -1,17 +1,34 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import FontAwesome from "react-fontawesome";
 import { useHistory } from "react-router-dom";
 
 const GroupActions = () => {
   const history = useHistory();
+  const loggedUser = useSelector(state => state.user);
 
-  const redirectToPostForm = () => {
-    history.push("/create");
+  const handleCreatePostButton = () => {
+    if (loggedUser) {
+      history.push("/create");
+    } else {
+      history.push({
+        pathname: "/login",
+        state: { headerMessage: "Log in to create a post", creatingPost: true }
+      });
+    }
   };
+
+  /*
+    this.props.history.push({
+      pathname: '/template',
+      search: '?query=abc',
+      state: { detail: response.data }
+    })
+  */
 
   return (
     <div className="group-actions">
-      <button onClick={redirectToPostForm}>
+      <button onClick={handleCreatePostButton}>
         <FontAwesome name="paper-plane"></FontAwesome> Submit a new post
       </button>
 
