@@ -45,12 +45,13 @@ const LoginForm = props => {
 
     if (loginSuccess) {
       dispatch(initializeVotes());
+      localStorage.setItem("loggedUser", JSON.stringify(loginSuccess));
       history.push(`/`);
     }
   };
 
   let headerMessage;
-  let creatingPost; // Did the user end up here from attempting to make a new post when not logged in?
+  let creatingPost; // Did the user end up here from attempting to make a new post while not logged in?
 
   // TODO: Make this more concise!
   try {

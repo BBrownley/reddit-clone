@@ -97,7 +97,14 @@ const App = () => {
   const [searchBy, setSearchBy] = useState("title");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const user = useSelector(state => state.user);
+  const user = useSelector(state => {
+    const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+    if (loggedUser) {
+      return loggedUser;
+    } else {
+      return state.user;
+    }
+  });
 
   useEffect(async () => {
     dispatch(initializePosts());
@@ -134,6 +141,7 @@ const App = () => {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("loggedUser");
     dispatch(logout());
   };
 

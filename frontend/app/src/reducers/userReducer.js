@@ -39,7 +39,7 @@ export const login = credentials => {
         type: "LOGIN",
         data
       });
-      return true;
+      return data;
     }
   };
 };
