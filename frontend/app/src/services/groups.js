@@ -13,4 +13,9 @@ const getAll = async () => {
   return req.data;
 };
 
-export default { getAll };
+const getGroupByName = async groupName => {
+  const req = await axios.get(`http://localhost:5000/groups/${groupName}`, config);
+  return req.data;
+}
+
+export default { getAll, getGroupByName };

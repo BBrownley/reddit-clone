@@ -9,6 +9,7 @@ import { initializeGroups } from "./reducers/groupsReducer";
 import { initializeVotes } from "./reducers/userPostVotesReducer";
 import { logout } from "./reducers/userReducer";
 
+import GroupInfo from "./components/GroupInfo/GroupInfo";
 import PostList from "./components/PostList/PostList";
 import PostView from "./components/PostView/PostView";
 import PostForm from "./components/PostForm/PostForm";
@@ -42,30 +43,6 @@ const Branding = styled.h1`
   padding: 10px 0;
 `;
 
-const GroupInfo = styled.div`
-  text-align: center;
-
-  .group-desc {
-    max-width: 80ch;
-    margin: auto;
-    margin-top: 10px;
-  }
-
-  .group-actions {
-    display: flex;
-    margin: 30px 0;
-
-    justify-content: space-between;
-    & > * {
-      flex: 1;
-      margin-right: 2rem;
-    }
-    & > *:last-child {
-      margin-right: 0;
-    }
-  }
-`;
-
 const Navigation = styled.nav`
   display: flex;
   justify-content: space-between;
@@ -96,6 +73,7 @@ const App = () => {
   const [sortBy, setSortBy] = useState("new");
   const [searchBy, setSearchBy] = useState("title");
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentGroup, setCurrentGroup] = useState({});
 
   const user = useSelector(state => {
     const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
@@ -194,28 +172,14 @@ const App = () => {
 
             <Switch>
               <Route exact path="/groups/:group">
-                <GroupInfo>
-                  <div className="group-info-main">
-                    <h1>General</h1>
-                    <p>1272 subscribers</p>
-                    <p className="group-desc">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Etiam dapibus turpis nec libero ornare, ut pharetra orci
-                      bibendum. Sed nec eros aliquet, sodales nunc sit amet,
-                      fringilla purus. Aliquam ac nunc aliquam, sollicitudin
-                      lorem sit amet, dapibus arcu. Donec mollis diam id lorem
-                      vestibulum.
-                    </p>
-                  </div>
-                </GroupInfo>
+                <GroupInfo />
               </Route>
             </Switch>
 
             <Switch>
               <Route exact path={["/", "/groups/:group"]}>
-                <GroupInfo>
-                  <GroupActions />
-                </GroupInfo>
+                <GroupActions />
+
                 <div>
                   <strong>Sort posts by:</strong>
                   <select

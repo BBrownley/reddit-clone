@@ -25,9 +25,13 @@ app.get("/groups", async (req, res) => {
   res.json(groups);
 });
 
+app.get("/groups/:groupName", async (req, res) => {
+  let group = await groupsDB.getGroupByName(req.params.groupName);
+  res.json(group);
+});
+
 app.post("/posts", async (req, res, next) => {
   try {
-    
     const token = req.headers.authorization;
     const data = await postsDB.create(req.body, token);
 

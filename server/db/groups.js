@@ -19,6 +19,26 @@ const all = () => {
   });
 };
 
+const getGroupByName = groupName => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `
+      SELECT * FROM groups
+      WHERE group_name = ?
+      LIMIT 1
+    `,
+      [groupName],
+      (err, results) => {
+        if (err) {
+          return reject(new Error("An unexpected error has occured"));
+        }
+        resolve(results[0]);
+      }
+    );
+  });
+};
+
 module.exports = {
-  all
+  all,
+  getGroupByName
 };

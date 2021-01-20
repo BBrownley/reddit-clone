@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import FontAwesome from "react-fontawesome";
 import { useHistory } from "react-router-dom";
 
+import { GroupActions as Container } from "./GroupActions.elements";
+
 const GroupActions = () => {
   const history = useHistory();
   const loggedUser = useSelector(state => state.user);
@@ -17,17 +19,9 @@ const GroupActions = () => {
       });
     }
   };
-
-  /*
-    this.props.history.push({
-      pathname: '/template',
-      search: '?query=abc',
-      state: { detail: response.data }
-    })
-  */
-
+  
   return (
-    <div className="group-actions">
+    <Container>
       <button onClick={handleCreatePostButton}>
         <FontAwesome name="paper-plane"></FontAwesome> Submit a new post
       </button>
@@ -38,7 +32,7 @@ const GroupActions = () => {
       <button>
         <FontAwesome name="info-circle"></FontAwesome> More Info
       </button>
-    </div>
+    </Container>
   );
 };
 
