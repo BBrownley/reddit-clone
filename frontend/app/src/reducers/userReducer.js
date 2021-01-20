@@ -1,5 +1,6 @@
 import userService from "../services/users";
 import postService from "../services/posts";
+import groupService from "../services/groups";
 import userPostVoteService from "../services/userPostVotes";
 
 import { timedNotification } from "../reducers/notificationReducer";
@@ -24,7 +25,7 @@ export const register = credentials => {
   };
 };
 
-export const login = credentials => {
+export const login = (credentials, hasToken) => {
   return async dispatch => {
     const data = await userService.login(credentials);
     console.log(data);
@@ -35,6 +36,7 @@ export const login = credentials => {
     } else {
       postService.setToken(data.token);
       userPostVoteService.setToken(data.token);
+      groupService.setToken(data.token);
       dispatch({
         type: "LOGIN",
         data
@@ -52,12 +54,27 @@ export const logout = () => {
   };
 };
 
+export const setUser = userInfo => {
+  return async dispatch => {
+    console.log("HEY");
+    // postService.setToken(userInfo.token);
+    // userPostVoteService.setToken(userInfo.token);
+    // groupService.setToken(userInfo.token);
+    dispatch({
+      type: "SET_USER",
+      userInfo
+    });
+  };
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "LOGIN":
       return action.data;
     case "LOGOUT":
       return null;
+    case "SET_USER":
+      return action.userInfo;
     default:
       return state;
   }

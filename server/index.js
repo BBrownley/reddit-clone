@@ -25,6 +25,19 @@ app.get("/groups", async (req, res) => {
   res.json(groups);
 });
 
+// TODO: Change this route pattern later
+app.post("/create/groups", async (req, res, next) => {
+  console.log(req.body);
+  try {
+    const token = req.headers.authorization;
+    const createdGroup = await groupsDB.create(req.body, token);
+    console.log(`CREATED GROUP: ${createdGroup}`);
+    res.json(createdGroup);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
 app.get("/groups/:groupName", async (req, res) => {
   let group = await groupsDB.getGroupByName(req.params.groupName);
   res.json(group);

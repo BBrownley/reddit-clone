@@ -32,6 +32,7 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
       posts = state.posts;
     } else {
       posts = state.posts.filter(post => {
+        // TODO: This line causes an unexpected error sometimes
         return post.groupName.toLowerCase() === match.params.group;
       });
     }

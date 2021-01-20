@@ -7,11 +7,16 @@ import styled from "styled-components";
 import { initializePosts } from "./reducers/postsReducer";
 import { initializeGroups } from "./reducers/groupsReducer";
 import { initializeVotes } from "./reducers/userPostVotesReducer";
-import { logout } from "./reducers/userReducer";
+import { logout, login, setUser } from "./reducers/userReducer";
+
+import postService from "./services/posts";
+import userPostVoteService from "./services/userPostVotes";
+import groupService from "./services/groups";
 
 import GroupInfo from "./components/GroupInfo/GroupInfo";
 import PostList from "./components/PostList/PostList";
 import PostView from "./components/PostView/PostView";
+import GroupForm from "./components/GroupForm/GroupForm";
 import PostForm from "./components/PostForm/PostForm";
 import GroupActions from "./components/GroupActions/GroupActions";
 import GroupList from "./components/GroupList/GroupList";
@@ -78,6 +83,7 @@ const App = () => {
   const user = useSelector(state => {
     const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
     if (loggedUser) {
+      dispatch(setUser(loggedUser));
       return loggedUser;
     } else {
       return state.user;
@@ -219,6 +225,9 @@ const App = () => {
             </Switch>
 
             <Switch>
+              <Route exact path="/create/groups">
+                <GroupForm />
+              </Route>
               <Route path="/create">
                 <PostForm />
               </Route>
