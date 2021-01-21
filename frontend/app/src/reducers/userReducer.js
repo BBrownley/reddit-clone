@@ -27,16 +27,23 @@ export const register = credentials => {
 
 export const login = (credentials, hasToken) => {
   return async dispatch => {
-    const data = await userService.login(credentials);
-    console.log(data);
+    const res = await userService.login(credentials);
+    console.log(res);
 
-    if (data.error) {
-      dispatch(timedNotification(data.error, 3000));
+    if (res.error) {
+      dispatch(timedNotification(res.error, 3000));
       return false;
     } else {
+      
+      const data = {
+        username: res.username,
+        token: `bearer ${res.token}`
+      };
+
       postService.setToken(data.token);
       userPostVoteService.setToken(data.token);
       groupService.setToken(data.token);
+
       dispatch({
         type: "LOGIN",
         data
@@ -56,7 +63,7 @@ export const logout = () => {
 
 export const setUser = userInfo => {
   return async dispatch => {
-    console.log("HEY");
+    console.log(userInfo);
     postService.setToken(userInfo.token);
     userPostVoteService.setToken(userInfo.token);
     groupService.setToken(userInfo.token);

@@ -79,6 +79,13 @@ app.post("/posts/:id/vote", async (req, res) => {
   res.json(vote);
 });
 
+app.get("/posts/verifyuserposts", async (req, res) => {
+  const token = req.headers.authorization;
+  const userposts = await postsDB.getPostsByToken(token);
+  console.log(userposts);
+  res.json(userposts);
+});
+
 app.get("/posts/votes", async (req, res, next) => {
   try {
     const token = req.headers.authorization;

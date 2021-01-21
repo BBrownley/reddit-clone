@@ -14,6 +14,7 @@ const q = `
     group_name AS groupName,
     group_id AS groupID,
     username,
+    users.id AS user_id,
     content FROM posts
   JOIN users ON users.id = posts.submitter_id
   JOIN groups ON groups.id = posts.group_id
@@ -167,8 +168,40 @@ const vote = (data, postID, token) => {
   });
 };
 
+const getPostsByToken = token => {
+  return new Promise(async (resolve, reject) => {
+    console.log(`LINE 173 ${token} LINE 173`);
+
+    const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
+    const userId = decodedToken.id;
+
+    console.log(decodedToken);
+
+    connection.query(
+      `
+    
+    SELECT id FROM posts WHERE submitter_id = ?
+
+    `,
+      [userId],
+      (err, results) => {
+        if (err) {
+          return reject(err);
+        }
+        // Return their IDs
+        resolve(
+          results.reduce((acc, curr) => {
+            return [...acc, curr.id];
+          }, [])
+        );
+      }
+    );
+  });
+};
+
 module.exports = {
   all,
+  getPostsByToken,
   create,
   vote
 };

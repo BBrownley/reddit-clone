@@ -24,8 +24,8 @@ const PostForm = () => {
 
   const groups = useSelector(state => state.groups).map(group => {
     return {
-      value: group.groupName.toLowerCase(),
-      label: group.groupName.toLowerCase(),
+      value: group.group_name.toLowerCase(),
+      label: group.group_name.toLowerCase(),
       id: group.id
     };
   });

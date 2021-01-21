@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 
 import moment from "moment";
@@ -11,6 +11,8 @@ import {
 } from "../../reducers/userPostVotesReducer";
 import { initializePosts } from "../../reducers/postsReducer";
 
+import postService from "../../services/posts";
+
 import FontAwesome from "react-fontawesome";
 
 import { Post, VoteContainer, Content, PostOptions } from "./PostList.elements";
@@ -21,7 +23,22 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
   const match = useRouteMatch("/groups/:group");
   const dispatch = useDispatch();
 
+  // User post IDs by the logged in user
+  const [userPosts, setUserPosts] = useState([]);
+
+  const user = useSelector(state => state.user);
   const userPostVotes = useSelector(state => state.userPostVotes);
+
+  useEffect(() => {
+    console.log(user);
+    const fetchUserPosts = async user => {
+      console.log(user);
+      const data = await postService.getByUser(user);
+      console.log(data);
+      setUserPosts(data);
+    };
+    fetchUserPosts(user);
+  }, []);
 
   let postsToDisplay = useSelector(state => {
     let posts = [];
@@ -137,6 +154,10 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
           <span className={Math.random() > 0.5 ? "favorite-active" : ""}>
             <FontAwesome name="heart" className="fa-heart" /> {post.followers}{" "}
             followers
+          </span>
+          <span>{post.postID}</span>
+          <span>
+            {userPosts.includes(post.postID) ? "This is my post!" : ""}
           </span>
         </PostOptions>
       </div>

@@ -4,7 +4,7 @@ let storedToken = null;
 
 const setToken = token => {
   console.log("Setting token...");
-  storedToken = `bearer ${token}`;
+  storedToken = token;
   console.log(`Updated token: ${token}`);
 };
 

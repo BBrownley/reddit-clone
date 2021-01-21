@@ -6,7 +6,7 @@ let storedToken = null;
 
 const setToken = token => {
   console.log("Setting token...");
-  storedToken = `bearer ${token}`;
+  storedToken = token;
   console.log(`Updated token: ${token}`);
 };
 
@@ -21,6 +21,24 @@ const getAll = async () => {
   console.log("Fetching posts (from services/posts)");
   const req = await axios.get("http://localhost:5000/", config);
   console.log(req);
+  return req.data;
+};
+
+const getByUser = async user => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      Authorization: user.token
+    }
+  };
+
+  console.log(config);
+
+  const req = await axios.get(
+    "http://localhost:5000/posts/verifyuserposts",
+    config
+  );
   return req.data;
 };
 
@@ -60,6 +78,7 @@ const vote = async (postID, value) => {
 
 export default {
   getAll,
+  getByUser,
   createPost,
   setToken,
   vote
