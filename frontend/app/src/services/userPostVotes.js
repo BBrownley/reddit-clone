@@ -10,6 +10,8 @@ const setToken = token => {
 };
 
 const getUserPostVotes = async () => {
+  console.log("user post votes reducer");
+
   const config = {
     headers: {
       Authorization: storedToken

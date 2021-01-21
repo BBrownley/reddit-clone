@@ -16,11 +16,13 @@ export const createGroup = formData => {
     console.log(data);
     if (data.error) {
       console.log(data.error);
+      return false;
     } else {
       dispatch({
         type: "CREATE_GROUP",
         data
       });
+      return data;
     }
   };
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
@@ -80,29 +80,36 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentGroup, setCurrentGroup] = useState({});
 
+  const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+
+  if (loggedUser) {
+    dispatch(setUser(loggedUser));
+  }
+
   const user = useSelector(state => {
-    const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-    if (loggedUser) {
-      dispatch(setUser(loggedUser));
-      return loggedUser;
-    } else {
-      return state.user;
-    }
+    console.log(state);
+    return state.user;
   });
+
+  useMemo(() => {
+    dispatch(initializeVotes());
+  }, []);
 
   useEffect(async () => {
     dispatch(initializePosts());
     dispatch(initializeGroups());
 
-    if (user) {
-      dispatch(initializeVotes());
-    }
+    // console.log(user);
+
+    // if (user) {
+    dispatch(initializeVotes());
+    // }
 
     // if (user) {
     //   console.log(user);
     //   dispatch(initializeVotes());
     // }
-  }, [PostList]);
+  }, []);
 
   const handleSortBy = e => {
     const sortValue = e.target.value;

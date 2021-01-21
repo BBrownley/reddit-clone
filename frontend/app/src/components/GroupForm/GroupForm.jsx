@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import { createGroup } from "../../reducers/groupsReducer";
 
@@ -11,11 +12,17 @@ const GroupForm = () => {
 
   const dispatch = useDispatch();
 
-  const handleCreateGroup = e => {
+  const history = useHistory();
+
+  const handleCreateGroup = async e => {
     e.preventDefault();
     const formData = { groupName, blurb };
-    console.log(formData);
-    dispatch(createGroup(formData));
+
+    const response = await dispatch(createGroup(formData));
+
+    if (response) {
+      history.push(`/groups/${response.group_name}`);
+    }
   };
 
   const handleSetGroupName = e => {

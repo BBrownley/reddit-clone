@@ -57,9 +57,9 @@ export const logout = () => {
 export const setUser = userInfo => {
   return async dispatch => {
     console.log("HEY");
-    // postService.setToken(userInfo.token);
-    // userPostVoteService.setToken(userInfo.token);
-    // groupService.setToken(userInfo.token);
+    postService.setToken(userInfo.token);
+    userPostVoteService.setToken(userInfo.token);
+    groupService.setToken(userInfo.token);
     dispatch({
       type: "SET_USER",
       userInfo
