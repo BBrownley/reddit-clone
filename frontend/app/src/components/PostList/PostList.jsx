@@ -119,6 +119,10 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
     dispatch(initializePosts());
   };
 
+  const handleDeletePost = async postId => {
+    console.log(postId);
+  };
+
   return postsToDisplay.map(post => (
     <Post key={post.postID}>
       <VoteContainer>
@@ -152,12 +156,18 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
             {/* <FontAwesome name="comments" /> {post.comments.length} comments */}
           </span>
           <span className={Math.random() > 0.5 ? "favorite-active" : ""}>
-            <FontAwesome name="heart" className="fa-heart" /> {post.followers}{" "}
+            <FontAwesome name="heart" className="fa-heart" /> {post.followers} 0
             followers
           </span>
           <span>{post.postID}</span>
           <span>
-            {userPosts.includes(post.postID) ? "This is my post!" : ""}
+            {userPosts.includes(post.postID) ? (
+              <span onClick={() => handleDeletePost(post.postID)}>
+                <FontAwesome name="trash" /> Delete
+              </span>
+            ) : (
+              ""
+            )}
           </span>
         </PostOptions>
       </div>
