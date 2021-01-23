@@ -37,8 +37,14 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
       console.log(data);
       setUserPosts(data);
     };
-    fetchUserPosts(user);
+    if (user) {
+      fetchUserPosts(user);
+    }
   }, []);
+
+  const clearUserPosts = () => {
+    setUserPosts([]);
+  };
 
   let postsToDisplay = useSelector(state => {
     let posts = [];
@@ -161,7 +167,7 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
           </span>
           <span>{post.postID}</span>
           <span>
-            {userPosts.includes(post.postID) ? (
+            {user && user.userPosts.includes(post.postID) ? (
               <span onClick={() => handleDeletePost(post.postID)}>
                 <FontAwesome name="trash" /> Delete
               </span>

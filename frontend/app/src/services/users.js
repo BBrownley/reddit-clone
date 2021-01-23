@@ -11,9 +11,9 @@ const config = {
 const register = async data => {
   try {
     const req = await axios.post("http://localhost:5000/users", data, config);
-    return req.data
+    return req.data;
   } catch (error) {
-    return {error: error.response.data.error};
+    return { error: error.response.data.error };
   }
 };
 
@@ -24,11 +24,12 @@ const login = async data => {
       data,
       config
     );
+    console.log(req.data);
     return req.data;
   } catch (error) {
     console.log(error.response); // https://stackoverflow.com/a/46339608
     // store.dispatch(timedNotification(error.response.data.error, 5000));
-    return {error: error.response.data.error};
+    return { error: error.response.data.error };
   }
 };
 

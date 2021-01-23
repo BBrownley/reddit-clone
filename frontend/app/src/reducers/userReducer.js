@@ -34,10 +34,10 @@ export const login = (credentials, hasToken) => {
       dispatch(timedNotification(res.error, 3000));
       return false;
     } else {
-      
       const data = {
         username: res.username,
-        token: `bearer ${res.token}`
+        token: res.token,
+        userPosts: res.userPosts
       };
 
       postService.setToken(data.token);

@@ -91,7 +91,7 @@ const login = userInfo => {
             console.log("Login succeeded");
 
             const userInfo = { username, id: results[0].id };
-            const token = jwt.sign(userInfo, process.env.SECRET);
+            const token = `bearer ${jwt.sign(userInfo, process.env.SECRET)}`;
 
             resolve({ username, token });
           } else {

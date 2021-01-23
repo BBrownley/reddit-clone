@@ -92,7 +92,9 @@ const App = () => {
   });
 
   useMemo(() => {
-    dispatch(initializeVotes());
+    if (user) {
+      dispatch(initializeVotes());
+    }
   }, []);
 
   useEffect(async () => {
@@ -101,14 +103,9 @@ const App = () => {
 
     // console.log(user);
 
-    // if (user) {
-    dispatch(initializeVotes());
-    // }
-
-    // if (user) {
-    //   console.log(user);
-    //   dispatch(initializeVotes());
-    // }
+    if (user) {
+      dispatch(initializeVotes());
+    }
   }, []);
 
   const handleSortBy = e => {

@@ -65,7 +65,11 @@ app.post("/users", async (req, res, next) => {
 
 app.post("/users/login", async (req, res, next) => {
   try {
-    const data = await usersDB.login(req.body);
+    let data = await usersDB.login(req.body);
+    console.log(`From login route line 69: ${JSON.stringify(data)}`);
+
+    data = { ...data, userPosts: await postsDB.getPostsByToken(data.token) };
+    console.log(`From login route like 72: ${JSON.stringify(data)}`);
     res.json(data);
   } catch (exception) {
     next(exception);
@@ -79,12 +83,12 @@ app.post("/posts/:id/vote", async (req, res) => {
   res.json(vote);
 });
 
-app.get("/posts/verifyuserposts", async (req, res) => {
-  const token = req.headers.authorization;
-  const userposts = await postsDB.getPostsByToken(token);
-  console.log(userposts);
-  res.json(userposts);
-});
+// app.get("/posts/verifyuserposts", async (req, res) => {
+//   const token = req.headers.authorization;
+//   const userposts = await postsDB.getPostsByToken(token);
+//   console.log(userposts);
+//   res.json(userposts);
+// });
 
 app.get("/posts/votes", async (req, res, next) => {
   try {
