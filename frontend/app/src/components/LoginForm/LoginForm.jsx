@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, useLocation, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
@@ -7,7 +7,8 @@ import { login } from "../../reducers/userReducer";
 import { initializeVotes } from "../../reducers/userPostVotesReducer";
 import {
   setNotification,
-  timedNotification
+  timedNotification,
+  removeNotification
 } from "../../reducers/notificationReducer";
 
 import Notification from "../../components/Notification/Notification";
@@ -34,6 +35,11 @@ const LoginForm = props => {
   };
 
   console.log(location);
+
+  // Clear notification on component unmount/view change
+  useEffect(() => {
+    return () => dispatch(removeNotification());
+  }, []);
 
   const handleLogin = async e => {
     e.preventDefault();

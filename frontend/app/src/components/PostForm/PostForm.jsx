@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Select from "react-select";
 
@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 import { createPost } from "../../reducers/postsReducer";
 import { initializeVotes } from "../../reducers/userPostVotesReducer";
 import { initializePosts } from "../../reducers/postsReducer";
+import { removeNotification } from "../../reducers/notificationReducer";
 
 import Notification from "../../components/Notification/Notification";
 
@@ -29,6 +30,11 @@ const PostForm = () => {
       id: group.id
     };
   });
+
+  // Clear notification on component unmount/view change
+  useEffect(() => {
+    return () => dispatch(removeNotification());
+  }, []);
 
   const handleSetTitle = e => {
     setTitle(e.target.value);

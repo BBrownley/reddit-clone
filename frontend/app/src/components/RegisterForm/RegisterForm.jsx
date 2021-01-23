@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import { login, register } from "../../reducers/userReducer";
+import { removeNotification } from "../../reducers/notificationReducer";
 
 import Notification from "../../components/Notification/Notification";
 
@@ -19,6 +20,11 @@ const RegisterForm = () => {
 
   const history = useHistory();
   const location = useLocation();
+
+  // Clear notification on component unmount/view change
+  useEffect(() => {
+    return () => dispatch(removeNotification());
+  }, []);
 
   const handleSetUsername = e => {
     setUsername(e.target.value);
