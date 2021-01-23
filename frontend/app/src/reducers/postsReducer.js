@@ -57,6 +57,7 @@ export const downvote = downvotedPost => {
 
 export const removePost = postId => {
   return async dispatch => {
+    // TODO: Is "await" needed here?
     postService.removePost(postId);
     dispatch({
       type: "REMOVE_POST",
