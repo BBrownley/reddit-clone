@@ -199,9 +199,35 @@ const getPostsByToken = token => {
   });
 };
 
+const deletePost = (token, postId) => {
+  return new Promise(async (resolve, reject) => {
+    const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
+    const submitterId = decodedToken.id;
+
+    connection.query(
+      `
+    
+   DELETE FROM posts WHERE posts.id = ? AND submitter_id = ?
+
+    `,
+      [postId, submitterId],
+      (err, results) => {
+        console.log(JSON.stringify(results));
+
+        if (err) {
+          return reject(new Error("An unexpected error has occured"));
+        }
+
+        resolve({ message: "Post successfully deleted" });
+      }
+    );
+  });
+};
+
 module.exports = {
   all,
   getPostsByToken,
   create,
-  vote
+  vote,
+  deletePost
 };

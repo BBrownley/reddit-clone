@@ -20,8 +20,6 @@ const getPostScore = postID => {
 
 const getUserPostVotes = token => {
   return new Promise((resolve, reject) => {
-    console.log(`The token value is: ${token}`);
-
     if (token === null) {
       return reject(new Error("No JWT provided - cannot load user post votes"));
     }

@@ -9,7 +9,7 @@ import {
   addVote,
   removeVote
 } from "../../reducers/userPostVotesReducer";
-import { initializePosts } from "../../reducers/postsReducer";
+import { initializePosts, removePost } from "../../reducers/postsReducer";
 
 import postService from "../../services/posts";
 
@@ -126,7 +126,7 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
   };
 
   const handleDeletePost = async postId => {
-    console.log(postId);
+    dispatch(removePost(postId));
   };
 
   return postsToDisplay.map(post => (

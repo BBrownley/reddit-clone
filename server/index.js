@@ -96,6 +96,15 @@ app.get("/posts/votes", async (req, res, next) => {
     const userPostVotes = await postVotesDB.getUserPostVotes(token);
     res.json(userPostVotes);
   } catch (exception) {
+    next(exception);
+  }
+});
+
+app.delete("/posts/:id", async (req, res, next) => {
+  try {
+    const token = req.headers.authorization;
+    await postsDB.deletePost(token, req.params.id);
+  } catch (exception) {
     console.log("##### FROM THE TRY-CATCH BLOCK #####");
     console.log(exception);
     console.log("##### FROM THE TRY-CATCH BLOCK #####");

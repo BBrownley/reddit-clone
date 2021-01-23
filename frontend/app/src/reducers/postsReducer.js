@@ -55,6 +55,17 @@ export const downvote = downvotedPost => {
   };
 };
 
+export const removePost = postId => {
+  return async dispatch => {
+    const res = await postService.removePost(postId);
+    console.log(JSON.stringify(res));
+    dispatch({
+      type: "REMOVE_POST",
+      postId
+    });
+  };
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "INITIALIZE_POSTS":
@@ -77,6 +88,9 @@ const reducer = (state = initialState, action) => {
           return action.updatedPost;
         }
       });
+    case "REMOVE_POST":
+      console.log("hey");
+      return state.filter(post => post.postID !== action.postId);
 
     default:
       return state;

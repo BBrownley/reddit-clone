@@ -3,9 +3,7 @@ import axios from "axios";
 let storedToken = null;
 
 const setToken = token => {
-  console.log("Setting token...");
   storedToken = token;
-  console.log(`Updated token: ${token}`);
 };
 
 const config = {

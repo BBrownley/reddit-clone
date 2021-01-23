@@ -5,9 +5,7 @@ import usersService from "./users";
 let storedToken = null;
 
 const setToken = token => {
-  console.log("Setting token...");
   storedToken = token;
-  console.log(`Updated token: ${token}`);
 };
 
 const config = {
@@ -76,10 +74,28 @@ const vote = async (postID, value) => {
   return data;
 };
 
+const removePost = async postId => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      Authorization: storedToken
+    }
+  };
+
+  try {
+    await axios.delete(`http://localhost:5000/posts/${postId}`, config);
+    return;
+  } catch (error) {
+    return { error: error.response.data.error };
+  }
+};
+
 export default {
   getAll,
   getByUser,
   createPost,
   setToken,
-  vote
+  vote,
+  removePost
 };
