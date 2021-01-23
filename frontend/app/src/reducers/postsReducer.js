@@ -57,8 +57,7 @@ export const downvote = downvotedPost => {
 
 export const removePost = postId => {
   return async dispatch => {
-    const res = await postService.removePost(postId);
-    console.log(JSON.stringify(res));
+    postService.removePost(postId);
     dispatch({
       type: "REMOVE_POST",
       postId
