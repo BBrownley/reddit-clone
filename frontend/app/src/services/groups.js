@@ -48,4 +48,58 @@ const create = async groupData => {
   }
 };
 
-export default { getAll, getGroupByName, create, setToken };
+const subscribeToGroup = async group => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      Authorization: storedToken
+    }
+  };
+
+  try {
+    const req = await axios.post(
+      "http://localhost:5000/groups/subscribe",
+      group,
+      config
+    );
+    return req.data;
+  } catch (error) {
+    return { error: error.response.data.error };
+  }
+};
+
+const getUserSubscriptions = async () => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      Authorization: storedToken
+    }
+  };
+  // try {
+  //   const req = await axios.get(
+  //     "http://localhost:5000/groups/subscriptions",
+  //     config
+  //   );
+  //   console.log(req);
+  //   return req.data;
+  // } catch (error) {
+  //   return { error: error.response.data.error };
+  // }
+  const req = await axios.get(
+    "http://localhost:5000/groups/subscriptions", // ????? why wont this work lol
+    config
+  );
+  console.log(req);
+  return req.data;
+};
+
+export default {
+  getAll,
+  getGroupByName,
+  create,
+  setToken,
+  subscribeToGroup,
+  getUserSubscriptions
+};

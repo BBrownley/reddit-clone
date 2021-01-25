@@ -96,8 +96,60 @@ const create = (data, token) => {
   });
 };
 
+const subscribe = (groupId, token) => {
+  return new Promise((resolve, reject) => {
+    // Verify token
+    const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
+    if (decodedToken.id) {
+      connection.query(
+        `
+        INSERT INTO group_subscribers SET ?
+        `,
+        {
+          group_id: groupId,
+          user_id: decodedToken.id
+        },
+        (err, results) => {
+          console.log(results);
+          if (err) {
+            return reject(new Error("An unexpected error has occured"));
+          } else {
+            return resolve(results[0]);
+          }
+        }
+      );
+    }
+  });
+};
+
+const getSubscriptions = token => {
+  return new Promise((resolve, reject) => {
+    // Verify token
+    console.log("hello");
+    const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
+    if (decodedToken.id) {
+      connection.query(
+        `
+        SELECT * FROM group_subscribers WHERE user_id = ?
+        `,
+        [decodedToken.id],
+        (err, results) => {
+          console.log(results);
+          if (err) {
+            return reject(new Error("An unexpected error has occured"));
+          } else {
+            return resolve(results);
+          }
+        }
+      );
+    }
+  });
+};
+
 module.exports = {
   all,
   getGroupByName,
-  create
+  create,
+  subscribe,
+  getSubscriptions
 };

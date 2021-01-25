@@ -83,13 +83,6 @@ app.post("/posts/:id/vote", async (req, res) => {
   res.json(vote);
 });
 
-// app.get("/posts/verifyuserposts", async (req, res) => {
-//   const token = req.headers.authorization;
-//   const userposts = await postsDB.getPostsByToken(token);
-//   console.log(userposts);
-//   res.json(userposts);
-// });
-
 app.get("/posts/votes", async (req, res, next) => {
   try {
     const token = req.headers.authorization;
@@ -104,6 +97,30 @@ app.delete("/posts/:id", async (req, res, next) => {
   try {
     const token = req.headers.authorization;
     await postsDB.deletePost(token, req.params.id);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
+app.post("/groups/subscribe", async (req, res, next) => {
+  try {
+    console.log(req.body);
+    const token = req.headers.authorization;
+    const subscriptionInfo = await groupsDB.subscribe(req.body.id, token);
+    res.json(subscriptionInfo);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
+app.get("/groups/subscriptions", async (req, res, next) => {
+  console.log("Pog");
+  try {
+    console.log("Pog");
+    const token = req.headers.authorization;
+    const subscriptions = await groupsDB.getSubscriptions(token);
+    console.log(subscriptions);
+    res.json(subscriptions);
   } catch (exception) {
     console.log("##### FROM THE TRY-CATCH BLOCK #####");
     console.log(exception);

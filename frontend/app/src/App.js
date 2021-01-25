@@ -8,6 +8,7 @@ import { initializePosts } from "./reducers/postsReducer";
 import { initializeGroups } from "./reducers/groupsReducer";
 import { initializeVotes } from "./reducers/userPostVotesReducer";
 import { logout, login, setUser } from "./reducers/userReducer";
+import { initializeSubscriptions } from "./reducers/groupSubscribesReducer";
 
 import postService from "./services/posts";
 import userPostVoteService from "./services/userPostVotes";
@@ -94,6 +95,7 @@ const App = () => {
   useMemo(() => {
     if (user) {
       dispatch(initializeVotes());
+      dispatch(initializeSubscriptions());
     }
   }, []);
 
