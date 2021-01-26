@@ -38,11 +38,6 @@ app.post("/create/groups", async (req, res, next) => {
   }
 });
 
-app.get("/groups/:groupName", async (req, res) => {
-  let group = await groupsDB.getGroupByName(req.params.groupName);
-  res.json(group);
-});
-
 app.post("/posts", async (req, res, next) => {
   try {
     const token = req.headers.authorization;
@@ -127,6 +122,11 @@ app.get("/groups/subscriptions", async (req, res, next) => {
     console.log("##### FROM THE TRY-CATCH BLOCK #####");
     next(exception);
   }
+});
+
+app.get("/groups/:groupName", async (req, res) => {
+  let group = await groupsDB.getGroupByName(req.params.groupName);
+  res.json(group);
 });
 
 app.listen(PORT, () => {

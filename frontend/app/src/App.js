@@ -95,7 +95,6 @@ const App = () => {
   useMemo(() => {
     if (user) {
       dispatch(initializeVotes());
-      dispatch(initializeSubscriptions());
     }
   }, []);
 
@@ -107,6 +106,7 @@ const App = () => {
 
     if (user) {
       dispatch(initializeVotes());
+      dispatch(initializeSubscriptions());
     }
   }, []);
 

@@ -77,22 +77,22 @@ const getUserSubscriptions = async () => {
       Authorization: storedToken
     }
   };
-  // try {
-  //   const req = await axios.get(
-  //     "http://localhost:5000/groups/subscriptions",
-  //     config
-  //   );
-  //   console.log(req);
-  //   return req.data;
-  // } catch (error) {
-  //   return { error: error.response.data.error };
-  // }
-  const req = await axios.get(
-    "http://localhost:5000/groups/subscriptions", // ????? why wont this work lol
-    config
-  );
-  console.log(req);
-  return req.data;
+  try {
+    const req = await axios.get(
+      "http://localhost:5000/groups/subscriptions",
+      config
+    );
+    console.log(req);
+    return req.data;
+  } catch (error) {
+    return { error: error.response.data.error };
+  }
+  // const req = await axios.get(
+  //   "http://localhost:5000/groups/subscriptions", // ????? why wont this work lol
+  //   config
+  // );
+  // console.log(req);
+  // return req.data;
 };
 
 export default {

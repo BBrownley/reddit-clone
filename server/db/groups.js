@@ -130,7 +130,9 @@ const getSubscriptions = token => {
     if (decodedToken.id) {
       connection.query(
         `
-        SELECT * FROM group_subscribers WHERE user_id = ?
+          SELECT group_name, group_subscribers.created_at, groups.id AS group_id FROM group_subscribers
+          LEFT JOIN groups ON groups.id = group_subscribers.group_id
+          WHERE group_subscribers.user_id = ?
         `,
         [decodedToken.id],
         (err, results) => {

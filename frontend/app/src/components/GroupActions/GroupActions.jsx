@@ -12,6 +12,7 @@ const GroupActions = () => {
   const dispatch = useDispatch();
 
   const loggedUser = useSelector(state => state.user);
+  const userSubscribedGroups = useSelector(state => state.subscribedGroups);
 
   const groupMatch = useRouteMatch("/groups/:groupName");
   const currentGroup = useSelector(state => {
@@ -60,7 +61,12 @@ const GroupActions = () => {
 
       {groupMatch && (
         <button onClick={handleSubscribeButton}>
-          <FontAwesome name="bell"></FontAwesome> Subscribe
+          <FontAwesome name="bell"></FontAwesome>{" "}
+          {userSubscribedGroups.find(
+            group => group.group_id === currentGroup.id
+          )
+            ? "SUBSCRIBED"
+            : "Subscribe"}
         </button>
       )}
 

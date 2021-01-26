@@ -5,7 +5,6 @@ const initialState = [];
 export const initializeSubscriptions = () => {
   return async dispatch => {
     const groups = await groupService.getUserSubscriptions();
-    console.log(groups);
     dispatch({
       type: "INITIALIZE_SUBSCRIPTIONS",
       groups
