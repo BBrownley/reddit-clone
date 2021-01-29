@@ -83,9 +83,9 @@ const App = () => {
 
   const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 
-  if (loggedUser) {
-    dispatch(setUser(loggedUser));
-  }
+  // if (loggedUser) {
+  //   dispatch(setUser(loggedUser));
+  // }
 
   const user = useSelector(state => {
     console.log(state);
@@ -95,6 +95,7 @@ const App = () => {
   useMemo(() => {
     if (user) {
       dispatch(initializeVotes());
+      dispatch(setUser(loggedUser));
     }
   }, []);
 

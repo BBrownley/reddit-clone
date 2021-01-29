@@ -74,6 +74,15 @@ export const setUser = userInfo => {
   };
 };
 
+export const addPostToUser = post => {
+  return async dispatch => {
+    dispatch({
+      type: "ADD_POST",
+      postId: post.postID
+    })
+  }
+}
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "LOGIN":
@@ -82,6 +91,8 @@ const reducer = (state = initialState, action) => {
       return null;
     case "SET_USER":
       return action.userInfo;
+    case "ADD_POST":
+      return {...state, userPosts: [...state.userPosts, action.postId]}
     default:
       return state;
   }

@@ -35,7 +35,8 @@ const PostView = () => {
   const userPostVote = useSelector(state =>
     state.userPostVotes.find(vote => {
       const x = vote.post_id;
-      const y = post.postID;
+      // const y = post.postID;
+      console.log(post);
       return vote.post_id === post.postID;
     })
   );

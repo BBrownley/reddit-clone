@@ -8,6 +8,7 @@ import { createPost } from "../../reducers/postsReducer";
 import { initializeVotes } from "../../reducers/userPostVotesReducer";
 import { initializePosts } from "../../reducers/postsReducer";
 import { removeNotification } from "../../reducers/notificationReducer";
+import { addPostToUser } from "../../reducers/userReducer";
 
 import Notification from "../../components/Notification/Notification";
 
@@ -59,6 +60,7 @@ const PostForm = () => {
     if (newPost) {
       dispatch(initializeVotes());
       dispatch(initializePosts());
+      dispatch(addPostToUser(newPost));
       history.push(`/groups/${groupQuery.label}/${newPost.postID}`);
     }
   };
