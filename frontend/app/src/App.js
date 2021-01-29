@@ -81,25 +81,24 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentGroup, setCurrentGroup] = useState({});
 
-  const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-
-  // if (loggedUser) {
-  //   dispatch(setUser(loggedUser));
-  // }
-
   const user = useSelector(state => {
     console.log(state);
     return state.user;
   });
 
-  useMemo(() => {
-    if (user) {
-      dispatch(initializeVotes());
-      dispatch(setUser(loggedUser));
-    }
-  }, []);
+  // useMemo(() => {
+  //   if (user) {
+  //     dispatch(initializeVotes());
+  //   }
+  // }, []);
 
   useEffect(async () => {
+    const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+
+    if (loggedUser) {
+      dispatch(setUser(loggedUser));
+    }
+
     dispatch(initializePosts());
     dispatch(initializeGroups());
 

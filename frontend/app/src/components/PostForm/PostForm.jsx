@@ -62,6 +62,12 @@ const PostForm = () => {
       dispatch(initializePosts());
       dispatch(addPostToUser(newPost));
       history.push(`/groups/${groupQuery.label}/${newPost.postID}`);
+
+      // Update localStorage to reflect them adding a new post
+      let user = JSON.parse(localStorage.getItem("loggedUser"));
+      console.log(user);
+      user = user.userPosts.push(newPost.postID);
+      localStorage.setItem("loggedUser", JSON.stringify(user));
     }
   };
 
