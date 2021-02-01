@@ -122,6 +122,34 @@ const subscribe = (groupId, token) => {
   });
 };
 
+const unsubscribe = (groupId, token) => {
+  return new Promise((resolve, reject) => {
+    // Verify token
+    console.log(groupId);
+    console.log(groupId);
+    console.log(groupId);
+    console.log(groupId);
+    console.log(groupId);
+    const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
+    if (decodedToken.id) {
+      connection.query(
+        `
+        DELETE FROM group_subscribers WHERE group_id = ? AND user_id = ?
+        `,
+        [groupId, decodedToken.id],
+        (err, results) => {
+          console.log(results);
+          if (err) {
+            return reject(new Error("An unexpected error has occured"));
+          } else {
+            return resolve(results[0]);
+          }
+        }
+      );
+    }
+  });
+};
+
 const getSubscriptions = token => {
   return new Promise((resolve, reject) => {
     // Verify token
@@ -130,7 +158,7 @@ const getSubscriptions = token => {
     if (decodedToken.id) {
       connection.query(
         `
-          SELECT group_name, group_subscribers.created_at, groups.id AS group_id FROM group_subscribers
+          SELECT group_name, group_subscribers.created_at, groups.id AS id FROM group_subscribers
           LEFT JOIN groups ON groups.id = group_subscribers.group_id
           WHERE group_subscribers.user_id = ?
         `,
@@ -153,5 +181,6 @@ module.exports = {
   getGroupByName,
   create,
   subscribe,
+  unsubscribe,
   getSubscriptions
 };

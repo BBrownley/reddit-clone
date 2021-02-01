@@ -69,6 +69,29 @@ const subscribeToGroup = async group => {
   }
 };
 
+const unsubscribe = async group => {
+  console.log(storedToken);
+
+  const headers = {
+    Authorization: storedToken
+  };
+
+  try {
+    const req = await axios.delete(
+      "http://localhost:5000/groups/subscription",
+      {
+        data: {
+          id: group.id
+        },
+        headers
+      }
+    );
+    return req.data;
+  } catch (error) {
+    return { error: error.response.data.error };
+  }
+};
+
 const getUserSubscriptions = async () => {
   const config = {
     headers: {
@@ -77,6 +100,7 @@ const getUserSubscriptions = async () => {
       Authorization: storedToken
     }
   };
+  console.log("hi");
   try {
     const req = await axios.get(
       "http://localhost:5000/groups/subscriptions",
@@ -87,12 +111,6 @@ const getUserSubscriptions = async () => {
   } catch (error) {
     return { error: error.response.data.error };
   }
-  // const req = await axios.get(
-  //   "http://localhost:5000/groups/subscriptions", // ????? why wont this work lol
-  //   config
-  // );
-  // console.log(req);
-  // return req.data;
 };
 
 export default {
@@ -101,5 +119,6 @@ export default {
   create,
   setToken,
   subscribeToGroup,
+  unsubscribe,
   getUserSubscriptions
 };

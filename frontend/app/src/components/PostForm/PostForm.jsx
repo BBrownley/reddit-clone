@@ -66,7 +66,7 @@ const PostForm = () => {
       // Update localStorage to reflect them adding a new post
       let user = JSON.parse(localStorage.getItem("loggedUser"));
       console.log(user);
-      user = user.userPosts.push(newPost.postID);
+      user = {...user, userPosts: [...user.userPosts, newPost.postID]}
       localStorage.setItem("loggedUser", JSON.stringify(user));
     }
   };

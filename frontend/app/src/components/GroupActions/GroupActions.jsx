@@ -3,7 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import FontAwesome from "react-fontawesome";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
-import { subscribeToGroup } from "../../reducers/groupSubscribesReducer";
+import {
+  subscribeToGroup,
+  unsubscribeFromGroup
+} from "../../reducers/groupSubscribesReducer";
 
 import { GroupActions as Container } from "./GroupActions.elements";
 
@@ -37,7 +40,7 @@ const GroupActions = () => {
     }
   };
 
-  const handleSubscribeButton = () => {
+  const handleSubscribe = () => {
     if (loggedUser) {
       console.log(`Subscribing to: ${currentGroup}`);
       console.log(currentGroup);
@@ -53,22 +56,30 @@ const GroupActions = () => {
     }
   };
 
+  const handleUnsubscribe = () => {
+    console.log(currentGroup);
+    dispatch(unsubscribeFromGroup(currentGroup, loggedUser));
+    console.log("unsubbing");
+  };
+
   return (
     <Container>
       <button onClick={handleCreatePostButton}>
         <FontAwesome name="paper-plane"></FontAwesome> Submit a new post
       </button>
 
-      {groupMatch && (
-        <button onClick={handleSubscribeButton}>
-          <FontAwesome name="bell"></FontAwesome>{" "}
-          {userSubscribedGroups.find(
-            group => group.group_id === currentGroup.id
-          )
-            ? "SUBSCRIBED"
-            : "Subscribe"}
-        </button>
-      )}
+      {groupMatch &&
+        (userSubscribedGroups.find(group => group.id === currentGroup.id) ? (
+          <button onClick={handleUnsubscribe}>
+            <FontAwesome name="check"></FontAwesome>
+            {" SUBSCRIBED"}
+          </button>
+        ) : (
+          <button onClick={handleSubscribe}>
+            <FontAwesome name="bell"></FontAwesome>
+            {" Subscribe"}
+          </button>
+        ))}
 
       <button>
         <FontAwesome name="info-circle"></FontAwesome> More Info

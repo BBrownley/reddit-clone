@@ -43,9 +43,9 @@ const LoginForm = props => {
 
   const handleLogin = async e => {
     e.preventDefault();
-    const data = { username, password };
+    const credentials = { username, password };
 
-    const loginSuccess = await dispatch(login(data));
+    const loginSuccess = await dispatch(login(credentials));
 
     console.log(loginSuccess);
 

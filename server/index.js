@@ -108,6 +108,19 @@ app.post("/groups/subscribe", async (req, res, next) => {
   }
 });
 
+app.delete("/groups/subscription", async (req, res, next) => {
+  try {
+    const token = req.headers.authorization;
+    console.log("TOKEN");
+    console.log(token);
+    console.log("TOKEN");
+    const unsub = await groupsDB.unsubscribe(req.body.id, token);
+    res.json(unsub);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
 app.get("/groups/subscriptions", async (req, res, next) => {
   console.log("Pog");
   try {

@@ -104,11 +104,16 @@ const App = () => {
 
     // console.log(user);
 
-    if (user) {
-      dispatch(initializeVotes());
-      dispatch(initializeSubscriptions());
-    }
+    // if (user) {
+    //   dispatch(initializeVotes());
+    //   dispatch(initializeSubscriptions());
+    // }
   }, []);
+
+  useEffect(async () => {
+    dispatch(initializeVotes());
+    dispatch(initializeSubscriptions());
+  }, [user]);
 
   const handleSortBy = e => {
     const sortValue = e.target.value;
