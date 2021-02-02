@@ -62,13 +62,16 @@ const GroupActions = () => {
     console.log("unsubbing");
   };
 
+  console.log(userSubscribedGroups);
+  console.log(currentGroup);
+
   return (
     <Container>
       <button onClick={handleCreatePostButton}>
         <FontAwesome name="paper-plane"></FontAwesome> Submit a new post
       </button>
 
-      {groupMatch &&
+      {currentGroup &&
         (userSubscribedGroups.find(group => group.id === currentGroup.id) ? (
           <button onClick={handleUnsubscribe}>
             <FontAwesome name="check"></FontAwesome>
