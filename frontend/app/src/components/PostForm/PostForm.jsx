@@ -9,6 +9,7 @@ import { initializeVotes } from "../../reducers/userPostVotesReducer";
 import { initializePosts } from "../../reducers/postsReducer";
 import { removeNotification } from "../../reducers/notificationReducer";
 import { addPostToUser } from "../../reducers/userReducer";
+import { addVote } from "../../reducers/userPostVotesReducer";
 
 import Notification from "../../components/Notification/Notification";
 
@@ -58,6 +59,7 @@ const PostForm = () => {
     console.log(newPost);
 
     if (newPost) {
+      dispatch(addVote(newPost.postID, 1));
       dispatch(initializeVotes());
       dispatch(initializePosts());
       dispatch(addPostToUser(newPost));
@@ -66,10 +68,14 @@ const PostForm = () => {
       // Update localStorage to reflect them adding a new post
       let user = JSON.parse(localStorage.getItem("loggedUser"));
       console.log(user);
-      user = {...user, userPosts: [...user.userPosts, newPost.postID]}
+      user = { ...user, userPosts: [...user.userPosts, newPost.postID] };
       localStorage.setItem("loggedUser", JSON.stringify(user));
     }
   };
+
+  /*
+
+  */
 
   return (
     <FormContainer>

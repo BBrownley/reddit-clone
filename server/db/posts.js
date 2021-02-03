@@ -4,9 +4,9 @@ const jwt = require("jsonwebtoken");
 const q = `
   SELECT 
     CASE
-      WHEN ISNULL(SUM(post_votes.vote_value)) THEN 1
+      WHEN ISNULL(SUM(post_votes.vote_value)) THEN 0
         WHEN SUM(post_votes.vote_value) < 1 THEN 0
-        ELSE SUM(post_votes.vote_value) + 1
+        ELSE SUM(post_votes.vote_value)
     END AS score,
     title, 
     posts.created_at AS createdAt, 
