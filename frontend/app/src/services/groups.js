@@ -37,7 +37,7 @@ const create = async groupData => {
 
   try {
     const req = await axios.post(
-      `http://localhost:5000/create/groups`,
+      `http://localhost:5000/groups/create`,
       groupData,
       config
     );

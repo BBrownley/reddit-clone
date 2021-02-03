@@ -12,7 +12,7 @@ const GroupList = () => {
 
   const handleCreateGroupButton = () => {
     if (loggedUser) {
-      history.push("/create/groups");
+      history.push("/groups/create");
     } else {
       history.push({
         pathname: "/login",
