@@ -174,6 +174,9 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
             ) : (
               ""
             )}
+            Are you sure?
+            <span>Yes</span>
+            <span>No</span>
           </span>
         </PostOptions>
       </div>
