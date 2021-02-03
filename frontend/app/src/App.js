@@ -23,6 +23,7 @@ import GroupActions from "./components/GroupActions/GroupActions";
 import GroupList from "./components/GroupList/GroupList";
 import RegisterForm from "./components/RegisterForm/RegisterForm";
 import LoginForm from "./components/LoginForm/LoginForm";
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 
 const Wrapper = styled.div`
   max-width: 1260px;
@@ -142,6 +143,7 @@ const App = () => {
 
   return (
     <Router>
+      <ScrollToTop />
       <Body>
         <div className="App">
           <Wrapper>
@@ -166,7 +168,10 @@ const App = () => {
                 {user !== null && (
                   <li>
                     Signed in as {user.username}{" "}
-                    <StyledLink onClick={handleLogout}> Logout</StyledLink>
+                    <StyledLink onClick={handleLogout} to="/">
+                      {" "}
+                      Logout
+                    </StyledLink>
                   </li>
                 )}
               </ul>

@@ -17,7 +17,7 @@ const GroupInfo = () => {
       setGroup(data);
     };
     fetchGroup(groupMatch.params.groupName);
-  }, []);
+  }, [groupMatch]);
 
   return (
     <Container>
