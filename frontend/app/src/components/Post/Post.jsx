@@ -2,21 +2,14 @@ import React from "react";
 import moment from "moment";
 import { useSelector, useDispatch } from "react-redux";
 
-import {
-  initializeVotes,
-  addVote,
-  removeVote
-} from "../../reducers/userPostVotesReducer";
+import { initializeVotes, addVote } from "../../reducers/userPostVotesReducer";
 import { initializePosts, removePost } from "../../reducers/postsReducer";
 
 import {
   Post as Container,
   VoteContainer,
-  PostMain,
-  Title,
   Content,
-  PostOptions,
-  FollowButton
+  PostOptions
 } from "../PostList/PostList.elements";
 
 import FontAwesome from "react-fontawesome";
@@ -27,8 +20,6 @@ const Post = ({ post }) => {
   const user = useSelector(state => state.user);
 
   const handleUpvotePost = async postID => {
-     
-
     await dispatch(addVote(postID, 1));
 
     dispatch(initializeVotes());
@@ -36,7 +27,6 @@ const Post = ({ post }) => {
   };
 
   const handleDownvotePost = async postID => {
-     
     await dispatch(addVote(postID, -1));
 
     dispatch(initializeVotes());

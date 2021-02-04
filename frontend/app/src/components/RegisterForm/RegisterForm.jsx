@@ -8,7 +8,6 @@ import { removeNotification } from "../../reducers/notificationReducer";
 import Notification from "../../components/Notification/Notification";
 
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
-import usersService from "../../services/users";
 
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
@@ -24,7 +23,7 @@ const RegisterForm = () => {
   // Clear notification on component unmount/view change
   useEffect(() => {
     return () => dispatch(removeNotification());
-  }, []);
+  }, [dispatch]);
 
   const handleSetUsername = e => {
     setUsername(e.target.value);
@@ -54,7 +53,7 @@ const RegisterForm = () => {
   const handleRegistration = async e => {
     e.preventDefault();
     const data = { username, email, password, confirmPassword };
-     
+
     const success = await dispatch(register({ data }));
 
     if (success) {

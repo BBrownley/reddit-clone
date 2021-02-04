@@ -15,8 +15,6 @@ import Notification from "../../components/Notification/Notification";
 
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 
-import postService from "../../services/posts";
-
 const PostForm = () => {
   const [title, setTitle] = useState("");
   const [groupQuery, setGroupQuery] = useState("");
@@ -36,7 +34,7 @@ const PostForm = () => {
   // Clear notification on component unmount/view change
   useEffect(() => {
     return () => dispatch(removeNotification());
-  }, []);
+  }, [dispatch]);
 
   const handleSetTitle = e => {
     setTitle(e.target.value);
@@ -56,8 +54,6 @@ const PostForm = () => {
 
     const newPost = await dispatch(createPost(data));
 
-     
-
     if (newPost) {
       dispatch(addVote(newPost.postID, 1));
       dispatch(initializeVotes());
@@ -67,15 +63,11 @@ const PostForm = () => {
 
       // Update localStorage to reflect them adding a new post
       let user = JSON.parse(localStorage.getItem("loggedUser"));
-       
+
       user = { ...user, userPosts: [...user.userPosts, newPost.postID] };
       localStorage.setItem("loggedUser", JSON.stringify(user));
     }
   };
-
-  /*
-
-  */
 
   return (
     <FormContainer>

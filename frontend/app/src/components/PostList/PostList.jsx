@@ -1,51 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import React from "react";
+import { useRouteMatch } from "react-router-dom";
 
 import moment from "moment";
 
-import { useSelector, useDispatch } from "react-redux";
-import {
-  initializeVotes,
-  addVote,
-  removeVote
-} from "../../reducers/userPostVotesReducer";
-import { initializePosts, removePost } from "../../reducers/postsReducer";
-
-import postService from "../../services/posts";
+import { useSelector } from "react-redux";
 
 import Post from "../Post/Post";
 
 const PostList = ({ sortBy, searchBy, searchTerm }) => {
   const match = useRouteMatch("/groups/:group");
-  const dispatch = useDispatch();
 
-  // User post IDs by the logged in user
-  const [userPosts, setUserPosts] = useState([]);
-
-  const user = useSelector(state => state.user);
   const userPostVotes = useSelector(state => state.userPostVotes);
-
-  useEffect(() => {
-     
-    const fetchUserPosts = async user => {
-       
-      const data = await postService.getByUser(user);
-       
-      setUserPosts(data);
-    };
-    if (user) {
-      fetchUserPosts(user);
-    }
-  }, []);
-
-  const clearUserPosts = () => {
-    setUserPosts([]);
-  };
 
   let postsToDisplay = useSelector(state => {
     let posts = [];
-
-     
 
     if (!match) {
       posts = state.posts;
@@ -70,8 +38,6 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
     return posts;
   });
 
-   
-
   // Filter results if search is used
   if (!!searchTerm) {
     postsToDisplay = postsToDisplay.filter(post => {
@@ -79,6 +45,8 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
         return post.title.toLowerCase().includes(searchTerm.toLowerCase());
       } else if (searchBy === "content") {
         return post.content.toLowerCase().includes(searchTerm.toLowerCase());
+      } else {
+        return post;
       }
     });
   }
@@ -104,7 +72,7 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
     }
   });
 
-  return postsToDisplay.map(post => <Post post={post} />);
+  return postsToDisplay.map(post => <Post post={post} key={post.postID} />);
 };
 
 export default PostList;

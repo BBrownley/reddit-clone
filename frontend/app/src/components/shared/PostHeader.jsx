@@ -17,13 +17,13 @@ const PostHeader = ({
         <Title>{title}</Title>{" "}
       </NavLink>
       posted <FontAwesome name="history" className="fa-history" /> {postAge} in{" "}
-      <a href="#">
+      <span>
         <NavLink to={groupLink}>
           <strong>{groupName}</strong>
         </NavLink>
-      </a>{" "}
+      </span>{" "}
       by{" "}
-      <NavLink href="#">
+      <NavLink to="/">
         <strong>{author}</strong>
       </NavLink>
     </PostHeaderContainer>

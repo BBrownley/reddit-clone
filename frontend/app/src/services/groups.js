@@ -27,8 +27,6 @@ const getGroupByName = async groupName => {
 };
 
 const create = async groupData => {
-   
-
   const config = {
     headers: {
       Authorization: storedToken
@@ -41,7 +39,7 @@ const create = async groupData => {
       groupData,
       config
     );
-     
+
     return req.data;
   } catch (error) {
     return { error: error.response.data.error };
@@ -70,8 +68,6 @@ const subscribeToGroup = async group => {
 };
 
 const unsubscribe = async group => {
-   
-
   const headers = {
     Authorization: storedToken
   };
@@ -100,20 +96,20 @@ const getUserSubscriptions = async () => {
       Authorization: storedToken
     }
   };
-   
+
   try {
     const req = await axios.get(
       "http://localhost:5000/groups/subscriptions",
       config
     );
-     
+
     return req.data;
   } catch (error) {
     return { error: error.response.data.error };
   }
 };
 
-export default {
+const groupService = {
   getAll,
   getGroupByName,
   create,
@@ -122,3 +118,5 @@ export default {
   unsubscribe,
   getUserSubscriptions
 };
+
+export default groupService;

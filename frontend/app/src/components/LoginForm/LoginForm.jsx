@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useLocation, Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 
 import { login } from "../../reducers/userReducer";
 import { initializeVotes } from "../../reducers/userPostVotesReducer";
 import {
-  setNotification,
-  timedNotification,
   removeNotification
 } from "../../reducers/notificationReducer";
 
 import Notification from "../../components/Notification/Notification";
 
-import userService from "../../services/users";
 
 const LoginForm = props => {
   const [username, setUsername] = useState("");
@@ -24,8 +21,6 @@ const LoginForm = props => {
   const history = useHistory();
   const location = useLocation();
 
-  const user = useSelector(state => state.user);
-
   const handleSetUsername = e => {
     setUsername(e.target.value);
   };
@@ -34,20 +29,16 @@ const LoginForm = props => {
     setPassword(e.target.value);
   };
 
-   
-
   // Clear notification on component unmount/view change
   useEffect(() => {
     return () => dispatch(removeNotification());
-  }, []);
+  }, [dispatch]);
 
   const handleLogin = async e => {
     e.preventDefault();
     const credentials = { username, password };
 
     const loginSuccess = await dispatch(login(credentials));
-
-     
 
     if (loginSuccess) {
       dispatch(initializeVotes());

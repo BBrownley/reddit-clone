@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useDispatch } from "react-redux";
 
 const config = {
   headers: {
@@ -24,13 +23,17 @@ const login = async data => {
       data,
       config
     );
-     
+
     return req.data;
   } catch (error) {
-     
     // store.dispatch(timedNotification(error.response.data.error, 5000));
     return { error: error.response.data.error };
   }
 };
 
-export default { register, login };
+const userService = {
+  register,
+  login
+};
+
+export default userService;

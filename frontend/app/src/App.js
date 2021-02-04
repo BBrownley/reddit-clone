@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
@@ -7,12 +7,8 @@ import styled from "styled-components";
 import { initializePosts } from "./reducers/postsReducer";
 import { initializeGroups } from "./reducers/groupsReducer";
 import { initializeVotes } from "./reducers/userPostVotesReducer";
-import { logout, login, setUser } from "./reducers/userReducer";
+import { logout, setUser } from "./reducers/userReducer";
 import { initializeSubscriptions } from "./reducers/groupSubscribesReducer";
-
-import postService from "./services/posts";
-import userPostVoteService from "./services/userPostVotes";
-import groupService from "./services/groups";
 
 import GroupInfo from "./components/GroupInfo/GroupInfo";
 import PostList from "./components/PostList/PostList";
@@ -80,28 +76,32 @@ const App = () => {
   const [sortBy, setSortBy] = useState("new");
   const [searchBy, setSearchBy] = useState("title");
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentGroup, setCurrentGroup] = useState({});
 
   const user = useSelector(state => {
     return state.user;
   });
 
-  useEffect(async () => {
-    const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+  useEffect(() => {
+    const initialize = async () => {
+      const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+      if (loggedUser) {
+        await dispatch(setUser(loggedUser));
+      }
 
-    if (loggedUser) {
-      dispatch(setUser(loggedUser));
-    }
+      const initializers = [
+        dispatch(initializePosts()),
+        dispatch(initializeGroups())
+      ];
+      await Promise.all(initializers);
+    };
 
-    dispatch(initializePosts());
-    dispatch(initializeGroups());
+    initialize();
+  }, [dispatch]);
 
-  }, []);
-
-  useEffect(async () => {
+  useEffect(() => {
     dispatch(initializeVotes());
     dispatch(initializeSubscriptions());
-  }, [user]);
+  }, [user, dispatch]);
 
   const handleSortBy = e => {
     const sortValue = e.target.value;

@@ -1,7 +1,5 @@
 import axios from "axios";
 
-import usersService from "./users";
-
 let storedToken = null;
 
 const setToken = token => {
@@ -16,9 +14,8 @@ const config = {
 };
 
 const getAll = async () => {
-   
   const req = await axios.get("http://localhost:5000/", config);
-   
+
   return req.data;
 };
 
@@ -30,8 +27,6 @@ const getByUser = async user => {
       Authorization: user.token
     }
   };
-
-   
 
   const req = await axios.get(
     "http://localhost:5000/posts/verifyuserposts",
@@ -49,7 +44,7 @@ const createPost = async post => {
 
   try {
     const req = await axios.post("http://localhost:5000/posts", post, config);
-     
+
     return req.data;
   } catch (error) {
     return { error: error.response.data.error };
@@ -70,7 +65,7 @@ const vote = async (postID, value) => {
     body,
     config
   );
-   
+
   return data;
 };
 
@@ -91,7 +86,7 @@ const removePost = async postId => {
   }
 };
 
-export default {
+const postService = {
   getAll,
   getByUser,
   createPost,
@@ -99,3 +94,5 @@ export default {
   vote,
   removePost
 };
+
+export default postService;

@@ -1,5 +1,4 @@
 import postService from "../services/posts";
-import userPostVoteService from "../services/userPostVotes";
 
 import { timedNotification } from "../reducers/notificationReducer";
 

@@ -7,22 +7,20 @@ const setToken = token => {
 };
 
 const getUserPostVotes = async () => {
-   
-
   const config = {
     headers: {
       Authorization: storedToken
     }
   };
 
-   
-
   const req = await axios.get(`http://localhost:5000/posts/votes`, config);
-   
+
   return req.data;
 };
 
-export default {
+const userPostVotesService = {
   getUserPostVotes,
   setToken
 };
+
+export default userPostVotesService;
