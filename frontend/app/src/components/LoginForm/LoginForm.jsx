@@ -34,7 +34,7 @@ const LoginForm = props => {
     setPassword(e.target.value);
   };
 
-  console.log(location);
+   
 
   // Clear notification on component unmount/view change
   useEffect(() => {
@@ -47,7 +47,7 @@ const LoginForm = props => {
 
     const loginSuccess = await dispatch(login(credentials));
 
-    console.log(loginSuccess);
+     
 
     if (loginSuccess) {
       dispatch(initializeVotes());

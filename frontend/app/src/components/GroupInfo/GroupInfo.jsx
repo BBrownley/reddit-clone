@@ -9,7 +9,7 @@ const GroupInfo = () => {
   const [group, setGroup] = useState({});
 
   const groupMatch = useRouteMatch("/groups/:groupName");
-  console.log(groupMatch);
+   
 
   useEffect(() => {
     const fetchGroup = async groupName => {
@@ -17,7 +17,7 @@ const GroupInfo = () => {
       setGroup(data);
     };
     fetchGroup(groupMatch.params.groupName);
-  }, [groupMatch]);
+  }, []);
 
   return (
     <Container>

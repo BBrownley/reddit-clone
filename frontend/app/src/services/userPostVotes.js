@@ -7,7 +7,7 @@ const setToken = token => {
 };
 
 const getUserPostVotes = async () => {
-  console.log("user post votes reducer");
+   
 
   const config = {
     headers: {
@@ -15,10 +15,10 @@ const getUserPostVotes = async () => {
     }
   };
 
-  console.log(config);
+   
 
   const req = await axios.get(`http://localhost:5000/posts/votes`, config);
-  console.log(req.data);
+   
   return req.data;
 };
 

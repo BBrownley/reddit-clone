@@ -83,15 +83,8 @@ const App = () => {
   const [currentGroup, setCurrentGroup] = useState({});
 
   const user = useSelector(state => {
-    console.log(state);
     return state.user;
   });
-
-  // useMemo(() => {
-  //   if (user) {
-  //     dispatch(initializeVotes());
-  //   }
-  // }, []);
 
   useEffect(async () => {
     const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
@@ -103,12 +96,6 @@ const App = () => {
     dispatch(initializePosts());
     dispatch(initializeGroups());
 
-    // console.log(user);
-
-    // if (user) {
-    //   dispatch(initializeVotes());
-    //   dispatch(initializeSubscriptions());
-    // }
   }, []);
 
   useEffect(async () => {

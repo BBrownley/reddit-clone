@@ -54,7 +54,7 @@ const RegisterForm = () => {
   const handleRegistration = async e => {
     e.preventDefault();
     const data = { username, email, password, confirmPassword };
-    console.log(data);
+     
     const success = await dispatch(register({ data }));
 
     if (success) {

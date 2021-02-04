@@ -42,8 +42,6 @@ const GroupActions = () => {
 
   const handleSubscribe = () => {
     if (loggedUser) {
-      console.log(`Subscribing to: ${currentGroup}`);
-      console.log(currentGroup);
       dispatch(subscribeToGroup(currentGroup, loggedUser));
     } else {
       history.push({
@@ -57,13 +55,11 @@ const GroupActions = () => {
   };
 
   const handleUnsubscribe = () => {
-    console.log(currentGroup);
     dispatch(unsubscribeFromGroup(currentGroup, loggedUser));
-    console.log("unsubbing");
   };
 
-  console.log(userSubscribedGroups);
-  console.log(currentGroup);
+   
+   
 
   return (
     <Container>

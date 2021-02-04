@@ -10,7 +10,7 @@ const initialState = null;
 export const register = credentials => {
   return async dispatch => {
     const data = await userService.register(credentials);
-    console.log(data);
+     
 
     if (data.error) {
       dispatch(timedNotification(data.error, 3000));
@@ -28,7 +28,7 @@ export const register = credentials => {
 export const login = (credentials, hasToken) => {
   return async dispatch => {
     const res = await userService.login(credentials);
-    console.log(res);
+     
 
     if (res.error) {
       dispatch(timedNotification(res.error, 3000));
@@ -63,7 +63,7 @@ export const logout = () => {
 
 export const setUser = userInfo => {
   return async dispatch => {
-    console.log(userInfo);
+     
     postService.setToken(userInfo.token);
     userPostVoteService.setToken(userInfo.token);
     groupService.setToken(userInfo.token);

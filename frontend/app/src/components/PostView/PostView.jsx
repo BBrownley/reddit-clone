@@ -44,7 +44,7 @@ const PostView = () => {
   }
 
   const handleUpvotePost = async postID => {
-    console.log("upvoting post");
+     
 
     await dispatch(addVote(postID, 1));
 
@@ -53,7 +53,7 @@ const PostView = () => {
   };
 
   const handleDownvotePost = async postID => {
-    console.log("downvoting post");
+     
     await dispatch(addVote(postID, -1));
 
     dispatch(initializeVotes());

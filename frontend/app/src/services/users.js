@@ -24,10 +24,10 @@ const login = async data => {
       data,
       config
     );
-    console.log(req.data);
+     
     return req.data;
   } catch (error) {
-    console.log(error.response); // https://stackoverflow.com/a/46339608
+     
     // store.dispatch(timedNotification(error.response.data.error, 5000));
     return { error: error.response.data.error };
   }

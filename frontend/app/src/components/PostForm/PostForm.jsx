@@ -56,7 +56,7 @@ const PostForm = () => {
 
     const newPost = await dispatch(createPost(data));
 
-    console.log(newPost);
+     
 
     if (newPost) {
       dispatch(addVote(newPost.postID, 1));
@@ -67,7 +67,7 @@ const PostForm = () => {
 
       // Update localStorage to reflect them adding a new post
       let user = JSON.parse(localStorage.getItem("loggedUser"));
-      console.log(user);
+       
       user = { ...user, userPosts: [...user.userPosts, newPost.postID] };
       localStorage.setItem("loggedUser", JSON.stringify(user));
     }

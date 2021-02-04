@@ -3,9 +3,9 @@ import postService from "../services/posts";
 
 export const initializeVotes = () => {
   return async dispatch => {
-    console.log("HELLO !:D");
+     
     const data = await userPostVotesService.getUserPostVotes();
-    console.log(data);
+     
     dispatch({
       type: "INITIALIZE_VOTES",
       data

@@ -13,11 +13,7 @@ import { initializePosts, removePost } from "../../reducers/postsReducer";
 
 import postService from "../../services/posts";
 
-import FontAwesome from "react-fontawesome";
-
-import { Post, VoteContainer, Content, PostOptions } from "./PostList.elements";
-
-import PostHeader from "../shared/PostHeader";
+import Post from "../Post/Post";
 
 const PostList = ({ sortBy, searchBy, searchTerm }) => {
   const match = useRouteMatch("/groups/:group");
@@ -30,11 +26,11 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
   const userPostVotes = useSelector(state => state.userPostVotes);
 
   useEffect(() => {
-    console.log(user);
+     
     const fetchUserPosts = async user => {
-      console.log(user);
+       
       const data = await postService.getByUser(user);
-      console.log(data);
+       
       setUserPosts(data);
     };
     if (user) {
@@ -49,7 +45,7 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
   let postsToDisplay = useSelector(state => {
     let posts = [];
 
-    console.log(state);
+     
 
     if (!match) {
       posts = state.posts;
@@ -74,7 +70,7 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
     return posts;
   });
 
-  console.log(postsToDisplay);
+   
 
   // Filter results if search is used
   if (!!searchTerm) {
@@ -108,80 +104,7 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
     }
   });
 
-  const handleUpvotePost = async postID => {
-    console.log("upvoting post");
-
-    await dispatch(addVote(postID, 1));
-
-    dispatch(initializeVotes());
-    dispatch(initializePosts());
-  };
-
-  const handleDownvotePost = async postID => {
-    console.log("downvoting post");
-    await dispatch(addVote(postID, -1));
-
-    dispatch(initializeVotes());
-    dispatch(initializePosts());
-  };
-
-  const handleDeletePost = async postId => {
-    dispatch(removePost(postId));
-  };
-
-  return postsToDisplay.map(post => (
-    <Post key={post.postID}>
-      <VoteContainer>
-        <FontAwesome
-          name="plus-square"
-          className="upvote"
-          onClick={() => handleUpvotePost(post.postID)}
-          style={post.vote === 1 ? { color: "blue" } : {}} // Refactor this later
-        />
-        <span>{post.score}</span>
-        <FontAwesome
-          name="minus-square"
-          className="downvote"
-          onClick={() => handleDownvotePost(post.postID)}
-          style={post.vote === -1 ? { color: "red" } : {}} // Refactor this later
-        />
-      </VoteContainer>
-      <div>
-        <PostHeader
-          postLink={`/groups/${post.groupName.toLowerCase()}/${post.postID}`}
-          title={post.title}
-          postAge={moment(post.createdAt).fromNow()}
-          groupLink={`/groups/${post.groupName.toLowerCase()}`}
-          groupName={post.groupName}
-          author={post.username}
-        />
-
-        <Content>{post.content}</Content>
-        <PostOptions>
-          <span>
-            {/* <FontAwesome name="comments" /> {post.comments.length} comments */}
-          </span>
-          <span className={Math.random() > 0.5 ? "favorite-active" : ""}>
-            <FontAwesome name="heart" className="fa-heart" /> {post.followers} 0
-            followers
-          </span>
-          <span>{post.postID}</span>
-          <span>
-            {user && user.userPosts.includes(post.postID) ? (
-              <span onClick={() => handleDeletePost(post.postID)}>
-                <FontAwesome name="trash" /> Delete
-              </span>
-            ) : (
-              ""
-            )}
-            Are you sure?
-            <span>Yes</span>
-            <span>No</span>
-          </span>
-        </PostOptions>
-      </div>
-    </Post>
-  ));
+  return postsToDisplay.map(post => <Post post={post} />);
 };
 
 export default PostList;

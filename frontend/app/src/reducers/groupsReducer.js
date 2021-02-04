@@ -13,9 +13,9 @@ export const initializeGroups = () => {
 export const createGroup = formData => {
   return async dispatch => {
     const data = await groupService.create(formData);
-    console.log(data);
+     
     if (data.error) {
-      console.log(data.error);
+       
       return false;
     } else {
       dispatch({

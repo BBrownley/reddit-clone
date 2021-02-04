@@ -16,9 +16,9 @@ const config = {
 };
 
 const getAll = async () => {
-  console.log("Fetching posts (from services/posts)");
+   
   const req = await axios.get("http://localhost:5000/", config);
-  console.log(req);
+   
   return req.data;
 };
 
@@ -31,7 +31,7 @@ const getByUser = async user => {
     }
   };
 
-  console.log(config);
+   
 
   const req = await axios.get(
     "http://localhost:5000/posts/verifyuserposts",
@@ -49,7 +49,7 @@ const createPost = async post => {
 
   try {
     const req = await axios.post("http://localhost:5000/posts", post, config);
-    console.log(req);
+     
     return req.data;
   } catch (error) {
     return { error: error.response.data.error };
@@ -70,7 +70,7 @@ const vote = async (postID, value) => {
     body,
     config
   );
-  console.log(data);
+   
   return data;
 };
 
