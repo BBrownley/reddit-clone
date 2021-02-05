@@ -20,6 +20,7 @@ import GroupList from "./components/GroupList/GroupList";
 import RegisterForm from "./components/RegisterForm/RegisterForm";
 import LoginForm from "./components/LoginForm/LoginForm";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
+import UserView from "./components/UserView/UserView";
 
 const Wrapper = styled.div`
   max-width: 1260px;
@@ -176,6 +177,9 @@ const App = () => {
               </Route>
               <Route exact path="/login">
                 <LoginForm />
+              </Route>
+              <Route exact path="/users/:userId">
+                <UserView />
               </Route>
             </Switch>
 
