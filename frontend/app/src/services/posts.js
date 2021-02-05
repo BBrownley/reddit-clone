@@ -19,6 +19,14 @@ const getAll = async () => {
   return req.data;
 };
 
+const getPostsByUID = async userId => {
+  const req = await axios.get(
+    `http://localhost:5000/posts/users/${userId}`,
+    config
+  );
+  return req.data;
+};
+
 const getByUser = async user => {
   const config = {
     headers: {
@@ -37,6 +45,7 @@ const getByUser = async user => {
 
 const getUserPosts = async userId => {
   const req = await axios.get(`http://localhost:5000/posts/${userId}`, config);
+  console.log(req);
   return req.data;
 };
 
@@ -98,7 +107,8 @@ const postService = {
   setToken,
   vote,
   removePost,
-  getUserPosts
+  getUserPosts,
+  getPostsByUID
 };
 
 export default postService;

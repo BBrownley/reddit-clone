@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouteMatch } from "react-router-dom";
 import userService from "../../services/users";
-import userPostService from "../../services/posts";
+import postService from "../../services/posts";
 
 import moment from "moment";
 
@@ -19,7 +19,8 @@ export default function UserView() {
     };
 
     const fetchUserPosts = async () => {
-      const userPostData = await userPostService.getUserPosts(match.params.id);
+      const userPostData = await postService.getUserPosts(match.params.id);
+      console.log(userPostData);
       setUserPosts(userPostData);
     };
 
@@ -32,7 +33,7 @@ export default function UserView() {
       <h1>{user.username}</h1>
       <p>Account created {moment(user.created_at).fromNow()}</p>
       {userPosts.map(post => {
-        
+        return <h2>{post.title}</h2>;
       })}
     </div>
   );

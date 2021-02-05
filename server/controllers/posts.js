@@ -39,4 +39,13 @@ postsRouter.delete("/:id", async (req, res, next) => {
   }
 });
 
+postsRouter.get("/:userId", async (req, res, next) => {
+  try {
+    const userPosts = await postsDB.getPostsByUID(req.params.userId);
+    res.json(userPosts);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
 module.exports = postsRouter;

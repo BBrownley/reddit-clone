@@ -105,7 +105,24 @@ const login = userInfo => {
   });
 };
 
+const getUserById = userId => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `SELECT * FROM users WHERE id = ?`,
+      [userId],
+      (error, results) => {
+        if (error) {
+          reject(new Error("Unable to find user"));
+        } else {
+          resolve(results[0]);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   register,
-  login
+  login,
+  getUserById
 };

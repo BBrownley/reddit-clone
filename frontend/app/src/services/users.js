@@ -31,9 +31,19 @@ const login = async data => {
   }
 };
 
+const getUser = async userId => {
+  try {
+    const req = await axios.get(`http://localhost:5000/users/${userId}`);
+    return req.data;
+  } catch (error) {
+    return { error: error.response.data.error };
+  }
+};
+
 const userService = {
   register,
-  login
+  login,
+  getUser
 };
 
 export default userService;

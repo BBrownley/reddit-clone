@@ -224,10 +224,27 @@ const deletePost = (token, postId) => {
   });
 };
 
+const getPostsByUID = userId => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `SELECT * FROM posts WHERE submitter_id = ?`,
+      [userId],
+      (error, results) => {
+        if (error) {
+          reject(new Error("Unable to fetch user posts"));
+        } else {
+          resolve(results);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   all,
   getPostsByToken,
   create,
   vote,
-  deletePost
+  deletePost,
+  getPostsByUID
 };

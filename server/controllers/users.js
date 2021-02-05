@@ -21,4 +21,13 @@ usersRouter.post("/login", async (req, res, next) => {
   }
 });
 
+usersRouter.get("/:userId", async (req, res, next) => {
+  try {
+    let data = await usersDB.getUserById(req.params.userId);
+    res.json(data);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
 module.exports = usersRouter;
