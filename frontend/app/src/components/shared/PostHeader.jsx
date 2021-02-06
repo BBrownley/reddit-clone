@@ -9,7 +9,7 @@ const PostHeader = ({
   postAge,
   groupLink,
   groupName,
-  author
+  author = undefined
 }) => {
   return (
     <PostHeaderContainer>
@@ -22,10 +22,14 @@ const PostHeader = ({
           <strong>{groupName}</strong>
         </NavLink>
       </span>{" "}
-      by{" "}
-      <NavLink to="/">
-        <strong>{author}</strong>
-      </NavLink>
+      {author !== undefined && (
+        <>
+          by{" "}
+          <NavLink to="/">
+            <strong>{author}</strong>
+          </NavLink>
+        </>
+      )}
     </PostHeaderContainer>
   );
 };

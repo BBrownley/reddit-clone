@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 
 import Post from "../Post/Post";
 
-const PostList = ({ sortBy, searchBy, searchTerm }) => {
+const PostList = ({ sortBy, searchBy, searchTerm, posts = undefined }) => {
   const match = useRouteMatch("/groups/:group");
 
   const userPostVotes = useSelector(state => state.userPostVotes);
@@ -38,9 +38,8 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
     return posts;
   });
 
-  // Filter results if search is used
-  if (!!searchTerm) {
-    postsToDisplay = postsToDisplay.filter(post => {
+  const filterPosts = posts => {
+    let result = posts.filter(post => {
       if (searchBy === "title") {
         return post.title.toLowerCase().includes(searchTerm.toLowerCase());
       } else if (searchBy === "content") {
@@ -49,30 +48,52 @@ const PostList = ({ sortBy, searchBy, searchTerm }) => {
         return post;
       }
     });
-  }
 
-  postsToDisplay = postsToDisplay.sort((a, b) => {
-    switch (sortBy) {
-      case "new":
-        const timestampA = moment(a.createdAt);
-        const timestampB = moment(b.createdAt);
-
-        return timestampA.isAfter(timestampB) ? -1 : 1;
-      case "top":
-        return b.score - a.score;
-      case "followers":
-        return b.followers - a.followers;
-
-      // case "commentsAsc":
-      //   return a.comments.length - b.comments.length;
-      // case "commentsDesc":
-      //   return b.comments.length - a.comments.length;
-      default:
-        return null;
+    // Filter results if search is used
+    if (!!searchTerm) {
+      result = result.filter(post => {
+        if (searchBy === "title") {
+          return post.title.toLowerCase().includes(searchTerm.toLowerCase());
+        } else if (searchBy === "content") {
+          return post.content.toLowerCase().includes(searchTerm.toLowerCase());
+        } else {
+          return post;
+        }
+      });
     }
-  });
+    return result;
+  };
 
-  return postsToDisplay.map(post => <Post post={post} key={post.postID} />);
+  const sortPosts = posts => {
+    return posts.sort((a, b) => {
+      switch (sortBy) {
+        case "new":
+          const timestampA = moment(a.createdAt);
+          const timestampB = moment(b.createdAt);
+
+          return timestampA.isAfter(timestampB) ? -1 : 1;
+        case "top":
+          return b.score - a.score;
+        case "followers":
+          return b.followers - a.followers;
+
+        // case "commentsAsc":
+        //   return a.comments.length - b.comments.length;
+        // case "commentsDesc":
+        //   return b.comments.length - a.comments.length;
+        default:
+          return null;
+      }
+    });
+  };
+
+  if (posts !== undefined) {
+    const postsAsProps = sortPosts(filterPosts(posts));
+    return postsAsProps.map(post => <Post post={post} key={post.postID} />);
+  } else {
+    postsToDisplay = sortPosts(filterPosts(postsToDisplay));
+    return postsToDisplay.map(post => <Post post={post} key={post.postID} />);
+  }
 };
 
 export default PostList;

@@ -227,7 +227,9 @@ const deletePost = (token, postId) => {
 const getPostsByUID = userId => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT * FROM posts WHERE submitter_id = ?`,
+      `SELECT *, group_name AS groupName FROM posts 
+      JOIN groups ON posts.group_id = groups.id
+      WHERE submitter_id = ?`,
       [userId],
       (error, results) => {
         if (error) {

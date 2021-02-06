@@ -61,7 +61,6 @@ const Post = ({ post }) => {
           postAge={moment(post.createdAt).fromNow()}
           groupLink={`/groups/${post.groupName.toLowerCase()}`}
           groupName={post.groupName}
-          author={post.username}
         />
 
         <Content>{post.content}</Content>
