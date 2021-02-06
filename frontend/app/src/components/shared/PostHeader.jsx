@@ -9,7 +9,8 @@ const PostHeader = ({
   postAge,
   groupLink,
   groupName,
-  author = undefined
+  author,
+  userId
 }) => {
   return (
     <PostHeaderContainer>
@@ -18,14 +19,14 @@ const PostHeader = ({
       </NavLink>
       posted <FontAwesome name="history" className="fa-history" /> {postAge} in{" "}
       <span>
-        <NavLink to={groupLink}>
+        <NavLink to={`/groups/${groupName.toLowerCase()}`}>
           <strong>{groupName}</strong>
         </NavLink>
       </span>{" "}
-      {author !== undefined && (
+      {author && (
         <>
           by{" "}
-          <NavLink to="/">
+          <NavLink to={`/users/${userId}`}>
             <strong>{author}</strong>
           </NavLink>
         </>

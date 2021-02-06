@@ -87,6 +87,7 @@ const PostList = ({ sortBy, searchBy, searchTerm, posts = undefined }) => {
     });
   };
 
+  // Temporary workaround from not being able to conditionally use useSelector
   if (posts !== undefined) {
     const postsAsProps = sortPosts(filterPosts(posts));
     return postsAsProps.map(post => <Post post={post} key={post.postID} />);
