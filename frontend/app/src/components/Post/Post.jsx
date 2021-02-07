@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -19,6 +19,8 @@ const Post = ({ post }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
 
+  const [confirmDeletion, setConfirmDeletion] = useState(false);
+
   const handleUpvotePost = async postID => {
     await dispatch(addVote(postID, 1));
 
@@ -37,6 +39,17 @@ const Post = ({ post }) => {
     dispatch(removePost(postId));
   };
 
+  const DeleteConfirmation = () => {
+    return (
+      <>
+        Are you sure?
+        <span onClick={() => handleDeletePost(post.postID)}>Yes</span>
+        <span onClick={() => setConfirmDeletion(false)}>No</span>
+      </>
+    );
+  };
+
+  console.log(post);
   return (
     <Container key={post.postID}>
       <VoteContainer>
@@ -76,16 +89,16 @@ const Post = ({ post }) => {
           </span>
           <span>{post.postID}</span>
           <span>
-            {user && user.userPosts.includes(post.postID) ? (
-              <span onClick={() => handleDeletePost(post.postID)}>
+            {user &&
+            confirmDeletion === false &&
+            user.userPosts.includes(post.postID) ? (
+              <span onClick={() => setConfirmDeletion(!confirmDeletion)}>
                 <FontAwesome name="trash" /> Delete
               </span>
             ) : (
               ""
             )}
-            Are you sure?
-            <span>Yes</span>
-            <span>No</span>
+            {confirmDeletion && <DeleteConfirmation />}
           </span>
         </PostOptions>
       </div>

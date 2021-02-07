@@ -227,9 +227,27 @@ const deletePost = (token, postId) => {
 const getPostsByUID = userId => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT *, group_name AS groupName FROM posts 
-      JOIN groups ON posts.group_id = groups.id
-      WHERE submitter_id = ?`,
+      `SELECT 
+      CASE
+        WHEN ISNULL(SUM(post_votes.vote_value)) THEN 0
+          WHEN SUM(post_votes.vote_value) < 1 THEN 0
+          ELSE SUM(post_votes.vote_value)
+      END AS score,
+      title, 
+      posts.created_at AS createdAt, 
+      posts.id AS postID,
+      group_name AS groupName,
+      group_id AS groupID,
+      username,
+      users.id AS user_id,
+      content FROM posts
+    JOIN users ON users.id = posts.submitter_id
+    JOIN groups ON groups.id = posts.group_id
+    LEFT JOIN post_votes ON post_votes.post_id = posts.id
+    WHERE posts.submitter_id = ?
+    GROUP BY posts.id
+    ORDER BY posts.created_at DESC
+    `,
       [userId],
       (error, results) => {
         if (error) {
