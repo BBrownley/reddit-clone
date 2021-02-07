@@ -24,7 +24,8 @@ const getGroupByName = groupName => {
   return new Promise((resolve, reject) => {
     connection.query(
       `
-      SELECT * FROM groups
+      SELECT *, COUNT(*) as subscribers FROM groups
+      LEFT JOIN group_subscribers ON groups.id = group_subscribers.group_id
       WHERE group_name = ?
       LIMIT 1
     `,

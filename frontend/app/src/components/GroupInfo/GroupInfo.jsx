@@ -22,7 +22,7 @@ const GroupInfo = () => {
     <Container>
       <div className="group-info-main">
         <h1>{group.group_name}</h1>
-        <p>0 subscribers</p>
+        <p>{group.subscribers} subscribers</p>
         <p className="group-desc">{group.blurb}</p>
       </div>
     </Container>
