@@ -24,10 +24,24 @@ const getGroupByName = groupName => {
   return new Promise((resolve, reject) => {
     connection.query(
       `
-      SELECT *, COUNT(*) as subscribers FROM groups
-      LEFT JOIN group_subscribers ON groups.id = group_subscribers.group_id
-      WHERE group_name = ?
-      LIMIT 1
+        SELECT 
+
+        id AS group_id,
+        owner_id,
+        group_name,
+        groups.created_at AS group_created_at,
+        blurb,
+
+        CASE
+          WHEN group_id IS NULL THEN 0
+            ELSE COUNT(*)
+        END AS subscribers
+
+        FROM group_subscribers
+        RIGHT JOIN groups ON group_subscribers.group_id = groups.id
+        WHERE group_name = ?
+        GROUP BY groups.id
+        LIMIT 1
     `,
       [groupName],
       (err, results) => {
