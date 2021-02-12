@@ -86,6 +86,7 @@ const PostView = () => {
           groupLink={`/groups/${post.groupName.toLowerCase()}`}
           groupName={post.groupName}
           author={post.username}
+          userId={post.user_id}
         />
 
         <Content>{post.content}</Content>
