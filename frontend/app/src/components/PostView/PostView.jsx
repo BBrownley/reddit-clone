@@ -21,16 +21,22 @@ import {
 import PostHeader from "../shared/PostHeader";
 
 const PostView = () => {
-  const posts = useSelector(state => state.posts);
+  const posts = useSelector(state => {
+    console.log(state);
+    return state.posts;
+  });
+  console.log(posts);
   const match = useRouteMatch("/groups/:group/:id");
   const post = match
     ? posts.find(post => post.postID.toString() === match.params.id.toString())
     : null;
-  const userPostVote = useSelector(state =>
+  const userPostVote = useSelector(state => {
+    console.log(state);
+    console.log(post);
     state.userPostVotes.find(vote => {
       return vote.post_id === post.postID;
-    })
-  );
+    });
+  });
   const dispatch = useDispatch();
 
   if (!post) {
