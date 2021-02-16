@@ -13,11 +13,13 @@ export default function Comment({ comment }) {
 
   useEffect(() => {
     const fetchChildren = async () => {
-      const children = await commentsService.getCommentChildren(comment.comment_id);
+      const children = await commentsService.getCommentChildren(
+        comment.comment_id
+      );
       setChildren(children);
     };
     fetchChildren();
-  });
+  }, []);
 
   return (
     <Container>

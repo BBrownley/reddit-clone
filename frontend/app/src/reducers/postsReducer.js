@@ -17,7 +17,6 @@ export const initializePosts = () => {
 export const createPost = formData => {
   return async dispatch => {
     const data = await postService.createPost(formData);
-     
 
     if (data.error) {
       dispatch(timedNotification(data.error, 3000));
@@ -88,7 +87,6 @@ const reducer = (state = initialState, action) => {
         }
       });
     case "REMOVE_POST":
-       
       return state.filter(post => post.postID !== action.postId);
 
     default:

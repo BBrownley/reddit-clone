@@ -1,5 +1,6 @@
 const commentsRouter = require("express").Router();
 const connection = require("../db/index").connection;
+const jwt = require("jsonwebtoken");
 
 commentsRouter.get("/post/:postId", async (req, res, next) => {
   const fetchComments = () => {
@@ -61,6 +62,42 @@ commentsRouter.get("/:commentId/children", async (req, res, next) => {
   try {
     const comments = await fetchChildren();
     res.json(comments);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
+commentsRouter.post("/", async (req, res, next) => {
+  const token = req.headers.authorization;
+  const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
+  console.log(req.body);
+  const postComment = () => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        INSERT INTO comments SET ?
+      `;
+
+      connection.query(
+        query,
+        {
+          commenter_id: decodedToken.id,
+          parent_id: req.body.parentId,
+          content: req.body.comment,
+          post_id: req.body.postId
+        },
+        (err, results) => {
+          if (err) {
+            reject(new Error(err));
+          } else {
+            resolve(results);
+          }
+        }
+      );
+    });
+  };
+  try {
+    const newComment = await postComment();
+    res.json(newComment);
   } catch (exception) {
     next(exception);
   }
