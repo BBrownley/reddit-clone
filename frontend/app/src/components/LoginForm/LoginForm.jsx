@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useLocation, Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 
 import { login } from "../../reducers/userReducer";
 import { initializeVotes } from "../../reducers/userPostVotesReducer";
-import {
-  removeNotification
-} from "../../reducers/notificationReducer";
+import { clearRedirectPath } from "../../reducers/redirectReducer";
+import { removeNotification } from "../../reducers/notificationReducer";
 
 import Notification from "../../components/Notification/Notification";
-
 
 const LoginForm = props => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
+
+  const redirectPath = useSelector(state => state.redirectPath);
 
   const history = useHistory();
   const location = useLocation();
@@ -29,9 +29,12 @@ const LoginForm = props => {
     setPassword(e.target.value);
   };
 
-  // Clear notification on component unmount/view change
+  // Clear notification, redirect path on component unmount/view change
   useEffect(() => {
-    return () => dispatch(removeNotification());
+    return () => {
+      dispatch(removeNotification());
+      dispatch(clearRedirectPath());
+    };
   }, [dispatch]);
 
   const handleLogin = async e => {
@@ -43,7 +46,11 @@ const LoginForm = props => {
     if (loginSuccess) {
       dispatch(initializeVotes());
       localStorage.setItem("loggedUser", JSON.stringify(loginSuccess));
-      history.push(`/`);
+      if (redirectPath) {
+        history.push(redirectPath);
+      } else {
+        history.push(`/`);
+      }
     }
   };
 

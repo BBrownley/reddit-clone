@@ -7,6 +7,7 @@ import {
   subscribeToGroup,
   unsubscribeFromGroup
 } from "../../reducers/groupSubscribesReducer";
+import { setRedirectPath } from "../../reducers/redirectReducer";
 
 import { GroupActions as Container } from "./GroupActions.elements";
 
@@ -33,6 +34,7 @@ const GroupActions = () => {
     if (loggedUser) {
       history.push("/create");
     } else {
+      dispatch(setRedirectPath("/create"));
       history.push({
         pathname: "/login",
         state: { headerMessage: "Log in to create a post", creatingPost: true }
@@ -57,9 +59,6 @@ const GroupActions = () => {
   const handleUnsubscribe = () => {
     dispatch(unsubscribeFromGroup(currentGroup, loggedUser));
   };
-
-   
-   
 
   return (
     <Container>

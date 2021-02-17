@@ -4,6 +4,7 @@ import userReducer from "./reducers/userReducer";
 import userPostVotesReducer from "./reducers/userPostVotesReducer";
 import notificationReducer from "./reducers/notificationReducer";
 import groupSubscribesReducer from "./reducers/groupSubscribesReducer";
+import redirectReducer from "./reducers/redirectReducer";
 import { combineReducers, createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
@@ -14,7 +15,8 @@ const reducer = combineReducers({
   user: userReducer,
   userPostVotes: userPostVotesReducer,
   notification: notificationReducer,
-  subscribedGroups: groupSubscribesReducer
+  subscribedGroups: groupSubscribesReducer,
+  redirectPath: redirectReducer
 });
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));

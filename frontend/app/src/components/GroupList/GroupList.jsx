@@ -2,18 +2,22 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
+import { setRedirectPath } from "../../reducers/redirectReducer";
 
 const GroupList = () => {
   const groups = useSelector(state => state.groups);
   const loggedUser = useSelector(state => state.user);
 
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const handleCreateGroupButton = () => {
     if (loggedUser) {
       history.push("/groups/create");
     } else {
+      dispatch(setRedirectPath("/groups/create"));
       history.push({
         pathname: "/login",
         state: {
