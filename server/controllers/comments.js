@@ -89,7 +89,13 @@ commentsRouter.post("/", async (req, res, next) => {
           if (err) {
             reject(new Error(err));
           } else {
-            resolve(results);
+            const query = `
+              SELECT * FROM comments
+              WHERE id = ?
+            `;
+            connection.query(query, [results.insertId], (err, results) => {
+              resolve(results[0]);
+            });
           }
         }
       );

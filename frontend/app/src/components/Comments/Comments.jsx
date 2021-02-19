@@ -29,7 +29,15 @@ export default function Comments({ postId }) {
   const handleSubmitComment = async e => {
     e.preventDefault();
     //dispatch(newComment);
-    await commentsService.add(currentUser, newComment, postId, null);
+    const newCommentObj = await commentsService.add(
+      currentUser,
+      newComment,
+      postId,
+      null
+    );
+    console.log(newCommentObj);
+    setComments([...comments, newCommentObj]);
+    console.log(comments);
     setFormOpen(false);
     setNewComment("");
   };
