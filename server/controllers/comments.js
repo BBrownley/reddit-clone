@@ -94,7 +94,7 @@ commentsRouter.post("/", async (req, res, next) => {
               WHERE id = ?
             `;
             connection.query(query, [results.insertId], (err, results) => {
-              resolve(results[0]);
+              resolve({ ...results[0], username: decodedToken.username });
             });
           }
         }

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useRouteMatch } from "react-router-dom";
 import commentsService from "../../services/comments";
 
 import { Container } from "./Comment.elements";
@@ -6,6 +8,11 @@ import { Container } from "./Comment.elements";
 export default function Comment({ comment }) {
   const [replying, setReplying] = useState(false);
   const [children, setChildren] = useState([]);
+  const [newComment, setNewComment] = useState("");
+
+  const match = useRouteMatch("/groups/:groupName/:groupId");
+
+  const currentUser = useSelector(state => state.user);
 
   /*
     Fetch children from DB where parent_id = comment.id
@@ -21,8 +28,20 @@ export default function Comment({ comment }) {
     fetchChildren();
   }, []);
 
+  const handleReplyComment = async () => {
+    const newCommentObj = await commentsService.add(
+      currentUser,
+      newComment,
+      match.params.groupId,
+      comment.comment_id
+    );
+    // setComments([...comments, newCommentObj]);
+    // setFormOpen(false);
+    setNewComment("");
+  };
+
   return (
-    <Container>
+    <Container onClick={() => console.log(comment)}>
       <div className="user">{comment.username}</div>
       <div className="content">{comment.content}</div>
       {replying === false && (
@@ -32,8 +51,12 @@ export default function Comment({ comment }) {
       )}
       {replying === true && (
         <div>
-          <input type="text" />
-          <button>Send</button>
+          <input
+            type="text"
+            value={newComment}
+            onChange={e => setNewComment(e.target.value)}
+          />
+          <button onClick={handleReplyComment}>Send</button>
           <a onClick={() => setReplying(false)}>Cancel</a>
         </div>
       )}

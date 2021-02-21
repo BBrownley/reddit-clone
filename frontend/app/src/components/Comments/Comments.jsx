@@ -26,18 +26,14 @@ export default function Comments({ postId }) {
     fetchComments();
   }, []);
 
-  const handleSubmitComment = async e => {
-    e.preventDefault();
-    //dispatch(newComment);
+  const handleSubmitComment = async () => {
     const newCommentObj = await commentsService.add(
       currentUser,
       newComment,
       postId,
       null
     );
-    console.log(newCommentObj);
     setComments([...comments, newCommentObj]);
-    console.log(comments);
     setFormOpen(false);
     setNewComment("");
   };
@@ -86,7 +82,12 @@ export default function Comments({ postId }) {
               return a.parent_id > b.parent_id ? 1 : -1;
             })
             .map(comment => {
-              return <Comment comment={comment} />;
+              return (
+                <Comment
+                  comment={comment}
+                  handleSubmitComment={handleSubmitComment}
+                />
+              );
             })}
         </>
       )}
