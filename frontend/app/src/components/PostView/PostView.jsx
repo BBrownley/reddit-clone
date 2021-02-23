@@ -32,14 +32,8 @@ const PostView = () => {
   const post = match
     ? posts.find(post => post.postID.toString() === match.params.id.toString())
     : null;
-<<<<<<< HEAD
-  const userPostVote = useSelector(state => {
-    console.log(state);
-    console.log(post);
-=======
   console.log(post);
-  const userPostVote = useSelector(state =>
->>>>>>> comments
+  const userPostVote = useSelector(state => {
     state.userPostVotes.find(vote => {
       return vote.post_id === post.postID;
     });
