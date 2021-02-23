@@ -77,6 +77,7 @@ const App = () => {
   const [sortBy, setSortBy] = useState("new");
   const [searchBy, setSearchBy] = useState("title");
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const user = useSelector(state => {
     return state.user;
@@ -89,15 +90,13 @@ const App = () => {
         await dispatch(setUser(loggedUser));
       }
 
-      const initializers = [
-        dispatch(initializePosts()),
-        dispatch(initializeGroups())
-      ];
-      await Promise.all(initializers);
+      await dispatch(initializePosts());
+      await dispatch(initializeGroups());
+      setLoading(false);
     };
 
     initialize();
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     dispatch(initializeVotes());
@@ -238,9 +237,12 @@ const App = () => {
               <Route path="/create">
                 <PostForm />
               </Route>
-              <Route path="/groups/:group/:id">
-                <PostView />
-              </Route>
+              {!loading && (
+                <Route path="/groups/:group/:id">
+                  <PostView />
+                </Route>
+              )}
+
               <Route exact path={["/groups/:group", "/"]}>
                 <PostList
                   sortBy={sortBy}

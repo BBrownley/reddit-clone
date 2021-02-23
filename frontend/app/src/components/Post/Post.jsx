@@ -49,7 +49,6 @@ const Post = ({ post }) => {
     );
   };
 
-  console.log(post);
   return (
     <Container key={post.postID}>
       <VoteContainer>

@@ -14,10 +14,12 @@ const postsDB = require("./db/posts");
 const groupsRouter = require("./controllers/groups");
 const postsRouter = require("./controllers/posts");
 const usersRouter = require("./controllers/users");
+const commentsRouter = require("./controllers/comments");
 
 app.use("/groups", groupsRouter);
 app.use("/posts", postsRouter);
 app.use("/users", usersRouter);
+app.use("/comments", commentsRouter);
 
 app.get("/", async (req, res) => {
   let posts = await postsDB.all();
