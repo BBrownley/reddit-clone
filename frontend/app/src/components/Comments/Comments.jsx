@@ -26,16 +26,28 @@ export default function Comments({ postId }) {
     fetchComments();
   }, []);
 
-  const handleSubmitComment = async () => {
+  const handleSubmitComment = async (
+    user,
+    content,
+    postId,
+    repliedCommentId = null,
+    replying = false,
+    children = null,
+    setChildren = null
+  ) => {
     const newCommentObj = await commentsService.add(
-      currentUser,
-      newComment,
+      user,
+      content,
       postId,
-      null
+      repliedCommentId || null
     );
-    setComments([...comments, newCommentObj]);
-    setFormOpen(false);
-    setNewComment("");
+    if (replying) {
+      setChildren([...children, newCommentObj]);
+    } else {
+      setComments([...comments, newCommentObj]);
+      setFormOpen(false);
+      setNewComment("");
+    }
   };
 
   const handleLoginRedirect = () => {
@@ -61,7 +73,13 @@ export default function Comments({ postId }) {
                 value={newComment}
                 onChange={e => setNewComment(e.target.value)}
               />
-              <button onClick={handleSubmitComment}>Submit</button>
+              <button
+                onClick={() =>
+                  handleSubmitComment(currentUser, newComment, postId)
+                }
+              >
+                Submit
+              </button>
               <p onClick={() => setFormOpen(false)}>Cancel</p>
             </>
           );

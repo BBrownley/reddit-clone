@@ -5,7 +5,7 @@ import commentsService from "../../services/comments";
 
 import { Container } from "./Comment.elements";
 
-export default function Comment({ comment }) {
+export default function Comment(props) {
   const [replying, setReplying] = useState(false);
   const [children, setChildren] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -14,36 +14,22 @@ export default function Comment({ comment }) {
 
   const currentUser = useSelector(state => state.user);
 
-  /*
-    Fetch children from DB where parent_id = comment.id
-  */
-
   useEffect(() => {
     const fetchChildren = async () => {
       const children = await commentsService.getCommentChildren(
-        comment.comment_id
+        props.comment.comment_id
       );
       setChildren(children);
     };
     fetchChildren();
   }, []);
 
-  const handleReplyComment = async () => {
-    const newCommentObj = await commentsService.add(
-      currentUser,
-      newComment,
-      match.params.groupId,
-      comment.comment_id
-    );
-    // setComments([...comments, newCommentObj]);
-    // setFormOpen(false);
-    setNewComment("");
-  };
+  console.log(props.handleSubmitComment);
 
   return (
-    <Container onClick={() => console.log(comment)}>
-      <div className="user">{comment.username}</div>
-      <div className="content">{comment.content}</div>
+    <Container>
+      <div className="user">{props.comment.username}</div>
+      <div className="content">{props.comment.content}</div>
       {replying === false && (
         <div onClick={() => setReplying(true)}>
           <a className="reply">Reply</a>
@@ -56,12 +42,29 @@ export default function Comment({ comment }) {
             value={newComment}
             onChange={e => setNewComment(e.target.value)}
           />
-          <button onClick={handleReplyComment}>Send</button>
+          <button
+            onClick={() =>
+              props.handleSubmitComment(
+                currentUser,
+                newComment,
+                match.params.groupId,
+                props.comment.comment_id,
+                true,
+                children,
+                setChildren
+              )
+            }
+          >
+            Send
+          </button>
           <a onClick={() => setReplying(false)}>Cancel</a>
         </div>
       )}
       {children.map(childComment => (
-        <Comment comment={childComment} />
+        <Comment
+          comment={childComment}
+          handleSubmitComment={props.handleSubmitComment}
+        />
       ))}
     </Container>
   );

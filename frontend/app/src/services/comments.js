@@ -20,7 +20,6 @@ const getCommentChildren = async commentId => {
   const req = await axios.get(
     `http://localhost:5000/comments/${commentId}/children`
   );
-  console.log(req);
   return req.data;
 };
 
