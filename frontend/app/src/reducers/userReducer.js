@@ -3,6 +3,7 @@ import postService from "../services/posts";
 import groupService from "../services/groups";
 import userPostVoteService from "../services/userPostVotes";
 import commentsService from "../services/comments";
+import messageService from "../services/messages";
 
 import { timedNotification } from "../reducers/notificationReducer";
 
@@ -43,6 +44,7 @@ export const login = (credentials, hasToken) => {
       userPostVoteService.setToken(data.token);
       groupService.setToken(data.token);
       commentsService.setToken(data.token);
+      messageService.setToken(data.token);
 
       dispatch({
         type: "LOGIN",
@@ -67,6 +69,7 @@ export const setUser = userInfo => {
     userPostVoteService.setToken(userInfo.token);
     groupService.setToken(userInfo.token);
     commentsService.setToken(userInfo.token);
+    messageService.setToken(userInfo.token);
     dispatch({
       type: "SET_USER",
       userInfo

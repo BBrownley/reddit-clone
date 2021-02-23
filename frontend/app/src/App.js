@@ -21,6 +21,7 @@ import RegisterForm from "./components/RegisterForm/RegisterForm";
 import LoginForm from "./components/LoginForm/LoginForm";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import UserView from "./components/UserView/UserView";
+import InboxView from "./components/InboxView/InboxView";
 
 const Wrapper = styled.div`
   max-width: 1260px;
@@ -142,6 +143,9 @@ const App = () => {
                 <li>
                   <StyledLink to="/groups">Groups</StyledLink>
                 </li>
+                <li>
+                  <StyledLink to="/inbox">Inbox</StyledLink>
+                </li>
                 {user === null && (
                   <>
                     <li>
@@ -252,6 +256,9 @@ const App = () => {
               </Route>
               <Route exact path="/groups">
                 <GroupList />
+              </Route>
+              <Route exact path="/inbox">
+                <InboxView />
               </Route>
             </Switch>
           </Wrapper>
