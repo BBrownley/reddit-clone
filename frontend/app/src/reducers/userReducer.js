@@ -37,7 +37,8 @@ export const login = (credentials, hasToken) => {
       const data = {
         username: res.username,
         token: res.token,
-        userPosts: res.userPosts
+        userPosts: res.userPosts,
+        userId: res.userId
       };
 
       postService.setToken(data.token);

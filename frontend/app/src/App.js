@@ -22,6 +22,7 @@ import LoginForm from "./components/LoginForm/LoginForm";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import UserView from "./components/UserView/UserView";
 import InboxView from "./components/InboxView/InboxView";
+import MessageForm from "./components/MessageForm/MessageForm";
 
 const Wrapper = styled.div`
   max-width: 1260px;
@@ -146,7 +147,7 @@ const App = () => {
                 <li>
                   <StyledLink to="/inbox">Inbox</StyledLink>
                 </li>
-                {user === null && (
+                {user.username === null && (
                   <>
                     <li>
                       <StyledLink to="/login">Log in</StyledLink>
@@ -156,7 +157,7 @@ const App = () => {
                     </li>
                   </>
                 )}
-                {user !== null && (
+                {user.username !== null && (
                   <li>
                     Signed in as {user.username}{" "}
                     <StyledLink onClick={handleLogout} to="/">
@@ -259,6 +260,9 @@ const App = () => {
               </Route>
               <Route exact path="/inbox">
                 <InboxView />
+              </Route>
+              <Route exact path="/messages/compose">
+                <MessageForm />
               </Route>
             </Switch>
           </Wrapper>

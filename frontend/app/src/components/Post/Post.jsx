@@ -88,7 +88,7 @@ const Post = ({ post }) => {
           </span>
           <span>{post.postID}</span>
           <span>
-            {user &&
+            {user.userposts &&
             confirmDeletion === false &&
             user.userPosts.includes(post.postID) ? (
               <span onClick={() => setConfirmDeletion(!confirmDeletion)}>

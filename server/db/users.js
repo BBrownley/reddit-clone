@@ -93,7 +93,7 @@ const login = userInfo => {
             const userInfo = { username, id: results[0].id };
             const token = `bearer ${jwt.sign(userInfo, process.env.SECRET)}`;
 
-            resolve({ username, token });
+            resolve({ username, token, userId: userInfo.id });
           } else {
             return reject(new Error("Invalid username or password"));
           }

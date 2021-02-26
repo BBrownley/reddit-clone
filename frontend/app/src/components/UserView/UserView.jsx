@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useRouteMatch } from "react-router-dom";
+import { useRouteMatch, useHistory } from "react-router-dom";
 import userService from "../../services/users";
 import postService from "../../services/posts";
 
@@ -16,7 +16,7 @@ export default function UserView() {
   const [searchBy, setSearchBy] = useState("title");
   const [searchTerm, setSearchTerm] = useState("");
 
-  console.log(match.params.id);
+  const history = useHistory();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -54,9 +54,20 @@ export default function UserView() {
     setSearchTerm("");
   };
 
+  const handleSendMessageButton = () => {
+    history.push({
+      pathname: "/messages/compose",
+      state: {
+        recipient_id: user.id
+      }
+    });
+  }
+
   return (
     <div>
       <h1>{user.username}</h1>
+      <button onClick={handleSendMessageButton}>Send message</button>
+
       <p>Account created {moment(user.created_at).fromNow()}</p>
       <div>
         <strong>Sort posts by:</strong>

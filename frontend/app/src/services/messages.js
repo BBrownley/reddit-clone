@@ -17,9 +17,25 @@ const getAll = async () => {
   return req.data;
 };
 
+const send = async message => {
+  const config = {
+    headers: {
+      Authorization: storedToken
+    }
+  };
+
+  const req = await axios.post(
+    "http://localhost:5000/messages",
+    message,
+    config
+  );
+  return req.data;
+};
+
 const messageService = {
   setToken,
-  getAll
+  getAll,
+  send
 };
 
 export default messageService;

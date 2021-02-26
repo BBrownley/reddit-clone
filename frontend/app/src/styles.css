@@ -64,9 +64,14 @@ button {
   /* -webkit-box-shadow: 0px 6px 35px -12px rgba(76, 139, 245, 0.35);
   box-shadow: 0px 6px 35px -12px rgba(76, 139, 245, 0.35); */
   background-color: #4385f5;
-  background-image: linear-gradient(to right, rgba(58, 168, 219, 0.35), rgba(76, 139, 245, 0.35));
+  background-image: linear-gradient(
+    to right,
+    rgba(58, 168, 219, 0.35),
+    rgba(76, 139, 245, 0.35)
+  );
   color: white;
   transition: 0.2s background-color ease-out;
+  border: 2px solid rgba(46, 53, 148, 0.35);
   /* border-radius: 5px; */
 }
 
