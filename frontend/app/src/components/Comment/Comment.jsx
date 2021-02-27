@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
 import commentsService from "../../services/comments";
+import messageService from "../../services/messages";
 
 import { Container } from "./Comment.elements";
 
@@ -24,7 +25,16 @@ export default function Comment(props) {
     fetchChildren();
   }, []);
 
-  console.log(props.handleSubmitComment);
+  const sendNotificationToRepliedUser = (repliedUser, newComment) => {
+    const message = {
+      sender_id: null,
+      recipient_id: repliedUser,
+      content: newComment,
+      has_read: 0,
+      subject: `User ${currentUser.username} has replied to a comment`
+    };
+    messageService.send(message);
+  };
 
   return (
     <Container>
@@ -43,7 +53,7 @@ export default function Comment(props) {
             onChange={e => setNewComment(e.target.value)}
           />
           <button
-            onClick={() =>
+            onClick={() => {
               props.handleSubmitComment(
                 currentUser,
                 newComment,
@@ -52,8 +62,12 @@ export default function Comment(props) {
                 true,
                 children,
                 setChildren
-              )
-            }
+              );
+              sendNotificationToRepliedUser(
+                props.comment.commenter_id,
+                newComment
+              );
+            }}
           >
             Send
           </button>
