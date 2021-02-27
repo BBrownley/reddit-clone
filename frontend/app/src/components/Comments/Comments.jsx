@@ -7,8 +7,9 @@ import { setRedirectPath } from "../../reducers/redirectReducer";
 import commentsService from "../../services/comments";
 
 import Comment from "../Comment/Comment";
+import messageService from "../../services/messages";
 
-export default function Comments({ postId }) {
+export default function Comments({ postId, authorId, postTitle }) {
   const dispatch = useDispatch();
   const currentUser = useSelector(state => state.user);
   const history = useHistory();
@@ -44,10 +45,23 @@ export default function Comments({ postId }) {
     if (replying) {
       setChildren([...children, newCommentObj]);
     } else {
+      // Not replying to a comment, begin a new thread
       setComments([...comments, newCommentObj]);
       setFormOpen(false);
       setNewComment("");
+      sendNotificationToAuthor(user, content);
     }
+  };
+
+  const sendNotificationToAuthor = (commentingUser, newComment) => {
+    const message = {
+      sender_id: null,
+      recipient_id: authorId,
+      content: newComment,
+      has_read: 0,
+      subject: `User ${commentingUser.username} has responded to a post: ${postTitle}`
+    };
+    messageService.send(message);
   };
 
   const handleLoginRedirect = () => {

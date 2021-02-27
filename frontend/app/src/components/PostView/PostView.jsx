@@ -107,7 +107,7 @@ const PostView = () => {
           </PostOptions>
         </div>
       </Post>
-      <Comments postId={post.postID} />
+      <Comments postId={post.postID} authorId={post.user_id} postTitle={post.title} />
     </>
   );
 };
