@@ -11,6 +11,7 @@ import { Message, MessageHeader } from "./InboxView.elements";
 
 export default function InboxView() {
   const [messages, setMessages] = useState([]);
+  const [messageFilter, setMessageFilter] = useState("all");
 
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
@@ -31,6 +32,12 @@ export default function InboxView() {
   return (
     <div>
       <h1>Messages</h1>
+      <ul>
+        <li onClick={() => setMessageFilter("all")}>All</li>
+        <li onClick={() => setMessageFilter("server")}>Server</li>
+        <li onClick={() => setMessageFilter("direct messages")}>Direct messages</li>
+        <li onClick={() => setMessageFilter("unread")}>Unread</li>
+      </ul>
       {messages.map(message => (
         <Message className={!!message.has_read ? ".message-read" : ""}>
           <MessageHeader>

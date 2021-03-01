@@ -12,13 +12,9 @@ import FontAwesome from "react-fontawesome";
 
 import Comments from "../Comments/Comments";
 
-import {
-  Post,
-  VoteContainer,
-  Content,
-  PostOptions,
-  FollowButton
-} from "./PostView.elements";
+import { Post, VoteContainer, Content, PostOptions } from "./PostView.elements";
+
+import FollowButton from "../FollowButton/FollowButton";
 
 import PostHeader from "../shared/PostHeader";
 
@@ -101,13 +97,18 @@ const PostView = () => {
             <span>
               {/* <FontAwesome name="comments" /> {post.comments.length} comments */}
             </span>
-            <FollowButton>
+            {/* <FollowButton>
               <FontAwesome name="heart" className="fa-heart" /> Follow
-            </FollowButton>
+            </FollowButton> */}
+            <FollowButton followers={10}/>
           </PostOptions>
         </div>
       </Post>
-      <Comments postId={post.postID} authorId={post.user_id} postTitle={post.title} />
+      <Comments
+        postId={post.postID}
+        authorId={post.user_id}
+        postTitle={post.title}
+      />
     </>
   );
 };

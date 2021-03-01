@@ -12,6 +12,8 @@ import {
   PostOptions
 } from "../PostList/PostList.elements";
 
+import FollowButton from "../FollowButton/FollowButton";
+
 import FontAwesome from "react-fontawesome";
 import PostHeader from "../shared/PostHeader";
 
@@ -82,14 +84,13 @@ const Post = ({ post }) => {
           <span>
             {/* <FontAwesome name="comments" /> {post.comments.length} comments */}
           </span>
-          <span className={Math.random() > 0.5 ? "favorite-active" : ""}>
+          {/* <span className={Math.random() > 0.5 ? "favorite-active" : ""}>
             <FontAwesome name="heart" className="fa-heart" /> {post.followers} 0
             followers
-          </span>
-          <span>{post.postID}</span>
+          </span> */}
+          <FollowButton followers={10} />
           <span>
-            {user.userposts &&
-            confirmDeletion === false &&
+            {
             user.userPosts.includes(post.postID) ? (
               <span onClick={() => setConfirmDeletion(!confirmDeletion)}>
                 <FontAwesome name="trash" /> Delete

@@ -67,7 +67,7 @@ export const PostOptions = styled.div`
   font-size: 14px;
   color: #777;
   margin-top: 10px;
-  & > span {
+  /* & > span {
     margin-right: 10px;
     padding: 4px;
     border-radius: 5px;
@@ -83,5 +83,5 @@ export const PostOptions = styled.div`
     .fa-heart {
       color: #fc74a4;
     }
-  }
+  } */
 `;

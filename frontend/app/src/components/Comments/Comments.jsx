@@ -103,7 +103,6 @@ export default function Comments({ postId, authorId, postTitle }) {
           );
         }
       })()}
-
       {comments.length === 0 ? (
         <h2>Be the first one to comment!</h2>
       ) : (
