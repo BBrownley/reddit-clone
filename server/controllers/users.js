@@ -14,7 +14,11 @@ usersRouter.post("/", async (req, res, next) => {
 usersRouter.post("/login", async (req, res, next) => {
   try {
     let data = await usersDB.login(req.body);
-    data = { ...data, userPosts: await postsDB.getPostsByToken(data.token) };
+    data = {
+      ...data,
+      userPosts: await postsDB.getPostsByToken(data.token),
+      postFollows: await postsDB.getPostFollows(data.token)
+    };
     res.json(data);
   } catch (exception) {
     next(exception);

@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { initializePosts } from "./reducers/postsReducer";
 import { initializeGroups } from "./reducers/groupsReducer";
 import { initializeVotes } from "./reducers/userPostVotesReducer";
-import { logout, setUser } from "./reducers/userReducer";
+import { logout, setUser, initializeFollows } from "./reducers/userReducer";
 import { initializeSubscriptions } from "./reducers/groupSubscribesReducer";
 
 import GroupInfo from "./components/GroupInfo/GroupInfo";
@@ -94,6 +94,7 @@ const App = () => {
 
       await dispatch(initializePosts());
       await dispatch(initializeGroups());
+      await dispatch(initializeFollows());
       setLoading(false);
     };
 

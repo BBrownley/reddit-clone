@@ -260,11 +260,39 @@ const getPostsByUID = userId => {
   });
 };
 
+const getPostFollows = userToken => {
+  return new Promise((resolve, reject) => {
+    const decodedToken = jwt.verify(
+      userToken.split(" ")[1],
+      process.env.SECRET
+    );
+    const userId = decodedToken.id;
+    const query = `
+      SELECT * FROM post_follows
+      WHERE user_id = ?
+    `;
+
+    connection.query(query, [userId], (err, results) => {
+      if (err) {
+        reject(new Error(err.message));
+      } else {
+        const postIds = results.reduce((ids, curr) => {
+          ids.push(curr.post_id);
+          return ids;
+        }, []);
+        resolve(postIds);
+      }
+    });
+  });
+};
+
 module.exports = {
   all,
   getPostsByToken,
   create,
   vote,
   deletePost,
-  getPostsByUID
+  getPostsByUID,
+  getPostFollows,
+  connection
 };

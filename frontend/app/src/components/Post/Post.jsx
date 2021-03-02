@@ -88,10 +88,9 @@ const Post = ({ post }) => {
             <FontAwesome name="heart" className="fa-heart" /> {post.followers} 0
             followers
           </span> */}
-          <FollowButton followers={10} />
+          <FollowButton followers={10} postId={post.postID} />
           <span>
-            {
-            user.userPosts.includes(post.postID) ? (
+            {user.userPosts && user.userPosts.includes(post.postID) ? (
               <span onClick={() => setConfirmDeletion(!confirmDeletion)}>
                 <FontAwesome name="trash" /> Delete
               </span>

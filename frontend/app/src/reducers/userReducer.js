@@ -38,7 +38,8 @@ export const login = (credentials, hasToken) => {
         username: res.username,
         token: res.token,
         userPosts: res.userPosts,
-        userId: res.userId
+        userId: res.userId,
+        postFollows: res.postFollows
       };
 
       postService.setToken(data.token);
@@ -87,6 +88,38 @@ export const addPostToUser = post => {
   };
 };
 
+export const followPost = postId => {
+  return async dispatch => {
+    const res = await postService.followPost(postId);
+    console.log(res);
+    dispatch({
+      type: "FOLLOW_POST",
+      postId: res.post_id
+    });
+  };
+};
+
+export const unfollowPost = postId => {
+  return async dispatch => {
+    const res = await postService.unfollowPost(postId);
+    dispatch({
+      type: "UNFOLLOW_POST",
+      postId: res.postId
+    });
+  };
+};
+
+export const initializeFollows = () => {
+  return async dispatch => {
+    const res = await postService.getPostFollows();
+    console.log(res);
+    dispatch({
+      type: "INITIALIZE_FOLLOWS",
+      postFollows: res.posts
+    });
+  };
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "LOGIN":
@@ -97,6 +130,15 @@ const reducer = (state = initialState, action) => {
       return action.userInfo;
     case "ADD_POST":
       return { ...state, userPosts: [...state.userPosts, action.postId] };
+    case "FOLLOW_POST":
+      return { ...state, postFollows: [...state.postFollows, action.postId] };
+    case "UNFOLLOW_POST":
+      return {
+        ...state,
+        postFollows: state.postFollows.filter(id => id !== action.postId)
+      };
+    case "INITIALIZE_FOLLOWS":
+      return { ...state, postFollows: action.postFollows };
     default:
       return state;
   }

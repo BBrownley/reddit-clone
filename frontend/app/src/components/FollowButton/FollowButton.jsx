@@ -1,18 +1,62 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import FontAwesome from "react-fontawesome";
+
+import {
+  followPost,
+  unfollowPost,
+  initializeFollows
+} from "../../reducers/userReducer";
 
 import { Button, InvisText, Container } from "./FollowButton.elements";
 
-export default function FollowButton({ followers }) {
+export default function FollowButton({ followers, postId }) {
+  const dispatch = useDispatch();
+  const userPostFollows = useSelector(state => {
+    return state.user.postFollows;
+  });
+
+  const follow = async () => {
+    await dispatch(followPost(postId));
+    dispatch(initializeFollows());
+  };
+
+  const unfollow = async () => {
+    await dispatch(unfollowPost(postId));
+    dispatch(initializeFollows());
+  };
+
   return (
-    <Button>
-      <InvisText>{followers} followers</InvisText>
-      <Container>
-        <span>{followers} followers</span>
-        <span>
-          <FontAwesome name="heart" className="fa-heart" /> Follow
-        </span>
-      </Container>
-    </Button>
+    <div>
+      {(() => {
+        if (userPostFollows.includes(postId)) {
+          return (
+            <Button onClick={() => unfollow()}>
+              <InvisText>
+                <FontAwesome name="heart" className="fa-heart" /> Followed
+              </InvisText>
+              <Container>
+                <span>
+                  <FontAwesome name="heart" className="fa-heart" /> Followed
+                </span>
+                <span>Unfollow</span>
+              </Container>
+            </Button>
+          );
+        } else {
+          return (
+            <Button onClick={() => follow()}>
+              <InvisText>{followers} followers</InvisText>
+              <Container>
+                <span>{followers} followers</span>
+                <span>
+                  <FontAwesome name="heart" className="fa-heart" /> Follow
+                </span>
+              </Container>
+            </Button>
+          );
+        }
+      })()}
+    </div>
   );
 }

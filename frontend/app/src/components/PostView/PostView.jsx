@@ -100,7 +100,7 @@ const PostView = () => {
             {/* <FollowButton>
               <FontAwesome name="heart" className="fa-heart" /> Follow
             </FollowButton> */}
-            <FollowButton followers={10}/>
+            <FollowButton followers={10} postId={post.postID}/>
           </PostOptions>
         </div>
       </Post>

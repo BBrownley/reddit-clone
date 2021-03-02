@@ -56,8 +56,6 @@ const getGroupByName = groupName => {
 
 const create = (data, token) => {
   return new Promise((resolve, reject) => {
-    console.log({ data, token });
-
     // Verify user
     const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
 
@@ -88,9 +86,7 @@ const create = (data, token) => {
         owner_id: decodedToken.id
       },
       (err, results) => {
-        console.log(results);
         if (err) {
-          console.log(err);
           return reject(new Error("An unexpected error has occured"));
         } else {
           connection.query(
@@ -100,8 +96,6 @@ const create = (data, token) => {
               if (err) {
                 return reject(new Error("An unexpected error has occured"));
               }
-
-              console.log(`RESULTS FROM GROUP DB: ${results[0]}`);
               resolve(results[0]);
             }
           );
@@ -125,7 +119,6 @@ const subscribe = (groupId, token) => {
           user_id: decodedToken.id
         },
         (err, results) => {
-          console.log(results);
           if (err) {
             return reject(new Error("An unexpected error has occured"));
           } else {
@@ -139,12 +132,6 @@ const subscribe = (groupId, token) => {
 
 const unsubscribe = (groupId, token) => {
   return new Promise((resolve, reject) => {
-    // Verify token
-    console.log(groupId);
-    console.log(groupId);
-    console.log(groupId);
-    console.log(groupId);
-    console.log(groupId);
     const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
     if (decodedToken.id) {
       connection.query(
@@ -153,7 +140,6 @@ const unsubscribe = (groupId, token) => {
         `,
         [groupId, decodedToken.id],
         (err, results) => {
-          console.log(results);
           if (err) {
             return reject(new Error("An unexpected error has occured"));
           } else {
@@ -179,7 +165,6 @@ const getSubscriptions = token => {
         `,
         [decodedToken.id],
         (err, results) => {
-          console.log(results);
           if (err) {
             return reject(new Error("An unexpected error has occured"));
           } else {
