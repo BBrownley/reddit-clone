@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import inboxService from "../../services/messages";
 
 import { setUser } from "../../reducers/userReducer";
 
 import moment from "moment";
+
+import MessageView from "../MessageView/MessageView";
 
 import { Message, MessageHeader } from "./InboxView.elements";
 
@@ -15,6 +18,7 @@ export default function InboxView() {
 
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
+  const history = useHistory();
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -29,17 +33,34 @@ export default function InboxView() {
     fetchMessages();
   }, []);
 
+  const openMessage = message => {
+    history.push({
+      pathname: "/inbox/message",
+      state: {
+        subject: message.subject,
+        sender: message.sender_id,
+        time: message.created_at,
+        body: message.content
+      }
+    });
+  };
+
   return (
     <div>
       <h1>Messages</h1>
       <ul>
         <li onClick={() => setMessageFilter("all")}>All</li>
         <li onClick={() => setMessageFilter("server")}>Server</li>
-        <li onClick={() => setMessageFilter("direct messages")}>Direct messages</li>
+        <li onClick={() => setMessageFilter("direct messages")}>
+          Direct messages
+        </li>
         <li onClick={() => setMessageFilter("unread")}>Unread</li>
       </ul>
       {messages.map(message => (
-        <Message className={!!message.has_read ? ".message-read" : ""}>
+        <Message
+          className={!!message.has_read ? ".message-read" : ""}
+          onClick={() => openMessage(message)}
+        >
           <MessageHeader>
             <p>
               <strong>{message.sender_id ? "user" : "(server message)"}</strong>{" "}
