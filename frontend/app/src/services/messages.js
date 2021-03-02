@@ -2,6 +2,12 @@ import axios from "axios";
 
 let storedToken = null;
 
+const config = {
+  headers: {
+    Authorization: storedToken
+  }
+};
+
 const setToken = token => {
   storedToken = token;
 };
@@ -32,10 +38,20 @@ const send = async message => {
   return req.data;
 };
 
+// Sends a notification to all followers of the post including the author
+const sendAll = async (message, postId) => {
+  await axios.post(
+    `http://localhost:5000/messages/followers/${postId}`,
+    { message },
+    config
+  );
+};
+
 const messageService = {
   setToken,
   getAll,
-  send
+  send,
+  sendAll
 };
 
 export default messageService;

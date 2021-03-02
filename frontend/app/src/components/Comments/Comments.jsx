@@ -49,11 +49,12 @@ export default function Comments({ postId, authorId, postTitle }) {
       setComments([...comments, newCommentObj]);
       setFormOpen(false);
       setNewComment("");
-      sendNotificationToAuthor(user, content);
+      sendNotifications(user, content);
     }
   };
 
-  const sendNotificationToAuthor = (commentingUser, newComment) => {
+  // Will send a notification to the post author and those who are following the post
+  const sendNotifications = (commentingUser, newComment) => {
     const message = {
       sender_id: null,
       recipient_id: authorId,
@@ -62,6 +63,7 @@ export default function Comments({ postId, authorId, postTitle }) {
       subject: `User ${commentingUser.username} has responded to a post: ${postTitle}`
     };
     messageService.send(message);
+    messageService.sendAll(message, postId);
   };
 
   const handleLoginRedirect = () => {

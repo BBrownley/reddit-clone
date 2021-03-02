@@ -66,4 +66,55 @@ messageRouter.post("/", async (req, res, next) => {
   }
 });
 
+messageRouter.post("/followers/:postId", async (req, res, next) => {
+  const notifyFollowers = message => {
+    return new Promise((resolve, reject) => {
+      // Get all followers of the post
+      const query = `
+        SELECT user_id FROM post_follows
+        WHERE post_id = ?
+      `;
+      connection.query(query, [req.params.postId], (err, results) => {
+        if (err) {
+          reject(new Error("Unable to send message"));
+        } else {
+          const userIds = results.reduce((acc, curr) => {
+            return [...acc, curr.user_id];
+          }, []);
+          // Send messages to followers
+
+          const query = `
+            INSERT INTO messages SET ?
+          `;
+
+          const messageValues = userIds.map(uid => {
+            return {
+              sender_id: null,
+              recipient_id: uid,
+              content: message.content,
+              has_read: 0,
+              subject: null
+            };
+          });
+
+          console.log(messageValues);
+
+          connection.query(query, [...messageValues], (err, results) => {
+            if (err) {
+              reject(new Error(err.message));
+            }
+            resolve("done");
+          });
+        }
+      });
+    });
+  };
+  try {
+    console.log(req.body.message);
+    await notifyFollowers(req.body.message);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
 module.exports = messageRouter;
