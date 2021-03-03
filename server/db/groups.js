@@ -5,7 +5,8 @@ const q = `
   SELECT 
     group_name,
     created_at AS createdAt,
-    id
+    id,
+    blurb
   FROM groups
 `;
 

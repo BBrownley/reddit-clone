@@ -4,6 +4,10 @@ import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
+import { Container } from "./GroupList.elements";
+
+import GroupCard from "../GroupCard/GroupCard";
+
 import { setRedirectPath } from "../../reducers/redirectReducer";
 
 const GroupList = () => {
@@ -36,15 +40,18 @@ const GroupList = () => {
       <button onClick={handleCreateGroupButton}>Create your own group</button>
       <br />
       <br />
-      {groups.map(group => {
-        return (
-          <div>
-            <Link to={`/groups/${group.group_name.toLowerCase()}`}>
-              {group.group_name}
-            </Link>
-          </div>
-        );
-      })}
+      <Container>
+        {groups.map(group => {
+          return (
+            // <div>
+            //   <Link to={`/groups/${group.group_name.toLowerCase()}`}>
+            //     {group.group_name}
+            //   </Link>
+            // </div>
+            <GroupCard groupName={group.group_name} blurb={group.blurb} />
+          );
+        })}
+      </Container>
     </div>
   );
 };

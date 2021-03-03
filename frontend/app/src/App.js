@@ -24,6 +24,7 @@ import UserView from "./components/UserView/UserView";
 import InboxView from "./components/InboxView/InboxView";
 import MessageForm from "./components/MessageForm/MessageForm";
 import MessageView from "./components/MessageView/MessageView";
+import Sandbox from "./components/Sandbox";
 
 const Wrapper = styled.div`
   max-width: 1260px;
@@ -189,6 +190,9 @@ const App = () => {
               </Route>
               <Route exact path="/inbox/message">
                 <MessageView />
+              </Route>
+              <Route exact path="/sandbox">
+                <Sandbox />
               </Route>
             </Switch>
 
