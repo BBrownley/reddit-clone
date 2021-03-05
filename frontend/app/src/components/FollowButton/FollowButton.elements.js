@@ -15,6 +15,7 @@ export const Button = styled.div`
   overflow: hidden;
   width: 150px;
   user-select: none;
+  margin: 10px 10px 0 10px;
   &:hover {
     cursor: pointer;
   }

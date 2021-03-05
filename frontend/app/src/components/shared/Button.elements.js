@@ -22,6 +22,17 @@ export const Button = styled.div`
         return `
           background-color: ${props.theme.cornflowerBlue};
           color: white;
+          border: 1px solid ${props.theme.cornflowerBlue}
+        `;
+      case "pink-primary":
+        return `
+          background-color: ${props.theme.persianPink};
+          color: white;
+          border: 1px solid ${props.theme.persianPink};
+        `;
+      case "pink-secondary":
+        return `
+          border: 1px solid ${props.theme.persianPink};
         `;
     }
   }}
@@ -55,7 +66,22 @@ export const Container = styled.div`
     display: block;
   }
   &:hover {
-    color: ${props => (props.color ? "white" : "")};
+    ${props => {
+      switch (props.color) {
+        case "blue":
+          return `
+          color: white;
+        `;
+        case "pink-primary":
+          return `
+          color: white;
+        `;
+        // case "pink-secondary":
+        // return `
+        //   border: 1px solid ${props.theme.persianPink};
+        // `;
+      }
+    }}
     animation: ${scrollUp} 0.2s ease-in-out;
     animation-fill-mode: forwards;
   }

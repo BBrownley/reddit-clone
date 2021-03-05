@@ -9,7 +9,9 @@ import {
   Post as Container,
   VoteContainer,
   Content,
-  PostOptions
+  PostOptions,
+  PostScore,
+  CommentCount
 } from "../PostList/PostList.elements";
 
 import FollowButton from "../FollowButton/FollowButton";
@@ -53,21 +55,6 @@ const Post = ({ post }) => {
 
   return (
     <Container key={post.postID}>
-      <VoteContainer>
-        <FontAwesome
-          name="plus-square"
-          className="upvote"
-          onClick={() => handleUpvotePost(post.postID)}
-          style={post.vote === 1 ? { color: "blue" } : {}} // Refactor this later
-        />
-        <span>{post.score}</span>
-        <FontAwesome
-          name="minus-square"
-          className="downvote"
-          onClick={() => handleDownvotePost(post.postID)}
-          style={post.vote === -1 ? { color: "red" } : {}} // Refactor this later
-        />
-      </VoteContainer>
       <div>
         <PostHeader
           postLink={`/groups/${post.groupName.toLowerCase()}/${post.postID}`}
@@ -81,13 +68,25 @@ const Post = ({ post }) => {
 
         <Content>{post.content}</Content>
         <PostOptions>
-          <span>
-            {/* <FontAwesome name="comments" /> {post.comments.length} comments */}
-          </span>
-          {/* <span className={Math.random() > 0.5 ? "favorite-active" : ""}>
-            <FontAwesome name="heart" className="fa-heart" /> {post.followers} 0
-            followers
-          </span> */}
+          <CommentCount>
+            <FontAwesome name="comments" /> 12
+          </CommentCount>
+          <VoteContainer>
+            <FontAwesome
+              name="arrow-circle-up"
+              className="upvote"
+              onClick={() => handleUpvotePost(post.postID)}
+              style={post.vote === 1 ? { color: "blue" } : {}} // Refactor this later
+            />
+            <PostScore>{post.score}</PostScore>
+            <span></span>
+            <FontAwesome
+              name="arrow-circle-down"
+              className="downvote"
+              onClick={() => handleDownvotePost(post.postID)}
+              style={post.vote === -1 ? { color: "red" } : {}} // Refactor this later
+            />
+          </VoteContainer>
           <FollowButton followers={10} postId={post.postID} />
           <span>
             {user.userPosts && user.userPosts.includes(post.postID) ? (

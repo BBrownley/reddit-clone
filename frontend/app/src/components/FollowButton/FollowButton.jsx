@@ -8,7 +8,8 @@ import {
   initializeFollows
 } from "../../reducers/userReducer";
 
-import { Button, InvisText, Container } from "./FollowButton.elements";
+import { InvisText, Container } from "./FollowButton.elements";
+import { Button } from "../shared/Button.elements";
 
 export default function FollowButton({ followers, postId }) {
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ export default function FollowButton({ followers, postId }) {
       {(() => {
         if (userPostFollows.includes(postId)) {
           return (
-            <Button onClick={() => unfollow()}>
+            <Button color={"pink-secondary"} onClick={() => unfollow()}>
               <InvisText>
                 <FontAwesome name="heart" className="fa-heart" /> Followed
               </InvisText>
@@ -45,7 +46,7 @@ export default function FollowButton({ followers, postId }) {
           );
         } else {
           return (
-            <Button onClick={() => follow()}>
+            <Button color={"pink-secondary"} onClick={() => follow()}>
               <InvisText>{followers} followers</InvisText>
               <Container>
                 <span>{followers} followers</span>

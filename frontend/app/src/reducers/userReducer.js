@@ -7,7 +7,7 @@ import messageService from "../services/messages";
 
 import { timedNotification } from "../reducers/notificationReducer";
 
-const initialState = { username: null, token: null };
+const initialState = { username: null, token: null, postFollows: [] };
 
 export const register = credentials => {
   return async dispatch => {

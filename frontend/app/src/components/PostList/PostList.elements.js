@@ -5,7 +5,7 @@ export const Post = styled.div`
   padding: 10px;
   padding-left: 5px;
   line-height: 1.5;
-  display: flex;
+  /* display: flex; */
   &:hover {
     background-color: #f5f5f5;
   }
@@ -42,15 +42,24 @@ export const Content = styled.div`
   max-width: 80ch;
 `;
 
+export const PostScore = styled.span`
+  padding: 0 10px;
+`
+
+export const CommentCount = styled.span`
+  font-size: 24px;
+  margin-bottom: -6px;
+  margin-right: 10px;
+`
+
 export const VoteContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* justify-content: space-between; */
   padding-top: 8px;
-  align-items: center;
-  margin-right: 20px;
+  /* margin-right: 20px; */
   color: #777;
-  font-size: 20px;
+  font-size: 28px;
   .upvote:hover,
   .downvote:hover {
     cursor: pointer;
@@ -66,7 +75,8 @@ export const VoteContainer = styled.div`
 export const PostOptions = styled.div`
   font-size: 14px;
   color: #777;
-  margin-top: 10px;
+  display: flex;
+  align-items: center;
   /* & > span {
     margin-right: 10px;
     padding: 4px;
