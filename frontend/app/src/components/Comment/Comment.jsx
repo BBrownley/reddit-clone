@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
+
+import FontAwesome from "react-fontawesome";
+
 import commentsService from "../../services/comments";
 import messageService from "../../services/messages";
 
-import { Container } from "./Comment.elements";
+import {
+  Container,
+  MainContent,
+  CommentVotes,
+  CommentAge
+} from "./Comment.elements";
 
 export default function Comment(props) {
+  const level = props.level || 1;
+
   const [replying, setReplying] = useState(false);
   const [children, setChildren] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -37,13 +47,27 @@ export default function Comment(props) {
   };
 
   return (
-    <Container>
-      <div className="user">{props.comment.username}</div>
-      <div className="content">{props.comment.content}</div>
-      {replying === false && (
-        <div onClick={() => setReplying(true)}>
+    <Container child={props.child}>
+      <div>
+        <img
+          src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
+          width="35"
+          height="35"
+        ></img>
+      </div>
+      <MainContent>
+        <a>{props.comment.username}</a>
+        <span class="comment">{props.comment.content}</span>
+        <p>
+          <CommentVotes>
+            <FontAwesome name="arrow-circle-up" />
+            <span>2</span>
+            <FontAwesome name="arrow-circle-down" />
+          </CommentVotes>
+          {replying === false && (
+        <span onClick={() => setReplying(true)}>
           <a className="reply">Reply</a>
-        </div>
+        </span>
       )}
       {replying === true && (
         <div>
@@ -74,10 +98,22 @@ export default function Comment(props) {
           <a onClick={() => setReplying(false)}>Cancel</a>
         </div>
       )}
+          <a href="#">Bookmark</a>
+          <a href="#">Delete</a>
+        </p>
+      </MainContent>
+      <CommentAge>
+        <span>2 days ago</span>
+      </CommentAge>
+
+      
+
       {children.map(childComment => (
         <Comment
           comment={childComment}
           handleSubmitComment={props.handleSubmitComment}
+          child={true}
+          level={level + 1}
         />
       ))}
     </Container>
