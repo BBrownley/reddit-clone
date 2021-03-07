@@ -18,12 +18,12 @@ export default function FollowButton({ followers, postId }) {
   });
 
   const follow = async () => {
-    await dispatch(followPost(postId));
+    dispatch(followPost(postId));
     dispatch(initializeFollows());
   };
 
   const unfollow = async () => {
-    await dispatch(unfollowPost(postId));
+    dispatch(unfollowPost(postId));
     dispatch(initializeFollows());
   };
 
