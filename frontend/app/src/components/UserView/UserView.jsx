@@ -20,7 +20,7 @@ export default function UserView() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const userData = await userService.getUser(match.params.id);
+      const userData = await userService.getUserById(match.params.id);
       setUser(userData);
     };
 
@@ -61,7 +61,7 @@ export default function UserView() {
         recipient_id: user.id
       }
     });
-  }
+  };
 
   return (
     <div>

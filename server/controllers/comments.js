@@ -13,7 +13,8 @@ commentsRouter.get("/post/:postId", async (req, res, next) => {
           content,
           post_id,
           parent_id,
-          username
+          username,
+          users.id AS user_id
         FROM comments
         JOIN users ON comments.commenter_id = users.id
         WHERE post_id = ?
@@ -45,7 +46,8 @@ commentsRouter.get("/:commentId/children", async (req, res, next) => {
           comments.created_at AS created_at,
           content,
           post_id,
-          username
+          username,
+          users.id AS user_id
         FROM comments
         JOIN users ON comments.commenter_id = users.id
         WHERE parent_id = ?

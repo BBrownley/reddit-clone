@@ -31,9 +31,18 @@ const login = async data => {
   }
 };
 
-const getUser = async userId => {
+const getUserById = async userId => {
   try {
-    const req = await axios.get(`http://localhost:5000/users/${userId}`);
+    const req = await axios.get(`http://localhost:5000/users/id/${userId}`);
+    return req.data;
+  } catch (error) {
+    return { error: error.response.data.error };
+  }
+};
+
+const getUserByUsername = async username => {
+  try {
+    const req = await axios.get(`http://localhost:5000/users/username/${username}`);
     return req.data;
   } catch (error) {
     return { error: error.response.data.error };
@@ -43,7 +52,8 @@ const getUser = async userId => {
 const userService = {
   register,
   login,
-  getUser
+  getUserById,
+  getUserByUsername
 };
 
 export default userService;

@@ -35,7 +35,7 @@ export const Container = styled.div`
 export const MainContent = styled.div`
   padding-top: 5px;
   padding-left: 50px;
-  padding-right: 100px;
+  padding-right: 150px;
   line-height: 1.75;
 
   display: inline-block;
@@ -67,4 +67,26 @@ export const CommentAge = styled.div`
   position: absolute;
   right: 10px;
   top: 10px;
+`;
+
+export const ReplyForm = styled.div`
+  button {
+    margin-right: 20px;
+    font-size: 1rem;
+  }
+`;
+
+export const ReplyInput = styled.textarea`
+  margin: 10px 0;
+  padding: 0.5rem;
+  width: 600px;
+  height: 100px;
+  min-width: 100px;
+  min-height: 100px;
+  border-radius: 5px;
+  display: block;
+  font-family: "Open Sans", sans-serif;
+  button {
+    margin-right: 20px;
+  }
 `;

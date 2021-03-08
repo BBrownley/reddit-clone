@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useRouteMatch } from "react-router-dom";
+import { useRouteMatch, Link, useHistory } from "react-router-dom";
+
+import moment from "moment";
 
 import FontAwesome from "react-fontawesome";
 
@@ -11,7 +13,9 @@ import {
   Container,
   MainContent,
   CommentVotes,
-  CommentAge
+  CommentAge,
+  ReplyForm,
+  ReplyInput
 } from "./Comment.elements";
 
 export default function Comment(props) {
@@ -21,6 +25,7 @@ export default function Comment(props) {
   const [children, setChildren] = useState([]);
   const [newComment, setNewComment] = useState("");
 
+  const history = useHistory();
   const match = useRouteMatch("/groups/:groupName/:groupId");
 
   const currentUser = useSelector(state => state.user);
@@ -56,7 +61,9 @@ export default function Comment(props) {
         ></img>
       </div>
       <MainContent>
-        <a>{props.comment.username}</a>
+        <Link to={`/users/${props.comment.user_id}`}>
+          {props.comment.username}
+        </Link>
         <span class="comment">{props.comment.content}</span>
         <p>
           <CommentVotes>
@@ -65,48 +72,47 @@ export default function Comment(props) {
             <FontAwesome name="arrow-circle-down" />
           </CommentVotes>
           {replying === false && (
-        <span onClick={() => setReplying(true)}>
-          <a className="reply">Reply</a>
-        </span>
-      )}
-      {replying === true && (
-        <div>
-          <input
-            type="text"
-            value={newComment}
-            onChange={e => setNewComment(e.target.value)}
-          />
-          <button
-            onClick={() => {
-              props.handleSubmitComment(
-                currentUser,
-                newComment,
-                match.params.groupId,
-                props.comment.comment_id,
-                true,
-                children,
-                setChildren
-              );
-              sendNotificationToRepliedUser(
-                props.comment.commenter_id,
-                newComment
-              );
-            }}
-          >
-            Send
-          </button>
-          <a onClick={() => setReplying(false)}>Cancel</a>
-        </div>
-      )}
+            <span onClick={() => setReplying(true)}>
+              <a className="reply">Reply</a>
+            </span>
+          )}
           <a href="#">Bookmark</a>
           <a href="#">Delete</a>
+          {replying === true && (
+            <ReplyForm>
+              <ReplyInput
+                type="text"
+                value={newComment}
+                onChange={e => setNewComment(e.target.value)}
+              />
+              <button
+                onClick={() => {
+                  props.handleSubmitComment(
+                    currentUser,
+                    newComment,
+                    match.params.groupId,
+                    props.comment.comment_id,
+                    true,
+                    children,
+                    setChildren
+                  );
+                  sendNotificationToRepliedUser(
+                    props.comment.commenter_id,
+                    newComment
+                  );
+                  setReplying(false);
+                }}
+              >
+                Send
+              </button>
+              <a onClick={() => setReplying(false)}>Cancel</a>
+            </ReplyForm>
+          )}
         </p>
       </MainContent>
       <CommentAge>
-        <span>2 days ago</span>
+        <span>{moment(props.comment.created_at).fromNow()}</span>
       </CommentAge>
-
-      
 
       {children.map(childComment => (
         <Comment

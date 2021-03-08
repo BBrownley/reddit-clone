@@ -108,7 +108,7 @@ const login = userInfo => {
 const getUserById = userId => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT * FROM users WHERE id = ?`,
+      `SELECT id, username FROM users WHERE id = ?`,
       [userId],
       (error, results) => {
         if (error) {
@@ -124,5 +124,6 @@ const getUserById = userId => {
 module.exports = {
   register,
   login,
-  getUserById
+  getUserById,
+  connection
 };
