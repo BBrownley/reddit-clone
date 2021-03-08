@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -69,7 +69,7 @@ const Post = ({ post }) => {
         <Content>{post.content}</Content>
         <PostOptions>
           <CommentCount>
-            <FontAwesome name="comments" /> 12
+            <FontAwesome name="comments" /> {post.total_comments}
           </CommentCount>
           <VoteContainer>
             <FontAwesome

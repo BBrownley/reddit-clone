@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouteMatch } from "react-router-dom";
 
 import moment from "moment";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import { initializePosts, removePost } from "../../reducers/postsReducer";
 
 import Post from "../Post/Post";
 
@@ -11,6 +13,12 @@ const PostList = ({ sortBy, searchBy, searchTerm, posts = undefined }) => {
   const match = useRouteMatch("/groups/:group");
 
   const userPostVotes = useSelector(state => state.userPostVotes);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(initializePosts());
+  }, [posts]);
 
   let postsToDisplay = useSelector(state => {
     let posts = [];

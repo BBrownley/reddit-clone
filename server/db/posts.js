@@ -3,19 +3,22 @@ const jwt = require("jsonwebtoken");
 
 const q = `
   SELECT 
-    CASE
-      WHEN ISNULL(SUM(post_votes.vote_value)) THEN 0
-        WHEN SUM(post_votes.vote_value) < 1 THEN 0
-        ELSE SUM(post_votes.vote_value)
-    END AS score,
-    title, 
-    posts.created_at AS createdAt, 
-    posts.id AS postID,
-    group_name AS groupName,
-    group_id AS groupID,
-    username,
-    users.id AS user_id,
-    content FROM posts
+  CASE
+    WHEN ISNULL(SUM(post_votes.vote_value)) THEN 0
+      WHEN SUM(post_votes.vote_value) < 1 THEN 0
+      ELSE SUM(post_votes.vote_value)
+  END AS score,
+  title, 
+  posts.created_at AS createdAt, 
+  posts.id AS postID,
+  group_name AS groupName,
+  group_id AS groupID,
+  username,
+  users.id AS user_id,
+  content,
+  (SELECT COUNT(*) FROM comments 
+    WHERE posts.id = comments.post_id) AS total_comments
+  FROM posts
   JOIN users ON users.id = posts.submitter_id
   JOIN groups ON groups.id = posts.group_id
   LEFT JOIN post_votes ON post_votes.post_id = posts.id
