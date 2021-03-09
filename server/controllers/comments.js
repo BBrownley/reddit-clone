@@ -6,18 +6,26 @@ commentsRouter.get("/post/:postId", async (req, res, next) => {
   const fetchComments = () => {
     return new Promise((resolve, reject) => {
       const query = `
-        SELECT  
-          comments.id AS comment_id,
-          commenter_id,
-          comments.created_at AS created_at,
-          content,
-          post_id,
-          parent_id,
-          username,
-          users.id AS user_id
-        FROM comments
-        JOIN users ON comments.commenter_id = users.id
-        WHERE post_id = ?
+      SELECT
+        comments.id AS comment_id,
+        commenter_id,
+        comments.created_at AS created_at,
+        parent_id,
+        content,
+        post_id,
+        users.id AS user_id,
+        users.username AS username,
+        (
+        SELECT CASE WHEN
+            SUM(vote_value) < 1 OR SUM(vote_value) IS NULL THEN 0 
+            ELSE SUM(vote_value)
+        END
+        ) AS comment_score FROM comments
+
+      LEFT JOIN comment_votes ON comment_votes.comment_id = comments.id
+      JOIN users ON comments.commenter_id = users.id
+      WHERE post_id = ?
+      GROUP BY comments.id
       `;
       connection.query(query, [req.params.postId], (err, results) => {
         if (err) {
@@ -30,6 +38,7 @@ commentsRouter.get("/post/:postId", async (req, res, next) => {
   };
   try {
     const comments = await fetchComments();
+    console.log(comments);
     res.json(comments);
   } catch (exception) {
     next(exception);
@@ -40,17 +49,26 @@ commentsRouter.get("/:commentId/children", async (req, res, next) => {
   const fetchChildren = () => {
     return new Promise((resolve, reject) => {
       const query = `
-        SELECT  
-          comments.id AS comment_id,
-          commenter_id,
-          comments.created_at AS created_at,
-          content,
-          post_id,
-          username,
-          users.id AS user_id
-        FROM comments
-        JOIN users ON comments.commenter_id = users.id
-        WHERE parent_id = ?
+      SELECT
+        comments.id AS comment_id,
+        commenter_id,
+        comments.created_at AS created_at,
+        parent_id,
+        content,
+        post_id,
+        users.id AS user_id,
+        users.username AS username,
+        (
+        SELECT CASE WHEN
+            SUM(vote_value) < 1 OR SUM(vote_value) IS NULL THEN 0 
+            ELSE SUM(vote_value)
+        END
+        ) AS comment_score FROM comments
+
+      LEFT JOIN comment_votes ON comment_votes.comment_id = comments.id
+      JOIN users ON comments.commenter_id = users.id
+      WHERE parent_id = ?
+      GROUP BY comments.id
       `;
       connection.query(query, [req.params.commentId], (err, results) => {
         if (err) {

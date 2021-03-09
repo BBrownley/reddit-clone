@@ -22,6 +22,7 @@ export default function Comments({ postId, authorId, postTitle }) {
     // Fetch root comments, its respective component will render its children recursively
     const fetchComments = async () => {
       const comments = await commentsService.getRootCommentsByPostId(postId);
+      console.log(comments);
       setComments(comments);
     };
     fetchComments();

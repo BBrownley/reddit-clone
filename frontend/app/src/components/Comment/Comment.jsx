@@ -68,7 +68,7 @@ export default function Comment(props) {
         <p>
           <CommentVotes>
             <FontAwesome name="arrow-circle-up" />
-            <span>2</span>
+            <span>{props.comment.comment_score}</span>
             <FontAwesome name="arrow-circle-down" />
           </CommentVotes>
           {replying === false && (
