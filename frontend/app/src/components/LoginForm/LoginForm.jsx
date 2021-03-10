@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 
 import { login } from "../../reducers/userReducer";
-import { initializeVotes } from "../../reducers/userPostVotesReducer";
+import { initializeVotes as initializePostVotes } from "../../reducers/userPostVotesReducer";
 import { clearRedirectPath } from "../../reducers/redirectReducer";
 import { removeNotification } from "../../reducers/notificationReducer";
 
@@ -44,7 +44,7 @@ const LoginForm = props => {
     const loginSuccess = await dispatch(login(credentials));
 
     if (loginSuccess) {
-      dispatch(initializeVotes());
+      dispatch(initializePostVotes());
       localStorage.setItem("loggedUser", JSON.stringify(loginSuccess));
       if (redirectPath) {
         history.push(redirectPath);

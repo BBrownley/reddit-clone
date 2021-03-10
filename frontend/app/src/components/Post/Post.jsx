@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import moment from "moment";
 import { useSelector, useDispatch } from "react-redux";
 
-import { initializeVotes, addVote } from "../../reducers/userPostVotesReducer";
+import {
+  initializeVotes as initializePostVotes,
+  addVote
+} from "../../reducers/userPostVotesReducer";
 import { initializePosts, removePost } from "../../reducers/postsReducer";
 
 import {
@@ -28,14 +31,14 @@ const Post = ({ post }) => {
   const handleUpvotePost = async postID => {
     await dispatch(addVote(postID, 1));
 
-    dispatch(initializeVotes());
+    dispatch(initializePostVotes());
     dispatch(initializePosts());
   };
 
   const handleDownvotePost = async postID => {
     await dispatch(addVote(postID, -1));
 
-    dispatch(initializeVotes());
+    dispatch(initializePostVotes());
     dispatch(initializePosts());
   };
 

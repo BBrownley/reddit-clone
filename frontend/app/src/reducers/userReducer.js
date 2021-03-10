@@ -4,10 +4,16 @@ import groupService from "../services/groups";
 import userPostVoteService from "../services/userPostVotes";
 import commentsService from "../services/comments";
 import messageService from "../services/messages";
+import commentVotesService from "../services/commentVotes";
 
 import { timedNotification } from "../reducers/notificationReducer";
 
-const initialState = { username: null, token: null, postFollows: [] };
+const initialState = {
+  username: null,
+  token: null,
+  postFollows: [],
+  commentVotes: []
+};
 
 export const register = credentials => {
   return async dispatch => {
@@ -47,6 +53,7 @@ export const login = (credentials, hasToken) => {
       groupService.setToken(data.token);
       commentsService.setToken(data.token);
       messageService.setToken(data.token);
+      commentVotesService.setToken(data.token);
 
       dispatch({
         type: "LOGIN",
@@ -72,6 +79,7 @@ export const setUser = userInfo => {
     groupService.setToken(userInfo.token);
     commentsService.setToken(userInfo.token);
     messageService.setToken(userInfo.token);
+    commentVotesService.setToken(userInfo.token);
     dispatch({
       type: "SET_USER",
       userInfo

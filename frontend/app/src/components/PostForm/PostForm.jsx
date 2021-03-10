@@ -5,7 +5,7 @@ import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { createPost } from "../../reducers/postsReducer";
-import { initializeVotes } from "../../reducers/userPostVotesReducer";
+import { initializeVotes as initializePostVotes } from "../../reducers/userPostVotesReducer";
 import { initializePosts } from "../../reducers/postsReducer";
 import { removeNotification } from "../../reducers/notificationReducer";
 import { addPostToUser } from "../../reducers/userReducer";
@@ -56,7 +56,7 @@ const PostForm = () => {
 
     if (newPost) {
       dispatch(addVote(newPost.postID, 1));
-      dispatch(initializeVotes());
+      dispatch(initializePostVotes());
       dispatch(initializePosts());
       dispatch(addPostToUser(newPost));
       history.push(`/groups/${groupQuery.label}/${newPost.postID}`);

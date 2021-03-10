@@ -3,11 +3,10 @@ import postService from "../services/posts";
 
 export const initializeVotes = () => {
   return async dispatch => {
-     
     const data = await userPostVotesService.getUserPostVotes();
-     
+
     dispatch({
-      type: "INITIALIZE_VOTES",
+      type: "INITIALIZE_POST_VOTES",
       data
     });
   };
@@ -39,7 +38,7 @@ export const removeVote = id => {
 
 const reducer = (state = [], action) => {
   switch (action.type) {
-    case "INITIALIZE_VOTES":
+    case "INITIALIZE_POST_VOTES":
       return action.data;
     case "ADD_VOTE":
       return [...state, action.data];

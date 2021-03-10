@@ -2,6 +2,7 @@ import postsReducer from "./reducers/postsReducer";
 import groupsReducer from "./reducers/groupsReducer";
 import userReducer from "./reducers/userReducer";
 import userPostVotesReducer from "./reducers/userPostVotesReducer";
+import commentVotesReducer from "./reducers/commentVotesReducer";
 import notificationReducer from "./reducers/notificationReducer";
 import groupSubscribesReducer from "./reducers/groupSubscribesReducer";
 import redirectReducer from "./reducers/redirectReducer";
@@ -14,6 +15,7 @@ const reducer = combineReducers({
   groups: groupsReducer,
   user: userReducer,
   userPostVotes: userPostVotesReducer,
+  userCommentVotes: commentVotesReducer,
   notification: notificationReducer,
   subscribedGroups: groupSubscribesReducer,
   redirectPath: redirectReducer

@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
 
 import moment from "moment";
 
-import { initializeVotes, addVote } from "../../reducers/userPostVotesReducer";
+import {
+  initializeVotes as initializePostVotes,
+  addVote
+} from "../../reducers/userPostVotesReducer";
 import { initializePosts } from "../../reducers/postsReducer";
+
+import { initializeVotes as initializeCommentVotes } from "../../reducers/commentVotesReducer";
 
 import FontAwesome from "react-fontawesome";
 
@@ -23,18 +28,29 @@ const PostView = () => {
     console.log(state);
     return state.posts;
   });
-  console.log(posts);
+
   const match = useRouteMatch("/groups/:group/:id");
   const post = match
     ? posts.find(post => post.postID.toString() === match.params.id.toString())
     : null;
-  console.log(post);
+
   const userPostVote = useSelector(state => {
     state.userPostVotes.find(vote => {
       return vote.post_id === post.postID;
     });
   });
+
+  const userCommentVotes = useSelector(state => {
+    return state.userCommentVotes.filter(vote => (vote.post_id = post.postID));
+  });
+
+  console.log(userCommentVotes);
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(initializeCommentVotes());
+  }, []);
 
   if (!post) {
     return null;
@@ -43,14 +59,14 @@ const PostView = () => {
   const handleUpvotePost = async postID => {
     await dispatch(addVote(postID, 1));
 
-    dispatch(initializeVotes());
+    dispatch(initializePostVotes());
     dispatch(initializePosts());
   };
 
   const handleDownvotePost = async postID => {
     await dispatch(addVote(postID, -1));
 
-    dispatch(initializeVotes());
+    dispatch(initializePostVotes());
     dispatch(initializePosts());
   };
 
@@ -100,7 +116,7 @@ const PostView = () => {
             {/* <FollowButton>
               <FontAwesome name="heart" className="fa-heart" /> Follow
             </FollowButton> */}
-            <FollowButton followers={10} postId={post.postID}/>
+            <FollowButton followers={10} postId={post.postID} />
           </PostOptions>
         </div>
       </Post>

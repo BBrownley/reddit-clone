@@ -16,12 +16,14 @@ const postsRouter = require("./controllers/posts");
 const usersRouter = require("./controllers/users");
 const commentsRouter = require("./controllers/comments");
 const messageRouter = require("./controllers/messages");
+const commentvotesRouter = require("./controllers/commentvotes");
 
 app.use("/groups", groupsRouter);
 app.use("/posts", postsRouter);
 app.use("/users", usersRouter);
 app.use("/comments", commentsRouter);
 app.use("/messages", messageRouter);
+app.use("/commentvotes", commentvotesRouter);
 
 app.get("/", async (req, res) => {
   let posts = await postsDB.all();

@@ -51,6 +51,14 @@ export default function Comment(props) {
     messageService.send(message);
   };
 
+  const handleUpvoteComment = () => {
+
+  }
+
+  const handleDownvoteComment = () => {
+    
+  }
+
   return (
     <Container child={props.child}>
       <div>
