@@ -247,7 +247,7 @@ const App = () => {
             </Switch>
 
             <Switch>
-              <Route exact path="/groups/create">
+              <Route exact path="/creategroup">
                 <GroupForm />
               </Route>
               <Route path="/create">

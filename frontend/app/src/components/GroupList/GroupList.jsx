@@ -22,9 +22,9 @@ const GroupList = () => {
 
   const handleCreateGroupButton = () => {
     if (loggedUser) {
-      history.push("/groups/create");
+      history.push("/creategroup");
     } else {
-      dispatch(setRedirectPath("/groups/create"));
+      dispatch(setRedirectPath("/creategroup"));
       history.push({
         pathname: "/login",
         state: {
