@@ -44,6 +44,8 @@ const PostView = () => {
     return state.userCommentVotes.filter(vote => (vote.post_id = post.postID));
   });
 
+  const user = useSelector(state => state.user);
+
   console.log(userCommentVotes);
 
   const dispatch = useDispatch();
@@ -116,7 +118,7 @@ const PostView = () => {
             {/* <FollowButton>
               <FontAwesome name="heart" className="fa-heart" /> Follow
             </FollowButton> */}
-            <FollowButton followers={10} postId={post.postID} />
+            {user.token && <FollowButton followers={10} postId={post.postID} />}
           </PostOptions>
         </div>
       </Post>

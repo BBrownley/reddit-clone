@@ -152,25 +152,30 @@ const App = () => {
                 <li>
                   <StyledLink to="/inbox">Inbox</StyledLink>
                 </li>
-                {user.username === null && (
-                  <>
-                    <li>
-                      <StyledLink to="/login">Log in</StyledLink>
-                    </li>
-                    <li>
-                      <StyledLink to="/register">Register</StyledLink>
-                    </li>
-                  </>
-                )}
-                {user.username !== null && (
-                  <li>
-                    Signed in as {user.username}{" "}
-                    <StyledLink onClick={handleLogout} to="/">
-                      {" "}
-                      Logout
-                    </StyledLink>
-                  </li>
-                )}
+                {(() => {
+                  if (user.username) {
+                    return (
+                      <li>
+                        Signed in as {user.username}{" "}
+                        <StyledLink onClick={handleLogout} to="/">
+                          {" "}
+                          Logout
+                        </StyledLink>
+                      </li>
+                    );
+                  } else {
+                    return (
+                      <>
+                        <li>
+                          <StyledLink to="/login">Log in</StyledLink>
+                        </li>
+                        <li>
+                          <StyledLink to="/register">Register</StyledLink>
+                        </li>
+                      </>
+                    );
+                  }
+                })()}
               </ul>
             </Navigation>
 

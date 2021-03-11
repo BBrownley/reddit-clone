@@ -35,6 +35,8 @@ export default function GroupCard({ group }) {
       </div>
 
       {(() => {
+        if (!loggedUser.token) return;
+
         if (
           userSubscribedGroups.find(group => group.group_name === group_name)
         ) {

@@ -90,17 +90,19 @@ const Post = ({ post }) => {
               style={post.vote === -1 ? { color: "red" } : {}} // Refactor this later
             />
           </VoteContainer>
-          <FollowButton followers={10} postId={post.postID} />
-          <span>
-            {user.userPosts && user.userPosts.includes(post.postID) ? (
-              <span onClick={() => setConfirmDeletion(!confirmDeletion)}>
-                <FontAwesome name="trash" /> Delete
-              </span>
-            ) : (
-              ""
-            )}
-            {confirmDeletion && <DeleteConfirmation />}
-          </span>
+          {user.token && <FollowButton followers={10} postId={post.postID} />}
+          {user && (
+            <span>
+              {user.userPosts && user.userPosts.includes(post.postID) ? (
+                <span onClick={() => setConfirmDeletion(!confirmDeletion)}>
+                  <FontAwesome name="trash" /> Delete
+                </span>
+              ) : (
+                ""
+              )}
+              {confirmDeletion && <DeleteConfirmation />}
+            </span>
+          )}
         </PostOptions>
       </div>
     </Container>

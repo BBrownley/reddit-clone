@@ -66,7 +66,7 @@ const GroupActions = () => {
         <FontAwesome name="paper-plane"></FontAwesome> Submit a new post
       </button>
 
-      {currentGroup &&
+      {(currentGroup && loggedUser.token) &&
         (userSubscribedGroups.find(group => group.id === currentGroup.id) ? (
           <button onClick={handleUnsubscribe}>
             <FontAwesome name="check"></FontAwesome>
