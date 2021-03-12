@@ -16,8 +16,18 @@ export const vote = commentId => {
   return async dispatch => {
     const newVote = commentVotesService.vote(commentId);
     dispatch({
-      type: "VOTE",
+      type: "COMMENT_VOTE",
       newVote
+    });
+  };
+};
+
+export const removeVote = commentId => {
+  return async dispatch => {
+    await commentVotesService.removeVote(commentId);
+    dispatch({
+      type: "REMOVE_COMMENT_VOTE",
+      commentId
     });
   };
 };
@@ -26,8 +36,10 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "INITIALIZE_COMMENT_VOTES":
       return action.votes;
-    case "VOTE":
+    case "COMMENT_VOTE":
       return [...state, action.newVote];
+    case "REMOVE_COMMENT_VOTE":
+      return [...state.filter(vote => vote.comment_id !== action.commentId)];
     default:
       return state;
   }

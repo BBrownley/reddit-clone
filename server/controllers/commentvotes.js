@@ -21,6 +21,7 @@ commentvotesRouter.get("/", async (req, res, next) => {
   };
 
   try {
+    // TODO: Can we separate this logic into its own middleware?
     const token = req.headers.authorization;
     const decodedToken = await jwt.verify(
       token.split(" ")[1],
@@ -34,6 +35,35 @@ commentvotesRouter.get("/", async (req, res, next) => {
   } catch (exception) {
     next(exception);
   }
+});
+
+commentvotesRouter.delete("/", async (req, res, next) => {
+  const deleteVote = (userId, commentId) => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        DELETE FROM comment_votes
+        WHERE user_id = ? AND comment_id = ?
+      `;
+      connection.query(query, [userId, commentId], err => {
+        if (err) return reject(new Error("Unable to delete comment vote"));
+
+        resolve();
+      });
+    });
+  };
+
+  try {
+    const token = req.headers.authorization;
+
+    const decodedToken = await jwt.verify(
+      token.split(" ")[1],
+      process.env.SECRET
+    );
+    const userId = decodedToken.id;
+    console.log(userId);
+    console.log(req.body.commentId);
+    deleteVote(userId, req.body.commentId);
+  } catch (exception) {}
 });
 
 module.exports = commentvotesRouter;

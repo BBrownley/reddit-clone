@@ -35,10 +35,23 @@ const vote = async (commentId, value) => {
   return voteObj;
 };
 
+const removeVote = commentId => {
+  const headers = {
+    Authorization: storedToken
+  };
+  axios.delete("http://localhost:5000/commentvotes", {
+    data: {
+      commentId
+    },
+    headers
+  });
+};
+
 const commentVotesService = {
   setToken,
   getVotes,
-  vote
+  vote,
+  removeVote
 };
 
 export default commentVotesService;

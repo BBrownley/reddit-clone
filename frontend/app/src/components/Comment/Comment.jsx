@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouteMatch, Link, useHistory } from "react-router-dom";
 
 import moment from "moment";
@@ -9,13 +9,16 @@ import FontAwesome from "react-fontawesome";
 import commentsService from "../../services/comments";
 import messageService from "../../services/messages";
 
+import { removeVote } from "../../reducers/commentVotesReducer";
+
 import {
   Container,
   MainContent,
   CommentVotes,
   CommentAge,
   ReplyForm,
-  ReplyInput
+  ReplyInput,
+  CommentVoteButton
 } from "./Comment.elements";
 
 export default function Comment(props) {
@@ -28,7 +31,10 @@ export default function Comment(props) {
   const history = useHistory();
   const match = useRouteMatch("/groups/:groupName/:groupId");
 
+  const dispatch = useDispatch();
+
   const currentUser = useSelector(state => state.user);
+  const userCommentVotes = useSelector(state => state.userCommentVotes);
 
   useEffect(() => {
     const fetchChildren = async () => {
@@ -51,13 +57,32 @@ export default function Comment(props) {
     messageService.send(message);
   };
 
-  const handleUpvoteComment = () => {
+  const currentCommentId = props.comment.comment_id;
+  const existingCommentVote = userCommentVotes.find(
+    userCommentVote => userCommentVote.comment_id === currentCommentId
+  );
 
-  }
+  // Handles comment voting when the thumbs up or thumbs down is clicked
+  const handleVoteComment = action => {
+    if (existingCommentVote) {
+      console.log(existingCommentVote);
 
-  const handleDownvoteComment = () => {
-    
-  }
+      if (
+        (existingCommentVote.vote_value === 1 && action === "upvote") ||
+        (existingCommentVote.vote_value === -1 && action === "downvote")
+      ) {
+        dispatch(removeVote(currentCommentId));
+      } else {
+        console.log("change vote");
+      }
+    } else {
+      if (action === "upvote") {
+        console.log("upvote comment");
+      } else {
+        console.log("downvote comment");
+      }
+    }
+  };
 
   return (
     <Container child={props.child}>
@@ -75,9 +100,17 @@ export default function Comment(props) {
         <span class="comment">{props.comment.content}</span>
         <p>
           <CommentVotes>
-            <FontAwesome name="arrow-circle-up" />
+            <CommentVoteButton
+              name="thumbs-up"
+              onClick={() => handleVoteComment("upvote")}
+              upvoted={existingCommentVote?.vote_value === 1 ? true : false}
+            />
             <span>{props.comment.comment_score}</span>
-            <FontAwesome name="arrow-circle-down" />
+            <CommentVoteButton
+              name="thumbs-down"
+              onClick={() => handleVoteComment("downvote")}
+              downvoted={existingCommentVote?.vote_value === -1 ? true : false}
+            />
           </CommentVotes>
           {replying === false && (
             <span onClick={() => setReplying(true)}>

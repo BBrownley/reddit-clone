@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import FontAwesome from "react-fontawesome";
 
 export const Container = styled.div`
   border-radius: 5px;
@@ -57,6 +58,22 @@ export const CommentVotes = styled.span`
   margin-right: 5px;
   span {
     margin: 0 5px;
+  }
+`;
+
+export const CommentVoteButton = styled(FontAwesome)`
+  color: ${props => {
+    if (props.upvoted) {
+      return props.theme.cornflowerBlue;
+    } else if (props.downvoted) {
+      return props.theme.crimson;
+    } else {
+      return "#CCCCCC";
+    }
+  }};
+  &:hover {
+    cursor: pointer;
+    opacity: .75;
   }
 `;
 
