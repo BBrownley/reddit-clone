@@ -69,6 +69,7 @@ export default function InboxView() {
         </li>
         <li onClick={() => setMessageFilter("unread")}>Unread</li>
       </ul>
+      {messages.length === 0 && <h3>Inbox empty</h3>}
       {filterMessages(messages).map(message => (
         <Message
           className={!!message.has_read ? ".message-read" : ""}

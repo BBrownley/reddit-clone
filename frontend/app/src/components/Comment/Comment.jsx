@@ -40,7 +40,20 @@ export default function Comment(props) {
     fetchChildren();
   }, []);
 
+  /*
+    Whenever a user replies to a comment, notify the user who was replied to
+
+    repliedUser - ID of the user who was replied to
+    newComment - Comment that was written in response to the replied user
+  */
   const sendNotificationToRepliedUser = (repliedUser, newComment) => {
+    // Prevent user from notifying themselves
+
+    console.log(repliedUser);
+    console.log(currentUser.userId);
+
+    if (repliedUser === currentUser.userId) return;
+
     const message = {
       sender_id: null,
       recipient_id: repliedUser,
@@ -51,13 +64,9 @@ export default function Comment(props) {
     messageService.send(message);
   };
 
-  const handleUpvoteComment = () => {
+  const handleUpvoteComment = () => {};
 
-  }
-
-  const handleDownvoteComment = () => {
-    
-  }
+  const handleDownvoteComment = () => {};
 
   return (
     <Container child={props.child}>
