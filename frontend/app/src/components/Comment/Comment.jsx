@@ -9,7 +9,11 @@ import FontAwesome from "react-fontawesome";
 import commentsService from "../../services/comments";
 import messageService from "../../services/messages";
 
-import { removeVote } from "../../reducers/commentVotesReducer";
+import {
+  removeVote,
+  vote,
+  changeVote
+} from "../../reducers/commentVotesReducer";
 
 import {
   Container,
@@ -63,7 +67,7 @@ export default function Comment(props) {
   );
 
   // Handles comment voting when the thumbs up or thumbs down is clicked
-  const handleVoteComment = action => {
+  const handleVoteComment = async action => {
     if (existingCommentVote) {
       console.log(existingCommentVote);
 
@@ -71,15 +75,23 @@ export default function Comment(props) {
         (existingCommentVote.vote_value === 1 && action === "upvote") ||
         (existingCommentVote.vote_value === -1 && action === "downvote")
       ) {
+        console.log("removing vote");
         dispatch(removeVote(currentCommentId));
       } else {
         console.log("change vote");
+        const newVoteValue = action === "upvote" ? 1 : -1;
+
+        console.log(newVoteValue);
+
+        dispatch(changeVote(currentCommentId, newVoteValue));
       }
     } else {
       if (action === "upvote") {
-        console.log("upvote comment");
+        console.log("upvote");
+        dispatch(vote(currentCommentId, 1));
       } else {
-        console.log("downvote comment");
+        console.log("downvote");
+        dispatch(vote(currentCommentId, -1));
       }
     }
   };
