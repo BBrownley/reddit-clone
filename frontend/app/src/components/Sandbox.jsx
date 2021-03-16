@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useRouteMatch, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import moment from "moment";
 
@@ -8,6 +9,7 @@ import Post from "./Post/Post";
 
 import postService from "../services/posts";
 import commentService from "../services/comments";
+import userService from "../services/users";
 
 const Container = styled.div`
   /* display: flex; */
@@ -61,12 +63,19 @@ const HistoryFilters = styled.ul`
 `;
 
 export default function Sandbox() {
+  const [user, setUser] = useState({});
   const [usersPosts, setUsersPosts] = useState([]);
   const [usersComments, setUsersComments] = useState([]);
   const [historyFilter, setHistoryFilter] = useState("overview");
 
+  const match = useRouteMatch("/users/:id");
+
   useEffect(() => {
-    // TODO: Implement caching for filter state changes
+    // TODO: Implement caching
+    const fetchUser = async () => {
+      const userData = await userService.getUserById(25);
+      setUser(userData);
+    };
     const fetchUserPosts = async () => {
       const usersPosts = await postService.getPostsByUID(25);
       setUsersPosts(usersPosts);
@@ -77,9 +86,19 @@ export default function Sandbox() {
       setUsersComments(usersComments);
       return usersComments;
     };
+    fetchUser();
     fetchUserPosts();
     fetchUserComments();
   }, []);
+
+  const handleSendMessageButton = () => {
+    // history.push({
+    //   pathname: "/messages/compose",
+    //   state: {
+    //     recipient_id: user.id
+    //   }
+    // });
+  };
 
   return (
     <div>
@@ -93,8 +112,8 @@ export default function Sandbox() {
           <h2>Mark Ellis</h2>
           <p>Posts: 0</p>
           <p>Comments: 0</p>
-          <p>Account created: Jan 1 2021</p>
-          <button>Send message</button>
+          <p>Account created {moment(user.created_at).fromNow()}</p>
+          <button onClick={handleSendMessageButton}>Send message</button>
         </ProfileInfo>
         <HistoryFilters>
           <li
@@ -171,76 +190,3 @@ export default function Sandbox() {
     </div>
   );
 }
-
-/*
-
-const posts = [
-    {
-      score: 1,
-      title: "dsfgdsfg",
-      createdAt: "2021-02-27T04:29:50.000Z",
-      postID: 212,
-      groupName: "Sports",
-      groupID: 3,
-      username: "user1337",
-      user_id: 25,
-      content: "dsfgdsfgsdfg"
-    },
-    {
-      score: 1,
-      title: "fgdh",
-      createdAt: "2021-02-26T21:18:28.000Z",
-      postID: 211,
-      groupName: "Sports",
-      groupID: 3,
-      username: "user1337",
-      user_id: 25,
-      content: "dfghfgdh"
-    },
-    {
-      score: 1,
-      title: "comments",
-      createdAt: "2021-02-23T05:01:59.000Z",
-      postID: 210,
-      groupName: "Health",
-      groupID: 5,
-      username: "user1337",
-      user_id: 25,
-      content: "retgserg"
-    },
-    {
-      score: 1,
-      title: "dsfgdsfg",
-      createdAt: "2021-02-23T05:00:48.000Z",
-      postID: 209,
-      groupName: "Clothing",
-      groupID: 4,
-      username: "user1337",
-      user_id: 25,
-      content: "dfsgdfsg"
-    },
-    {
-      score: 1,
-      title: "fgdhdfh",
-      createdAt: "2021-02-21T03:25:49.000Z",
-      postID: 207,
-      groupName: "Clothing",
-      groupID: 4,
-      username: "user1337",
-      user_id: 25,
-      content: "fdghdfgh"
-    },
-    {
-      score: 1,
-      title: "srfgerg",
-      createdAt: "2021-02-21T02:46:34.000Z",
-      postID: 206,
-      groupName: "mysecondgroup2",
-      groupID: 22,
-      username: "user1337",
-      user_id: 25,
-      content: "resgserg"
-    }
-  ];
-  
-*/
