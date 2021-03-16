@@ -167,6 +167,7 @@ commentvotesRouter.delete("/", async (req, res, next) => {
   };
 
   try {
+    console.log("hello");
     const token = req.headers.authorization;
 
     const decodedToken = await jwt.verify(
@@ -177,6 +178,7 @@ commentvotesRouter.delete("/", async (req, res, next) => {
     console.log(userId);
     console.log(req.body.commentId);
     deleteVote(userId, req.body.commentId);
+    res.json({ message: "Comment vote deleted" });
   } catch (exception) {
     next(exception);
   }

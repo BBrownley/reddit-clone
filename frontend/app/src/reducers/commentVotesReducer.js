@@ -24,7 +24,7 @@ export const vote = (commentId, value) => {
 
 export const removeVote = commentId => {
   return async dispatch => {
-    await commentVotesService.removeVote(commentId);
+    commentVotesService.removeVote(commentId);
     dispatch({
       type: "REMOVE_COMMENT_VOTE",
       commentId

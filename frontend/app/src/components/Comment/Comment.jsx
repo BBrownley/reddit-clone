@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouteMatch, Link, useHistory } from "react-router-dom";
 
 import moment from "moment";
+import _ from "lodash";
 
 import FontAwesome from "react-fontawesome";
 
@@ -27,18 +28,24 @@ import {
 
 export default function Comment(props) {
   const level = props.level || 1;
+  const currentCommentId = props.comment.comment_id;
+
+  const currentUser = useSelector(state => state.user);
+  const userCommentVotes = useSelector(state => state.userCommentVotes);
+
+  const existingCommentVote = userCommentVotes.find(
+    userCommentVote => userCommentVote.comment_id === currentCommentId
+  );
 
   const [replying, setReplying] = useState(false);
   const [children, setChildren] = useState([]);
   const [newComment, setNewComment] = useState("");
+  const [commentScoreDelta, setCommentScoreDelta] = useState(0);
 
   const history = useHistory();
   const match = useRouteMatch("/groups/:groupName/:groupId");
 
   const dispatch = useDispatch();
-
-  const currentUser = useSelector(state => state.user);
-  const userCommentVotes = useSelector(state => state.userCommentVotes);
 
   useEffect(() => {
     const fetchChildren = async () => {
@@ -61,22 +68,16 @@ export default function Comment(props) {
     messageService.send(message);
   };
 
-  const currentCommentId = props.comment.comment_id;
-  const existingCommentVote = userCommentVotes.find(
-    userCommentVote => userCommentVote.comment_id === currentCommentId
-  );
-
   // Handles comment voting when the thumbs up or thumbs down is clicked
   const handleVoteComment = async action => {
     if (existingCommentVote) {
-      console.log(existingCommentVote);
-
       if (
         (existingCommentVote.vote_value === 1 && action === "upvote") ||
         (existingCommentVote.vote_value === -1 && action === "downvote")
       ) {
         console.log("removing vote");
         dispatch(removeVote(currentCommentId));
+        setCommentScoreDelta(existingCommentVote.vote_value === 1 ? -1 : 1);
       } else {
         console.log("change vote");
         const newVoteValue = action === "upvote" ? 1 : -1;
@@ -84,14 +85,17 @@ export default function Comment(props) {
         console.log(newVoteValue);
 
         dispatch(changeVote(currentCommentId, newVoteValue));
+        setCommentScoreDelta(action === "upvote" ? 1 : -1);
       }
     } else {
       if (action === "upvote") {
         console.log("upvote");
         dispatch(vote(currentCommentId, 1));
+        setCommentScoreDelta(1);
       } else {
         console.log("downvote");
         dispatch(vote(currentCommentId, -1));
+        setCommentScoreDelta(-1);
       }
     }
   };
@@ -117,7 +121,9 @@ export default function Comment(props) {
               onClick={() => handleVoteComment("upvote")}
               upvoted={existingCommentVote?.vote_value === 1 ? true : false}
             />
-            <span>{props.comment.comment_score}</span>
+            <span>
+              {_.clamp(props.comment.comment_score + commentScoreDelta, 0, 99)}
+            </span>
             <CommentVoteButton
               name="thumbs-down"
               onClick={() => handleVoteComment("downvote")}
