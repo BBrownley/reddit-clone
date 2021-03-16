@@ -8,7 +8,11 @@ const setToken = token => {
 
 const getCommentsByPostId = async postId => {
   const req = await axios.get(`http://localhost:5000/comments/post/${postId}`);
+  return req.data;
+};
 
+const getCommentsByUserId = async userId => {
+  const req = await axios.get(`http://localhost:5000/comments/users/${userId}`);
   return req.data;
 };
 
@@ -52,6 +56,7 @@ const add = async (user, comment, postId, parentId) => {
 export default {
   getCommentsByPostId,
   getRootCommentsByPostId,
+  getCommentsByUserId,
   getCommentChildren,
   add,
   setToken

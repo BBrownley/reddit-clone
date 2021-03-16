@@ -80,8 +80,8 @@ const PostList = ({ sortBy, searchBy, searchTerm, posts = undefined }) => {
     return posts.sort((a, b) => {
       switch (sortBy) {
         case "new":
-          const timestampA = moment(a.createdAt);
-          const timestampB = moment(b.createdAt);
+          const timestampA = moment(a.created_at);
+          const timestampB = moment(b.created_at);
 
           return timestampA.isAfter(timestampB) ? -1 : 1;
         case "top":

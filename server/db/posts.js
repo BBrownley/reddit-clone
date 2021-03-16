@@ -9,7 +9,7 @@ const q = `
       ELSE SUM(post_votes.vote_value)
   END AS score,
   title, 
-  posts.created_at AS createdAt, 
+  posts.created_at AS created_at, 
   posts.id AS postID,
   group_name AS groupName,
   group_id AS groupID,
@@ -73,7 +73,7 @@ const create = (data, token) => {
           connection.query(
             ` SELECT 
                 title, 
-                posts.created_at AS createdAt, 
+                posts.created_at AS created_at, 
                 posts.id AS postID,
                 group_name AS groupName,
                 group_id AS groupID,
@@ -237,7 +237,7 @@ const getPostsByUID = userId => {
           ELSE SUM(post_votes.vote_value)
       END AS score,
       title, 
-      posts.created_at AS createdAt, 
+      posts.created_at AS created_at, 
       posts.id AS postID,
       group_name AS groupName,
       group_id AS groupID,

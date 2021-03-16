@@ -104,7 +104,7 @@ const PostView = () => {
           <PostHeader
             postLink={`/groups/${post.groupName.toLowerCase()}/${post.postID}`}
             title={post.title}
-            postAge={moment(post.createdAt).fromNow()}
+            postAge={moment(post.created_at).fromNow()}
             groupLink={`/groups/${post.groupName.toLowerCase()}`}
             groupName={post.groupName}
             author={post.username}

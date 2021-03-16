@@ -45,6 +45,31 @@ commentsRouter.get("/post/:postId", async (req, res, next) => {
   }
 });
 
+commentsRouter.get("/users/:userId", async (req, res, next) => {
+  const fetchUserComments = uid => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT * FROM comments
+        WHERE commenter_id = ?
+      `;
+      connection.query(query, [uid], (err, results) => {
+        if (err) {
+          reject(new Error("Unable to fetch user comments"));
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  };
+
+  try {
+    const userComments = await fetchUserComments(req.params.userId);
+    res.json(userComments);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
 commentsRouter.get("/:commentId/children", async (req, res, next) => {
   const fetchChildren = () => {
     return new Promise((resolve, reject) => {

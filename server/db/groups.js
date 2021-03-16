@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const q = `
   SELECT 
     group_name,
-    created_at AS createdAt,
+    created_at AS created_at,
     id,
     blurb
   FROM groups
