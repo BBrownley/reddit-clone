@@ -133,7 +133,7 @@ const reducer = (state = initialState, action) => {
     case "LOGIN":
       return action.data;
     case "LOGOUT":
-      return null;
+      return initialState;
     case "SET_USER":
       return action.userInfo;
     case "ADD_POST":
