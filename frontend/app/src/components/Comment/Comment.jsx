@@ -118,6 +118,7 @@ export default function Comment(props) {
                     newComment
                   );
                   setReplying(false);
+                  setNewComment("");
                 }}
               >
                 Send
