@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useRouteMatch, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import userService from "../../services/users";
@@ -63,54 +64,19 @@ const HistoryFilters = styled.ul`
 `;
 
 export default function UserView() {
-  // const [user, setUser] = useState({});
-  // const [userPosts, setUserPosts] = useState([]);
-  // const match = useRouteMatch("/users/:id");
-
-  // const [sortBy, setSortBy] = useState("new");
-  // const [searchBy, setSearchBy] = useState("title");
-  // const [searchTerm, setSearchTerm] = useState("");
-
-  // const history = useHistory();
-
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     const userData = await userService.getUserById(match.params.id);
-  //     setUser(userData);
-  //   };
-
-  //   const fetchUserPosts = async () => {
-  //     const userPostData = await postService.getUserPosts(match.params.id);
-  //     console.log(userPostData);
-  //     setUserPosts(userPostData);
-  //   };
-
-  //   fetchUser();
-  //   fetchUserPosts();
-  // }, []);
-
-  // return (
-  //   <div>
-  //     <h1>{user.username}</h1>
-  //     <button onClick={handleSendMessageButton}>Send message</button>
-
-  //     <p>Account created {moment(user.created_at).fromNow()}</p>
-  //     <PostList
-  //       sortBy={sortBy}
-  //       searchBy={searchBy}
-  //       searchTerm={searchTerm}
-  //       posts={userPosts}
-  //     />
-  //   </div>
-  // );
+  const match = useRouteMatch("/users/:id");
+  const history = useHistory();
 
   const [user, setUser] = useState({});
   const [usersPosts, setUsersPosts] = useState([]);
   const [usersComments, setUsersComments] = useState([]);
   const [historyFilter, setHistoryFilter] = useState("overview");
 
-  const match = useRouteMatch("/users/:id");
-  const history = useHistory();
+  const loggedUserId = useSelector(state => state.user.userId);
+  const [matchesLoggedUser, setMatchesLoggedUser] = useState(false);
+
+  console.log(loggedUserId);
+  console.log(loggedUserId === Number(match.params.id));
 
   useEffect(() => {
     // TODO: Implement caching
@@ -132,10 +98,22 @@ export default function UserView() {
       setUsersComments(usersComments);
       return usersComments;
     };
+
+    // const fetchUserBookmarks = async () => {
+    //   const usersComments = await bookmarkService.getUserBookmarks(
+    //     match.params.id
+    //   );
+    //   setUsersComments(usersComments);
+    //   return usersComments;
+    // };
+
     fetchUser();
     fetchUserPosts();
     fetchUserComments();
-  }, []);
+    // fetchUserBookmarks();
+
+    setMatchesLoggedUser(loggedUserId === Number(match.params.id));
+  }, [loggedUserId]);
 
   const handleSendMessageButton = () => {
     history.push({
@@ -180,13 +158,16 @@ export default function UserView() {
           >
             Comments
           </li>
-          <li
-            className={historyFilter === "bookmarked" ? "active" : ""}
-            onClick={() => setHistoryFilter("bookmarked")}
-          >
-            Bookmarked
-          </li>
+          {matchesLoggedUser && (
+            <li
+              className={historyFilter === "bookmarked" ? "active" : ""}
+              onClick={() => setHistoryFilter("bookmarked")}
+            >
+              Bookmarked
+            </li>
+          )}
         </HistoryFilters>
+        <p>This is {matchesLoggedUser ? "your account" : "not your account"}</p>
         <UserHistory>
           <br />
           <div>

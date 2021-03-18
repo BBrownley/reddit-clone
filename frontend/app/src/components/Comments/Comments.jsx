@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
 
 import { setRedirectPath } from "../../reducers/redirectReducer";
+import { initializeBookmarks } from "../../reducers/userBookmarksReducer";
 
 import commentsService from "../../services/comments";
 
@@ -25,7 +26,9 @@ export default function Comments({ postId, authorId, postTitle }) {
       console.log(comments);
       setComments(comments);
     };
+
     fetchComments();
+    
   }, []);
 
   const handleSubmitComment = async (

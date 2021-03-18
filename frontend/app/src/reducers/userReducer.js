@@ -5,6 +5,7 @@ import userPostVoteService from "../services/userPostVotes";
 import commentsService from "../services/comments";
 import messageService from "../services/messages";
 import commentVotesService from "../services/commentVotes";
+import bookmarkService from "../services/bookmarks";
 
 import { timedNotification } from "../reducers/notificationReducer";
 
@@ -54,6 +55,7 @@ export const login = (credentials, hasToken) => {
       commentsService.setToken(data.token);
       messageService.setToken(data.token);
       commentVotesService.setToken(data.token);
+      bookmarkService.setToken(data.token);
 
       dispatch({
         type: "LOGIN",
@@ -80,6 +82,8 @@ export const setUser = userInfo => {
     commentsService.setToken(userInfo.token);
     messageService.setToken(userInfo.token);
     commentVotesService.setToken(userInfo.token);
+    bookmarkService.setToken(userInfo.token);
+
     dispatch({
       type: "SET_USER",
       userInfo

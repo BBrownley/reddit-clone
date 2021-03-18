@@ -16,6 +16,8 @@ import {
   changeVote
 } from "../../reducers/commentVotesReducer";
 
+import BookmarkButton from "../BookmarkButton/BookmarkButton";
+
 import {
   Container,
   MainContent,
@@ -32,6 +34,13 @@ export default function Comment(props) {
 
   const currentUser = useSelector(state => state.user);
   const userCommentVotes = useSelector(state => state.userCommentVotes);
+  const userBookmarked = useSelector(state =>
+    state.userBookmarks.find(
+      bookmark => bookmark.comment_id === props.comment.comment_id
+    )
+  );
+
+  console.log(userBookmarked);
 
   const existingCommentVote = userCommentVotes.find(
     userCommentVote => userCommentVote.comment_id === currentCommentId
@@ -42,8 +51,6 @@ export default function Comment(props) {
   const [newComment, setNewComment] = useState("");
   const [initialVoteValue, setInitialVoteValue] = useState(0);
   const [commentScoreDelta, setCommentScoreDelta] = useState(0);
-
-  
 
   const history = useHistory();
   const match = useRouteMatch("/groups/:groupName/:groupId");
@@ -158,7 +165,7 @@ export default function Comment(props) {
   };
 
   return (
-    <Container child={props.child}>
+    <Container child={props.child} key={props.comment.comment_id}>
       <div>
         <img
           src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
@@ -171,7 +178,7 @@ export default function Comment(props) {
         <Link to={`/users/${props.comment.user_id}`}>
           {props.comment.username}
         </Link>
-        <span class="comment">{props.comment.content}</span>
+        <span className="comment">{props.comment.content}</span>
         <p>
           <CommentVotes>
             <CommentVoteButton
@@ -191,7 +198,10 @@ export default function Comment(props) {
               <a className="reply">Reply</a>
             </span>
           )}
-          <a href="#">Bookmark</a>
+          <BookmarkButton
+            bookmarked={userBookmarked}
+            commentId={props.comment.comment_id}
+          />
           <a href="#">Delete</a>
           {replying === true && (
             <ReplyForm>

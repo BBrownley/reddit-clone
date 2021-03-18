@@ -12,6 +12,7 @@ import {
 import { initializePosts } from "../../reducers/postsReducer";
 
 import { initializeVotes as initializeCommentVotes } from "../../reducers/commentVotesReducer";
+import { initializeBookmarks } from "../../reducers/userBookmarksReducer";
 
 import FontAwesome from "react-fontawesome";
 
@@ -52,6 +53,7 @@ const PostView = () => {
 
   useEffect(() => {
     dispatch(initializeCommentVotes());
+    dispatch(initializeBookmarks(Number(post.postID)));
   }, []);
 
   if (!post) {

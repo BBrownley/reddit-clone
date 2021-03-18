@@ -63,7 +63,7 @@ const reducer = (state = initialState, action) => {
     case "REMOVE_COMMENT_VOTE":
       return [...state.filter(vote => vote.comment_id !== action.commentId)];
     default:
-      return state;
+      return initialState;
   }
 };
 

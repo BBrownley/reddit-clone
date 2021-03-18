@@ -38,7 +38,6 @@ commentsRouter.get("/post/:postId", async (req, res, next) => {
   };
   try {
     const comments = await fetchComments();
-    console.log(comments);
     res.json(comments);
   } catch (exception) {
     next(exception);
