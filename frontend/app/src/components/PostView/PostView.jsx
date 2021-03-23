@@ -53,7 +53,7 @@ const PostView = () => {
 
   useEffect(() => {
     const init = async () => {
-      await dispatch(initializeBookmarks(216));
+      await dispatch(initializeBookmarks(match.params.id));
       await dispatch(initializeCommentVotes());
     };
     init();

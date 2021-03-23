@@ -8,11 +8,20 @@ const setToken = token => {
 
 const getAllBookmarks = async () => {
   const config = {
-    Authorization: storedToken
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      Authorization: storedToken
+    }
   };
 
   const req = await axios.get(`http://localhost:5000/bookmarks/`, config);
-  return req.data;
+  return req.data.map(bookmark => {
+    return {
+      ...bookmark,
+      type: "bookmark"
+    };
+  });
 };
 
 const getBookmarksByPostId = async postId => {

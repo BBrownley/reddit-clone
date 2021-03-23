@@ -5,6 +5,7 @@ import styled from "styled-components";
 import userService from "../../services/users";
 import postService from "../../services/posts";
 import commentService from "../../services/comments";
+import bookmarkService from "../../services/bookmarks";
 
 import NavLink from "../shared/NavLink.elements.js";
 
@@ -70,6 +71,7 @@ export default function UserView() {
   const [user, setUser] = useState({});
   const [usersPosts, setUsersPosts] = useState([]);
   const [usersComments, setUsersComments] = useState([]);
+  const [userBookmarks, setUserBookmarks] = useState([]);
   const [historyFilter, setHistoryFilter] = useState("overview");
 
   const loggedUserId = useSelector(state => state.user.userId);
@@ -99,18 +101,19 @@ export default function UserView() {
       return usersComments;
     };
 
-    // const fetchUserBookmarks = async () => {
-    //   const usersComments = await bookmarkService.getUserBookmarks(
-    //     match.params.id
-    //   );
-    //   setUsersComments(usersComments);
-    //   return usersComments;
-    // };
+    const fetchUserBookmarks = async () => {
+      const userBookmarks = await bookmarkService.getAllBookmarks(
+        match.params.id
+      );
+      console.log(userBookmarks);
+      setUserBookmarks(userBookmarks);
+      return usersComments;
+    };
 
     fetchUser();
     fetchUserPosts();
     fetchUserComments();
-    // fetchUserBookmarks();
+    fetchUserBookmarks();
 
     setMatchesLoggedUser(loggedUserId === Number(match.params.id));
   }, [loggedUserId]);
@@ -172,29 +175,45 @@ export default function UserView() {
           <br />
           <div>
             {(() => {
-              const allHistory = [...usersComments, ...usersPosts]
+              const allHistory = [
+                ...usersComments,
+                ...usersPosts,
+                ...userBookmarks
+              ]
                 .sort((historyItemA, historyItemB) => {
                   const timestampA = moment(historyItemA.created_at);
                   const timestampB = moment(historyItemB.created_at);
 
                   return timestampA.isAfter(timestampB) ? -1 : 1;
                 })
+                // TODO: Refactor this
                 .filter(historyItem => {
-                  if (historyFilter === "overview") {
+                  if (
+                    historyFilter === "overview" &&
+                    historyItem.type !== "bookmark"
+                  ) {
                     return historyItem;
-                  } else if (historyFilter === "submitted") {
+                  } else if (
+                    historyFilter === "submitted" &&
+                    historyItem.type !== "bookmark"
+                  ) {
                     return historyItem.postID !== undefined;
-                  } else if (historyFilter === "comments") {
+                  } else if (
+                    historyFilter === "comments" &&
+                    historyItem.type !== "bookmark"
+                  ) {
                     return historyItem.commenter_id !== undefined;
+                  } else if (historyFilter === "bookmarked") {
+                    return historyItem.type === "bookmark";
                   }
                 });
 
-              console.log([...usersComments, ...usersPosts]);
+              console.log(allHistory);
 
               return allHistory.map(historyItem => {
                 if (historyItem.postID !== undefined) {
                   return <Post post={historyItem} options={false} />;
-                } else {
+                } else if (historyItem.commenter_id !== undefined) {
                   return (
                     <CommentItem>
                       <p>
@@ -216,6 +235,8 @@ export default function UserView() {
                       <p>{historyItem.content}</p>
                     </CommentItem>
                   );
+                } else {
+                  return <p>{historyItem.content}</p>;
                 }
               });
             })()}
