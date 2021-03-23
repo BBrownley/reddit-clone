@@ -28,7 +28,6 @@ export default function Comments({ postId, authorId, postTitle }) {
     };
 
     fetchComments();
-    
   }, []);
 
   const handleSubmitComment = async (
@@ -123,6 +122,7 @@ export default function Comments({ postId, authorId, postTitle }) {
                 <Comment
                   comment={comment}
                   handleSubmitComment={handleSubmitComment}
+                  key={comment.comment_id}
                 />
               );
             })}

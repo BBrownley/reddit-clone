@@ -22,12 +22,12 @@ export default function BookmarkButton({ bookmarked, commentId }) {
   };
 
   return (
-    <>
+    <button>
       {bookmarked ? (
         <span onClick={() => handleDeleteBookmark(commentId)}>Unbookmark</span>
       ) : (
         <span onClick={() => handleAddBookmark(commentId)}>Bookmark</span>
       )}
-    </>
+    </button>
   );
 }

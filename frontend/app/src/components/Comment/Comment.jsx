@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouteMatch, Link, useHistory } from "react-router-dom";
+import { useRouteMatch, Link } from "react-router-dom";
 
 import moment from "moment";
-import _ from "lodash";
-
-import FontAwesome from "react-fontawesome";
 
 import commentsService from "../../services/comments";
 import messageService from "../../services/messages";
@@ -34,12 +31,15 @@ export default function Comment(props) {
 
   const currentUser = useSelector(state => state.user);
   const userCommentVotes = useSelector(state => state.userCommentVotes);
-  const userBookmarked = useSelector(state =>
+  const userBookmark = useSelector(state =>
     state.userBookmarks.find(
       bookmark => bookmark.comment_id === props.comment.comment_id
     )
   );
 
+  console.log(userBookmark);
+
+  const userBookmarked = !!userBookmark;
   console.log(userBookmarked);
 
   const existingCommentVote = userCommentVotes.find(
@@ -52,7 +52,6 @@ export default function Comment(props) {
   const [initialVoteValue, setInitialVoteValue] = useState(0);
   const [commentScoreDelta, setCommentScoreDelta] = useState(0);
 
-  const history = useHistory();
   const match = useRouteMatch("/groups/:groupName/:groupId");
 
   const dispatch = useDispatch();
@@ -69,7 +68,7 @@ export default function Comment(props) {
     if (existingCommentVote) {
       setInitialVoteValue(existingCommentVote.vote_value);
     }
-  }, []);
+  }, [existingCommentVote, props.comment.comment_id]);
 
   /*
     Whenever a user replies to a comment, notify the user who was replied to
@@ -171,6 +170,7 @@ export default function Comment(props) {
           src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
           width="35"
           height="35"
+          alt="user profile image"
         ></img>
       </div>
       <p>{initialVoteValue}</p>
@@ -184,13 +184,13 @@ export default function Comment(props) {
             <CommentVoteButton
               name="thumbs-up"
               onClick={() => handleVoteComment("upvote")}
-              upvoted={existingCommentVote?.vote_value === 1 ? true : false}
+              upvoted={existingCommentVote?.vote_value === 1 ? 1 : 0}
             />
             <span>{props.comment.comment_score + commentScoreDelta}</span>
             <CommentVoteButton
               name="thumbs-down"
               onClick={() => handleVoteComment("downvote")}
-              downvoted={existingCommentVote?.vote_value === -1 ? true : false}
+              downvoted={existingCommentVote?.vote_value === -1 ? 1 : 0}
             />
           </CommentVotes>
           {replying === false && (
@@ -246,6 +246,7 @@ export default function Comment(props) {
           handleSubmitComment={props.handleSubmitComment}
           child={true}
           level={level + 1}
+          key={childComment.comment_id}
         />
       ))}
     </Container>

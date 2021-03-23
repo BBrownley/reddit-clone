@@ -1,109 +1,109 @@
-import React, { useEffect, useState } from "react";
-import { useRouteMatch, useHistory } from "react-router-dom";
-import styled from "styled-components";
-import moment from "moment";
+// import React, { useEffect, useState } from "react";
+// import { useRouteMatch, useHistory } from "react-router-dom";
+// import styled from "styled-components";
+// import moment from "moment";
 
-import NavLink from "./shared/NavLink.elements.js";
+// import NavLink from "./shared/NavLink.elements.js";
 
-import Post from "./Post/Post";
+// import Post from "./Post/Post";
 
-import postService from "../services/posts";
-import commentService from "../services/comments";
-import userService from "../services/users";
+// import postService from "../services/posts";
+// import commentService from "../services/comments";
+// import userService from "../services/users";
 
-const Container = styled.div`
-  /* display: flex; */
-`;
+// const Container = styled.div`
+//   /* display: flex; */
+// `;
 
-const ProfileInfo = styled.div`
-  text-align: center;
-  line-height: 2;
-  img {
-    height: 150px;
-  }
-`;
+// const ProfileInfo = styled.div`
+//   text-align: center;
+//   line-height: 2;
+//   img {
+//     height: 150px;
+//   }
+// `;
 
-const UserHistory = styled.div`
-  flex: 1;
-`;
+// const UserHistory = styled.div`
+//   flex: 1;
+// `;
 
-const CommentItem = styled.div`
-  padding: 10px 10px 10px 5px;
-  border-bottom: 1px solid #dddddd;
-`;
+// const CommentItem = styled.div`
+//   padding: 10px 10px 10px 5px;
+//   border-bottom: 1px solid #dddddd;
+// `;
 
-const HistoryFilters = styled.ul`
-  display: flex;
-  margin-left: -10px;
-  /* justify-content: center; */
-  li {
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid #eee;
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Old versions of Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Edge, Opera and Firefox */
-  }
-  li:hover {
-    cursor: pointer;
-    background-color: #4385f5;
-    color: white;
-    transition: 0.2s all;
-  }
-  li[class="active"] {
-    background-color: #4385f5;
-    color: white;
-    font-weight: bold;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
-  }
-`;
+// const HistoryFilters = styled.ul`
+//   display: flex;
+//   margin-left: -10px;
+//   /* justify-content: center; */
+//   li {
+//     margin: 10px;
+//     padding: 10px;
+//     border: 1px solid #eee;
+//     -webkit-touch-callout: none; /* iOS Safari */
+//     -webkit-user-select: none; /* Safari */
+//     -khtml-user-select: none; /* Konqueror HTML */
+//     -moz-user-select: none; /* Old versions of Firefox */
+//     -ms-user-select: none; /* Internet Explorer/Edge */
+//     user-select: none; /* Non-prefixed version, currently
+//                                   supported by Chrome, Edge, Opera and Firefox */
+//   }
+//   li:hover {
+//     cursor: pointer;
+//     background-color: #4385f5;
+//     color: white;
+//     transition: 0.2s all;
+//   }
+//   li[class="active"] {
+//     background-color: #4385f5;
+//     color: white;
+//     font-weight: bold;
+//     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
+//   }
+// `;
 
 export default function Sandbox() {
-  const [user, setUser] = useState({});
-  const [usersPosts, setUsersPosts] = useState([]);
-  const [usersComments, setUsersComments] = useState([]);
-  const [historyFilter, setHistoryFilter] = useState("overview");
+  // const [user, setUser] = useState({});
+  // const [usersPosts, setUsersPosts] = useState([]);
+  // const [usersComments, setUsersComments] = useState([]);
+  // const [historyFilter, setHistoryFilter] = useState("overview");
 
-  const match = useRouteMatch("/users/:id");
+  // const match = useRouteMatch("/users/:id");
 
-  useEffect(() => {
-    // TODO: Implement caching
-    const fetchUser = async () => {
-      const userData = await userService.getUserById(25);
-      setUser(userData);
-    };
-    const fetchUserPosts = async () => {
-      const usersPosts = await postService.getPostsByUID(25);
-      setUsersPosts(usersPosts);
-      return usersPosts;
-    };
-    const fetchUserComments = async () => {
-      const usersComments = await commentService.getCommentsByUserId(25);
-      setUsersComments(usersComments);
-      return usersComments;
-    };
-    fetchUser();
-    fetchUserPosts();
-    fetchUserComments();
-  }, []);
+  // useEffect(() => {
+  //   // TODO: Implement caching
+  //   const fetchUser = async () => {
+  //     const userData = await userService.getUserById(25);
+  //     setUser(userData);
+  //   };
+  //   const fetchUserPosts = async () => {
+  //     const usersPosts = await postService.getPostsByUID(25);
+  //     setUsersPosts(usersPosts);
+  //     return usersPosts;
+  //   };
+  //   const fetchUserComments = async () => {
+  //     const usersComments = await commentService.getCommentsByUserId(25);
+  //     setUsersComments(usersComments);
+  //     return usersComments;
+  //   };
+  //   fetchUser();
+  //   fetchUserPosts();
+  //   fetchUserComments();
+  // }, []);
 
-  const handleSendMessageButton = () => {
-    // history.push({
-    //   pathname: "/messages/compose",
-    //   state: {
-    //     recipient_id: user.id
-    //   }
-    // });
-  };
+  // const handleSendMessageButton = () => {
+  //   // history.push({
+  //   //   pathname: "/messages/compose",
+  //   //   state: {
+  //   //     recipient_id: user.id
+  //   //   }
+  //   // });
+  // };
 
   return (
     <div>
       <h1>Sandbox</h1>
-      <Container>
+      {/* <Container>
         <ProfileInfo>
           <img
             src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
@@ -185,8 +185,8 @@ export default function Sandbox() {
           {/* {usersPosts.map(post => (
             <Post post={post} options={false} />
           ))} */}
-        </UserHistory>
-      </Container>
+      {/* </UserHistory>
+      </Container> */} */}
     </div>
   );
 }

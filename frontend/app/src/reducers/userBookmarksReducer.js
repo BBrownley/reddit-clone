@@ -7,7 +7,7 @@ export const initializeBookmarks = (postId = null) => {
     let bookmarks;
 
     if (postId === null) {
-      bookmarks = await bookmarkService.getBookmarks();
+      bookmarks = await bookmarkService.getAllBookmarks();
     } else {
       bookmarks = await bookmarkService.getBookmarksByPostId(postId);
     }
@@ -44,7 +44,7 @@ export const deleteBookmark = commentId => {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "INITIALIZE_BOOKMARKS":
-      return action.bookmarks;
+      return [...action.bookmarks];
     case "ADD_BOOKMARK":
       return [...state, action.newBookmark];
     case "DELETE_BOOKMARK":
@@ -52,7 +52,7 @@ const reducer = (state = initialState, action) => {
         return bookmark.comment_id !== action.commentId;
       });
     default:
-      return initialState;
+      return state;
   }
 };
 

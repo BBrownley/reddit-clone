@@ -52,9 +52,12 @@ const PostView = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(initializeCommentVotes());
-    dispatch(initializeBookmarks(Number(post.postID)));
-  }, []);
+    const init = async () => {
+      await dispatch(initializeBookmarks(216));
+      await dispatch(initializeCommentVotes());
+    };
+    init();
+  }, [dispatch]);
 
   if (!post) {
     return null;

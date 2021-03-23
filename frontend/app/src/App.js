@@ -7,7 +7,6 @@ import styled from "styled-components";
 import { initializePosts } from "./reducers/postsReducer";
 import { initializeGroups } from "./reducers/groupsReducer";
 import { initializeVotes as initializePostVotes } from "./reducers/userPostVotesReducer";
-import { initializeVotes as initializeCommentVotes } from "./reducers/commentVotesReducer";
 import { logout, setUser, initializeFollows } from "./reducers/userReducer";
 import { initializeSubscriptions } from "./reducers/groupSubscribesReducer";
 
