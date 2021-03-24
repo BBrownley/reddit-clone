@@ -30,6 +30,18 @@ const getCommentChildren = async commentId => {
   return req.data;
 };
 
+const editComment = (id, updatedContent) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      Authorization: storedToken
+    }
+  };
+
+  axios.put(`http://localhost:5000/comments/${id}`, {updatedContent}, config);
+};
+
 const add = async (user, comment, postId, parentId) => {
   const config = {
     headers: {
@@ -58,6 +70,7 @@ export default {
   getRootCommentsByPostId,
   getCommentsByUserId,
   getCommentChildren,
+  editComment,
   add,
   setToken
 };

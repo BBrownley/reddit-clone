@@ -159,4 +159,32 @@ commentsRouter.post("/", async (req, res, next) => {
   }
 });
 
+commentsRouter.put(`/:commentId`, async (req, res, next) => {
+  const updateComment = (updatedContent, commentId) => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        UPDATE comments
+        SET content = ?
+        WHERE id = ?
+      `;
+
+      connection.query(query, [updatedContent, commentId], (err, results) => {
+        if (err) {
+          reject(new Error("Unable to update comment"));
+          console.log(err.message);
+        } else {
+          resolve({ message: "Comment successfully updated" });
+        }
+      });
+    });
+  };
+
+  try {
+    await updateComment(req.body.updatedContent, req.params.commentId);
+    res.sendStatus(200);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
 module.exports = commentsRouter;

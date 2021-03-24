@@ -37,20 +37,20 @@ export default function Comment(props) {
     )
   );
 
-  console.log(userBookmark);
-
   const userBookmarked = !!userBookmark;
-  console.log(userBookmarked);
 
   const existingCommentVote = userCommentVotes.find(
     userCommentVote => userCommentVote.comment_id === currentCommentId
   );
 
   const [replying, setReplying] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editValue, setEditValue] = useState(props.comment.content);
   const [children, setChildren] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [initialVoteValue, setInitialVoteValue] = useState(0);
   const [commentScoreDelta, setCommentScoreDelta] = useState(0);
+  const [content, setContent] = useState(props.comment.content);
 
   const match = useRouteMatch("/groups/:groupName/:groupId");
 
@@ -163,6 +163,14 @@ export default function Comment(props) {
     }
   };
 
+  const handleEditComment = () => {
+    console.log(`Comment ID: ${props.comment.comment_id}`);
+    console.log(`New content: ${editValue}`);
+    setEditing(false);
+    setContent(editValue);
+    commentsService.editComment(props.comment.comment_id, editValue);
+  };
+
   return (
     <Container child={props.child} key={props.comment.comment_id}>
       <div>
@@ -178,7 +186,7 @@ export default function Comment(props) {
         <Link to={`/users/${props.comment.user_id}`}>
           {props.comment.username}
         </Link>
-        <span className="comment">{props.comment.content}</span>
+        <span className="comment">{content}</span>
         <p>
           <CommentVotes>
             <CommentVoteButton
@@ -203,6 +211,7 @@ export default function Comment(props) {
             commentId={props.comment.comment_id}
           />
           <a href="#">Delete</a>
+          <span onClick={() => setEditing(true)}>Edit</span>
           {replying === true && (
             <ReplyForm>
               <ReplyInput
@@ -233,6 +242,23 @@ export default function Comment(props) {
               </button>
               <a onClick={() => setReplying(false)}>Cancel</a>
             </ReplyForm>
+          )}
+          {editing === true && (
+            <div>
+              <input
+                value={editValue}
+                onChange={e => setEditValue(e.target.value)}
+              />
+              <button onClick={() => handleEditComment()}>Edit comment</button>
+              <p
+                onClick={() => {
+                  setEditing(false);
+                  setEditValue(content);
+                }}
+              >
+                Cancel
+              </p>
+            </div>
           )}
         </p>
       </MainContent>
