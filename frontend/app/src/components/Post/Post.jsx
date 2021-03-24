@@ -56,55 +56,72 @@ const Post = ({ post, options }) => {
     );
   };
 
+  // TODO: Remove inline CSS
   return (
     <Container key={post.postID}>
-      <div>
-        <PostHeader
-          postLink={`/groups/${post.groupName.toLowerCase()}/${post.postID}`}
-          title={post.title}
-          postAge={moment(post.created_at).fromNow()}
-          groupLink={`/groups/${post.groupName.toLowerCase()}`}
-          groupName={post.groupName}
-          author={post.username}
-          userId={post.user_id}
-        />
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div style={{ display: "flex" }}>
+          <VoteContainer>
+            <FontAwesome
+              name="arrow-circle-up"
+              className="upvote"
+              onClick={() => handleUpvotePost(post.postID)}
+              style={post.vote === 1 ? { color: "blue" } : {}} // Refactor this later
+            />
+            <PostScore>{post.score}</PostScore>
+            <span></span>
+            <FontAwesome
+              name="arrow-circle-down"
+              className="downvote"
+              onClick={() => handleDownvotePost(post.postID)}
+              style={post.vote === -1 ? { color: "red" } : {}} // Refactor this later
+            />
+          </VoteContainer>
+          <div>
+            <PostHeader
+              postLink={`/groups/${post.groupName.toLowerCase()}/${
+                post.postID
+              }`}
+              title={post.title}
+              postAge={moment(post.created_at).fromNow()}
+              groupLink={`/groups/${post.groupName.toLowerCase()}`}
+              groupName={post.groupName}
+              author={post.username}
+              userId={post.user_id}
+            />
 
-        <Content>{post.content}</Content>
-        {options !== false && (
-          <PostOptions>
-            <CommentCount>
-              <FontAwesome name="comments" /> {post.total_comments}
-            </CommentCount>
-            <VoteContainer>
-              <FontAwesome
-                name="arrow-circle-up"
-                className="upvote"
-                onClick={() => handleUpvotePost(post.postID)}
-                style={post.vote === 1 ? { color: "blue" } : {}} // Refactor this later
-              />
-              <PostScore>{post.score}</PostScore>
-              <span></span>
-              <FontAwesome
-                name="arrow-circle-down"
-                className="downvote"
-                onClick={() => handleDownvotePost(post.postID)}
-                style={post.vote === -1 ? { color: "red" } : {}} // Refactor this later
-              />
-            </VoteContainer>
-            {user.token && <FollowButton followers={10} postId={post.postID} />}
-            {user && (
-              <span>
-                {user.userPosts && user.userPosts.includes(post.postID) ? (
-                  <span onClick={() => setConfirmDeletion(!confirmDeletion)}>
-                    <FontAwesome name="trash" /> Delete
-                  </span>
-                ) : (
-                  ""
+            <Content>{post.content}</Content>
+            {options !== false && (
+              <PostOptions>
+                {user.token && (
+                  <FollowButton followers={10} postId={post.postID} />
                 )}
-                {confirmDeletion && <DeleteConfirmation />}
-              </span>
+                {user && (
+                  <span>
+                    {user.userPosts && user.userPosts.includes(post.postID) ? (
+                      <span
+                        onClick={() => setConfirmDeletion(!confirmDeletion)}
+                      >
+                        <FontAwesome name="trash" /> Delete
+                      </span>
+                    ) : (
+                      ""
+                    )}
+                    {confirmDeletion && <DeleteConfirmation />}
+                  </span>
+                )}
+              </PostOptions>
             )}
-          </PostOptions>
+          </div>
+        </div>
+        {options !== false && (
+          <div style={{ display: "flex", alignItems: "flex-end" }}>
+            <CommentCount>
+              <div>
+                <FontAwesome name="comments" /> {post.total_comments} Comments
+              </div>
+            </CommentCount>
+          </div>
         )}
       </div>
     </Container>

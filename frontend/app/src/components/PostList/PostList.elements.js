@@ -5,9 +5,14 @@ export const Post = styled.div`
   padding: 10px;
   padding-left: 5px;
   line-height: 1.5;
-  /* display: flex; */
+  display: flex;
+  width: 100%;
   &:hover {
     background-color: #f5f5f5;
+  }
+  & > div {
+    display: flex;
+    width: 100%;
   }
 `;
 
@@ -43,21 +48,22 @@ export const Content = styled.div`
 `;
 
 export const PostScore = styled.span`
-  padding: 0 10px;
-`
+  padding: 0 0;
+  font-size: 1.5rem;
+`;
 
 export const CommentCount = styled.span`
   font-size: 24px;
-  margin-bottom: -6px;
-  margin-right: 10px;
-`
+  color: #777777;
+`;
 
 export const VoteContainer = styled.div`
-  /* display: flex; */
-  /* flex-direction: column; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   /* justify-content: space-between; */
-  padding-top: 8px;
-  /* margin-right: 20px; */
+  margin-right: 20px;
   color: #777;
   font-size: 28px;
   .upvote:hover,

@@ -8,9 +8,11 @@ import {
   initializeFollows
 } from "../../reducers/userReducer";
 
-import { InvisText, Container } from "./FollowButton.elements";
-import { Button } from "../shared/Button.elements";
-
+import {
+  StyledButton,
+  InvisText,
+  StyledContainer
+} from "./FollowButton.elements";
 export default function FollowButton({ followers, postId }) {
   const dispatch = useDispatch();
   const userPostFollows = useSelector(state => {
@@ -32,29 +34,29 @@ export default function FollowButton({ followers, postId }) {
       {(() => {
         if (userPostFollows.includes(postId)) {
           return (
-            <Button color={"pink-secondary"} onClick={() => unfollow()}>
+            <StyledButton color={"pink-primary"} onClick={() => unfollow()}>
               <InvisText>
                 <FontAwesome name="heart" className="fa-heart" /> Followed
               </InvisText>
-              <Container>
+              <StyledContainer>
                 <span>
                   <FontAwesome name="heart" className="fa-heart" /> Followed
                 </span>
                 <span>Unfollow</span>
-              </Container>
-            </Button>
+              </StyledContainer>
+            </StyledButton>
           );
         } else {
           return (
-            <Button color={"pink-secondary"} onClick={() => follow()}>
+            <StyledButton color={"pink-secondary"} onClick={() => follow()}>
               <InvisText>{followers} followers</InvisText>
-              <Container>
+              <StyledContainer>
                 <span>{followers} followers</span>
                 <span>
                   <FontAwesome name="heart" className="fa-heart" /> Follow
                 </span>
-              </Container>
-            </Button>
+              </StyledContainer>
+            </StyledButton>
           );
         }
       })()}

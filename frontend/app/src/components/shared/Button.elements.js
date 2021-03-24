@@ -29,11 +29,14 @@ export const Button = styled.div`
           background-color: ${props.theme.persianPink};
           color: white;
           border: 1px solid ${props.theme.persianPink};
+          &:hover {
+            color: white;
+          }
         `;
-      case "pink-secondary":
-        return `
-          border: 1px solid ${props.theme.persianPink};
-        `;
+      // case "pink-secondary":
+      //   return `
+      //     border: 1px solid ${props.theme.persianPink};
+      //   `;
     }
   }}
 
@@ -78,7 +81,7 @@ export const Container = styled.div`
         `;
         // case "pink-secondary":
         // return `
-        //   border: 1px solid ${props.theme.persianPink};
+        //   color: ${props.theme.persianPink};
         // `;
       }
     }}
