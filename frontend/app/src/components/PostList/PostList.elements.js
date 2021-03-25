@@ -45,6 +45,17 @@ export const Content = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 80ch;
+  ${props => {
+    if (props.expand) {
+      return `
+      border: 1px solid #777;
+      background-color: #fafafa;
+      padding: 10px;
+      overflow: visible;
+      white-space: normal;
+      `;
+    }
+  }}
 `;
 
 export const PostScore = styled.span`

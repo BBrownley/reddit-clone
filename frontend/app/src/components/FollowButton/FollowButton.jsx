@@ -34,7 +34,7 @@ export default function FollowButton({ followers, postId }) {
       {(() => {
         if (userPostFollows.includes(postId)) {
           return (
-            <StyledButton color={"pink-primary"} onClick={() => unfollow()}>
+            <StyledButton color={"pink-secondary"} onClick={() => unfollow()}>
               <InvisText>
                 <FontAwesome name="heart" className="fa-heart" /> Followed
               </InvisText>
@@ -48,7 +48,7 @@ export default function FollowButton({ followers, postId }) {
           );
         } else {
           return (
-            <StyledButton color={"pink-secondary"} onClick={() => follow()}>
+            <StyledButton color={"pink-primary"} onClick={() => follow()}>
               <InvisText>{followers} followers</InvisText>
               <StyledContainer>
                 <span>{followers} followers</span>

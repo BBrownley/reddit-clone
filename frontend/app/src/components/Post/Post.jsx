@@ -22,7 +22,7 @@ import FollowButton from "../FollowButton/FollowButton";
 import FontAwesome from "react-fontawesome";
 import PostHeader from "../shared/PostHeader";
 
-const Post = ({ post, options }) => {
+const Post = ({ post, options, expand }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
 
@@ -90,7 +90,7 @@ const Post = ({ post, options }) => {
               userId={post.user_id}
             />
 
-            <Content>{post.content}</Content>
+            <Content expand={expand}>{post.content}</Content>
             {options !== false && (
               <PostOptions>
                 {user.token && (

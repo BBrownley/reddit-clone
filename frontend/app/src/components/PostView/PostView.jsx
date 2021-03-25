@@ -26,7 +26,6 @@ import PostHeader from "../shared/PostHeader";
 
 const PostView = () => {
   const posts = useSelector(state => {
-    console.log(state);
     return state.posts;
   });
 
