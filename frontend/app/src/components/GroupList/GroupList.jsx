@@ -88,14 +88,7 @@ const GroupList = () => {
       <Container>
         {groups.length !== 0
           ? filterGroups(groups).map(group => {
-              return (
-                // <div>
-                //   <Link to={`/groups/${group.group_name.toLowerCase()}`}>
-                //     {group.group_name}
-                //   </Link>
-                // </div>
-                <GroupCard group={group} />
-              );
+              return <GroupCard group={group} />;
             })
           : ""}
       </Container>
