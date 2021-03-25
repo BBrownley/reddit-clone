@@ -11,6 +11,7 @@ import { initializePosts, removePost } from "../../reducers/postsReducer";
 import {
   Post as Container,
   VoteContainer,
+  VoteButton,
   Content,
   PostOptions,
   PostScore,
@@ -25,6 +26,11 @@ import PostHeader from "../shared/PostHeader";
 const Post = ({ post, options, expand }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
+  const userPostVote = useSelector(state =>
+    state.userPostVotes.find(vote => {
+      return vote.post_id === post.postID;
+    })
+  );
 
   const [confirmDeletion, setConfirmDeletion] = useState(false);
 
@@ -58,25 +64,29 @@ const Post = ({ post, options, expand }) => {
 
   // TODO: Remove inline CSS
   return (
-    <Container key={post.postID}>
+    <Container key={post.postID} expand={expand}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div style={{ display: "flex" }}>
-          <VoteContainer>
-            <FontAwesome
-              name="arrow-circle-up"
-              className="upvote"
-              onClick={() => handleUpvotePost(post.postID)}
-              style={post.vote === 1 ? { color: "blue" } : {}} // Refactor this later
-            />
-            <PostScore>{post.score}</PostScore>
-            <span></span>
-            <FontAwesome
-              name="arrow-circle-down"
-              className="downvote"
-              onClick={() => handleDownvotePost(post.postID)}
-              style={post.vote === -1 ? { color: "red" } : {}} // Refactor this later
-            />
-          </VoteContainer>
+          {options !== false && (
+            <VoteContainer>
+              <VoteButton upvoted={userPostVote?.vote_value === 1 ? 1 : 0}>
+                <FontAwesome
+                  name="arrow-circle-up"
+                  className="upvote"
+                  onClick={() => handleUpvotePost(post.postID)}
+                />
+              </VoteButton>
+              <PostScore>{post.score}</PostScore>
+              <VoteButton downvoted={userPostVote?.vote_value === -1 ? 1 : 0}>
+                <FontAwesome
+                  name="arrow-circle-down"
+                  className="downvote"
+                  onClick={() => handleDownvotePost(post.postID)}
+                />
+              </VoteButton>
+            </VoteContainer>
+          )}
+
           <div>
             <PostHeader
               postLink={`/groups/${post.groupName.toLowerCase()}/${

@@ -18,7 +18,9 @@ import FontAwesome from "react-fontawesome";
 
 import Comments from "../Comments/Comments";
 
-import { Post, VoteContainer, Content, PostOptions } from "./PostView.elements";
+// import { Post, VoteContainer, Content, PostOptions } from "./PostView.elements";
+
+import Post from "../Post/Post";
 
 import FollowButton from "../FollowButton/FollowButton";
 
@@ -88,44 +90,7 @@ const PostView = () => {
 
   return (
     <>
-      <Post>
-        <VoteContainer>
-          <FontAwesome
-            name="plus-square"
-            className="upvote"
-            onClick={() => handleUpvotePost(post.postID)}
-            style={styleVoteButton("upvote")}
-          />
-          <span>{post.score}</span>
-          <FontAwesome
-            name="minus-square"
-            className="downvote"
-            onClick={() => handleDownvotePost(post.postID)}
-            style={styleVoteButton("downvote")}
-          />
-        </VoteContainer>
-        <div>
-          <PostHeader
-            postLink={`/groups/${post.groupName.toLowerCase()}/${post.postID}`}
-            title={post.title}
-            postAge={moment(post.created_at).fromNow()}
-            groupLink={`/groups/${post.groupName.toLowerCase()}`}
-            groupName={post.groupName}
-            author={post.username}
-          />
-
-          <Content>{post.content}</Content>
-          <PostOptions>
-            <span>
-              {/* <FontAwesome name="comments" /> {post.comments.length} comments */}
-            </span>
-            {/* <FollowButton>
-              <FontAwesome name="heart" className="fa-heart" /> Follow
-            </FollowButton> */}
-            {user.token && <FollowButton followers={10} postId={post.postID} />}
-          </PostOptions>
-        </div>
-      </Post>
+      <Post post={post} key={post.postID} expand={true} />
       <Comments
         postId={post.postID}
         authorId={post.user_id}

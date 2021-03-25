@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Post = styled.div`
   border-bottom: 1px solid #ddd;
@@ -8,7 +8,11 @@ export const Post = styled.div`
   display: flex;
   width: 100%;
   &:hover {
-    background-color: #f5f5f5;
+    ${props => {
+      if (props.expand !== true) {
+        return `background-color: #f5f5f5;`;
+      }
+    }}
   }
   & > div {
     display: flex;
@@ -73,20 +77,41 @@ export const VoteContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* justify-content: space-between; */
   margin-right: 20px;
   color: #777;
-  font-size: 28px;
-  .upvote:hover,
-  .downvote:hover {
+  font-size: 25px;
+  /* position: relative;
+
+  .upvote,
+  .downvote {
+    position: absolute;
+  }
+
+  .upvote {
+    margin-bottom: 20px;
+  }
+
+  .downvote {
+    margin-top: 20px;
+  } */
+`;
+
+export const VoteButton = styled.span`
+  &:hover {
+    opacity: 0.75;
     cursor: pointer;
   }
-  .upvote:hover {
-    color: #4385f5;
-  }
-  .downvote:hover {
-    color: #ff3548;
-  }
+  ${props => {
+    if (props.upvoted) {
+      return css`
+        color: ${props.theme.cornflowerBlue};
+      `;
+    } else if (props.downvoted) {
+      return css`
+        color: ${props.theme.crimson};
+      `;
+    }
+  }}
 `;
 
 export const PostOptions = styled.div`
