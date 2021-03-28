@@ -46,10 +46,6 @@ const PostList = ({ sortBy, searchBy, searchTerm, posts = undefined }) => {
     return posts;
   });
 
-  const mapVotesToPosts = () => {
-    console.log("hey");
-  };
-
   const filterPosts = posts => {
     let result = posts.filter(post => {
       if (searchBy === "title") {

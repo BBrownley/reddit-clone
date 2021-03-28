@@ -27,6 +27,7 @@ import MessageView from "./components/MessageView/MessageView";
 import Navigation from "./components/Navigation/Navigation";
 import NotFound from "./components/NotFound/NotFound";
 import Sandbox from "./components/Sandbox";
+import SingleGroupView from "./components/SingleGroupView/SingleGroupView";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -62,26 +63,6 @@ const App = () => {
     dispatch(initializeSubscriptions());
   }, [user, dispatch]);
 
-  const handleSortBy = e => {
-    const sortValue = e.target.value;
-    setSortBy(sortValue);
-  };
-
-  const handleSearchBy = e => {
-    const searchByValue = e.target.value;
-    setSearchBy(searchByValue);
-  };
-
-  const handleSearchTerm = e => {
-    const searchByValue = e.target.value;
-    setSearchTerm(searchByValue);
-  };
-
-  const resetFilters = () => {
-    setSearchBy("title");
-    setSearchTerm("");
-  };
-
   return (
     <Router>
       <ScrollToTop />
@@ -89,77 +70,36 @@ const App = () => {
         <div className="App">
           <Wrapper>
             <Navigation />
-            <Route exact path="/">
-              <h2>Welcome to my Reddit clone! :)</h2>
-            </Route>
 
-            <Route exact path="/register" component={RegisterForm} />
-            <Route exact path="/login" component={LoginForm} />
-            <Route exact path="/users/:userId" component={UserView} />
-            <Route exact path="/inbox/message" component={MessageView} />
-            <Route exact path="/sandbox" component={Sandbox} />
+            <Switch>
+              <Route exact path="/">
+                <h2>Welcome to my Reddit clone! :)</h2>
+                <SingleGroupView all={true} />
+              </Route>
 
-            <Route exact path="/groups/:group" component={GroupInfo} />
+              <Route exact path="/register" component={RegisterForm} />
+              <Route exact path="/login" component={LoginForm} />
+              <Route exact path="/users/:userId" component={UserView} />
+              <Route exact path="/inbox/message" component={MessageView} />
+              <Route exact path="/sandbox" component={Sandbox} />
 
-            <Route exact path={["/", "/groups/:group"]}>
-              <GroupActions />
+              <Route exact path={["/groups/:group"]}>
+                <SingleGroupView />
+              </Route>
 
-              <div>
-                <strong>Sort posts by:</strong>
-                <select
-                  name="sortBy"
-                  id="sort-by"
-                  onChange={handleSortBy}
-                  value={sortBy}
-                >
-                  <option value="new">New</option>
-                  <option value="top">Top</option>
-                  <option value="followers">Followers</option>
-                  <option value="commentsDesc">Comments (high to low)</option>
-                  <option value="commentsAsc">Comments (low to high)</option>
-                </select>
-                <strong>
-                  Search posts by{" "}
-                  <select
-                    name="searchOption"
-                    id="search-option"
-                    onChange={handleSearchBy}
-                    value={searchBy}
-                  >
-                    <option value="title">Title</option>
-                    <option value="content">Content</option>
-                  </select>
-                  :{" "}
-                </strong>
-                <input onChange={handleSearchTerm} value={searchTerm}></input>
-                <button
-                  className="button-small no-shadow ml-10"
-                  onClick={resetFilters}
-                >
-                  Clear search
-                </button>
-              </div>
-            </Route>
+              <Route exact path="/creategroup" component={GroupForm} />
+              <Route path="/create" component={PostForm} />
 
-            <Route exact path="/creategroup" component={GroupForm} />
-            <Route path="/create" component={PostForm} />
+              {!loading && (
+                <Route path="/groups/:group/:id" component={PostView} />
+              )}
 
-            {!loading && (
-              <Route path="/groups/:group/:id" component={PostView} />
-            )}
+              <Route exact path="/groups" component={GroupList} />
+              <Route exact path="/inbox" component={InboxView} />
+              <Route exact path="/messages/compose" component={MessageForm} />
 
-            <Route exact path={["/groups/:group", "/"]}>
-              <PostList
-                sortBy={sortBy}
-                searchBy={searchBy}
-                searchTerm={searchTerm}
-              />
-            </Route>
-            <Route exact path="/groups" component={GroupList} />
-            <Route exact path="/inbox" component={InboxView} />
-            <Route exact path="/messages/compose" component={MessageForm} />
-
-            <Route component={NotFound} />
+              <Route component={NotFound} />
+            </Switch>
           </Wrapper>
         </div>
       </Body>
