@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-import styled from "styled-components";
+import { Body, Wrapper } from "./components/shared/Body.elements";
 
 import { initializePosts } from "./reducers/postsReducer";
 import { initializeGroups } from "./reducers/groupsReducer";
 import { initializeVotes as initializePostVotes } from "./reducers/userPostVotesReducer";
-import { logout, setUser, initializeFollows } from "./reducers/userReducer";
+import { setUser, initializeFollows } from "./reducers/userReducer";
 import { initializeSubscriptions } from "./reducers/groupSubscribesReducer";
 
 import GroupInfo from "./components/GroupInfo/GroupInfo";
@@ -24,65 +24,8 @@ import UserView from "./components/UserView/UserView";
 import InboxView from "./components/InboxView/InboxView";
 import MessageForm from "./components/MessageForm/MessageForm";
 import MessageView from "./components/MessageView/MessageView";
-import UserCard from "./components/UserCard/UserCard";
+import Navigation from "./components/Navigation/Navigation";
 import Sandbox from "./components/Sandbox";
-
-const Wrapper = styled.div`
-  max-width: 1260px;
-  margin: auto;
-  background-color: white;
-  min-height: 100vh;
-  padding: 30px;
-`;
-
-const Body = styled.div`
-  background-color: #eff0f2;
-  color: #333;
-  position: absolute;
-  right: 0;
-  left: 0;
-  top: 0;
-  min-height: 100vh;
-  font-family: "Open Sans", sans-serif;
-  font-weight: 400;
-`;
-
-const Branding = styled.h1`
-  margin: 0;
-  padding: 10px 0;
-`;
-
-const Navigation = styled.nav`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  ul {
-    display: flex;
-    li {
-      margin: 10px 20px;
-      font-weight: bold;
-      font-size: 1.25rem;
-      &:last-of-type {
-        margin-right: 0;
-      }
-    }
-  }
-  > div {
-    display: flex;
-    align-items: center;
-    > *:not(:last-child) {
-      margin-right: 2rem;
-    }
-  }
-`;
-
-const StyledLink = styled(Link)`
-  color: #4385f5;
-  font-weight: bold;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
 
 const App = () => {
   const dispatch = useDispatch();
@@ -138,49 +81,13 @@ const App = () => {
     setSearchTerm("");
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("loggedUser");
-    dispatch(logout());
-  };
-
   return (
     <Router>
       <ScrollToTop />
       <Body>
         <div className="App">
           <Wrapper>
-            <Navigation>
-              <StyledLink to="/">
-                <Branding>Hello! ^_^</Branding>
-              </StyledLink>
-
-              <div>
-                <h2>
-                  <StyledLink to="/groups">Groups</StyledLink>
-                </h2>
-                {(() => {
-                  if (user.username) {
-                    return (
-                      <UserCard
-                        username={user.username}
-                        handleLogout={handleLogout}
-                      />
-                    );
-                  } else {
-                    return (
-                      <ul>
-                        <li>
-                          <StyledLink to="/login">Log in</StyledLink>
-                        </li>
-                        <li>
-                          <StyledLink to="/register">Register</StyledLink>
-                        </li>
-                      </ul>
-                    );
-                  }
-                })()}
-              </div>
-            </Navigation>
+            <Navigation />
 
             <Switch>
               <Route exact path="/">
