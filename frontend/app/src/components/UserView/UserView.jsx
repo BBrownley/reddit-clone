@@ -129,7 +129,6 @@ export default function UserView() {
 
   return (
     <div>
-      <h1>Sandbox</h1>
       <Container>
         <ProfileInfo>
           <img
