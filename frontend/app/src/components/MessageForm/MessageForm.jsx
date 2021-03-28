@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 
+import {FormContainer, FormHeader, FormField} from "../shared/Form.elements";
+
 import messageService from "../../services/messages";
 
 export default function MessageForm() {
@@ -23,26 +25,35 @@ export default function MessageForm() {
   };
 
   return (
-    <div>
-      <h1>Write a new message</h1>
-      <h3>Subject</h3>
-      <input
-        type="text"
-        value={subject}
-        onChange={e => setSubject(e.target.value)}
-      />
-      <h3>Content</h3>
-      <textarea
-        name=""
-        id=""
-        cols="30"
-        rows="10"
-        value={body}
-        onChange={e => setBody(e.target.value)}
-      ></textarea>
-      <div>
-        <button onClick={sendMessage}>Send</button>
-      </div>
-    </div>
+    <FormContainer>
+      <FormHeader>Write a new message</FormHeader>
+      <form id="message-form" onSubmit={sendMessage}>
+        <FormField>
+          <label htmlFor="subject">Subject:</label>
+          <input
+            type="text"
+            id="subject"
+            name="subject"
+            value={subject}
+            onChange={e => setSubject(e.target.value)}
+          ></input>
+        </FormField>
+        <FormField>
+          <label htmlFor="email">Message:</label>
+          <textarea
+            type="message"
+            id="message"
+            name="message"
+            value={body}
+            onChange={e => setBody(e.target.value)}
+          ></textarea>
+        </FormField>
+      </form>
+      <button type="submit" form="register-form">
+        Send
+      </button>
+      {/* <Notification /> */}
+    </FormContainer>
   );
+
 }

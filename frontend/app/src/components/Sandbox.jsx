@@ -1,192 +1,60 @@
-// import React, { useEffect, useState } from "react";
-// import { useRouteMatch, useHistory } from "react-router-dom";
-// import styled from "styled-components";
-// import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { useRouteMatch, useHistory } from "react-router-dom";
+import styled from "styled-components";
+import moment from "moment";
 
-// import NavLink from "./shared/NavLink.elements.js";
+import FontAwesome from "react-fontawesome";
 
-// import Post from "./Post/Post";
+const Container = styled.div`
+  border: 1px solid black;
+  display: inline-block;
+  padding: 1rem;
+  display: inline-flex;
+`;
 
-// import postService from "../services/posts";
-// import commentService from "../services/comments";
-// import userService from "../services/users";
+const ProfileImage = styled.img`
+  height: 50px;
+  margin-right: 1rem;
+`;
 
-// const Container = styled.div`
-//   /* display: flex; */
-// `;
-
-// const ProfileInfo = styled.div`
-//   text-align: center;
-//   line-height: 2;
-//   img {
-//     height: 150px;
-//   }
-// `;
-
-// const UserHistory = styled.div`
-//   flex: 1;
-// `;
-
-// const CommentItem = styled.div`
-//   padding: 10px 10px 10px 5px;
-//   border-bottom: 1px solid #dddddd;
-// `;
-
-// const HistoryFilters = styled.ul`
-//   display: flex;
-//   margin-left: -10px;
-//   /* justify-content: center; */
-//   li {
-//     margin: 10px;
-//     padding: 10px;
-//     border: 1px solid #eee;
-//     -webkit-touch-callout: none; /* iOS Safari */
-//     -webkit-user-select: none; /* Safari */
-//     -khtml-user-select: none; /* Konqueror HTML */
-//     -moz-user-select: none; /* Old versions of Firefox */
-//     -ms-user-select: none; /* Internet Explorer/Edge */
-//     user-select: none; /* Non-prefixed version, currently
-//                                   supported by Chrome, Edge, Opera and Firefox */
-//   }
-//   li:hover {
-//     cursor: pointer;
-//     background-color: #4385f5;
-//     color: white;
-//     transition: 0.2s all;
-//   }
-//   li[class="active"] {
-//     background-color: #4385f5;
-//     color: white;
-//     font-weight: bold;
-//     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
-//   }
-// `;
+const InboxLink = styled.a`
+  margin-right: 2rem;
+  font-weight: bold;
+  color: blue;
+  position: relative;
+  span {
+    ${props => {
+      return `background-color: ${props.theme.crimson};`;
+    }}
+    color: white;
+    padding: 0 0.5rem;
+    margin-left: 0.5rem;
+    border-radius: 1000px;
+    font-size: 12px;
+  }
+`;
 
 export default function Sandbox() {
-  // const [user, setUser] = useState({});
-  // const [usersPosts, setUsersPosts] = useState([]);
-  // const [usersComments, setUsersComments] = useState([]);
-  // const [historyFilter, setHistoryFilter] = useState("overview");
-
-  // const match = useRouteMatch("/users/:id");
-
-  // useEffect(() => {
-  //   // TODO: Implement caching
-  //   const fetchUser = async () => {
-  //     const userData = await userService.getUserById(25);
-  //     setUser(userData);
-  //   };
-  //   const fetchUserPosts = async () => {
-  //     const usersPosts = await postService.getPostsByUID(25);
-  //     setUsersPosts(usersPosts);
-  //     return usersPosts;
-  //   };
-  //   const fetchUserComments = async () => {
-  //     const usersComments = await commentService.getCommentsByUserId(25);
-  //     setUsersComments(usersComments);
-  //     return usersComments;
-  //   };
-  //   fetchUser();
-  //   fetchUserPosts();
-  //   fetchUserComments();
-  // }, []);
-
-  // const handleSendMessageButton = () => {
-  //   // history.push({
-  //   //   pathname: "/messages/compose",
-  //   //   state: {
-  //   //     recipient_id: user.id
-  //   //   }
-  //   // });
-  // };
-
   return (
     <div>
       <h1>Sandbox</h1>
-      {/* <Container>
-        <ProfileInfo>
-          <img
+      <Container>
+        <div>
+          <ProfileImage
             src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
             alt=""
           />
-          <h2>Mark Ellis</h2>
-          <p>Posts: 0</p>
-          <p>Comments: 0</p>
-          <p>Account created {moment(user.created_at).fromNow()}</p>
-          <button onClick={handleSendMessageButton}>Send message</button>
-        </ProfileInfo>
-        <HistoryFilters>
-          <li
-            className={historyFilter === "overview" ? "active" : ""}
-            onClick={() => setHistoryFilter("overview")}
-          >
-            Overview
-          </li>
-          <li
-            className={historyFilter === "submitted" ? "active" : ""}
-            onClick={() => setHistoryFilter("submitted")}
-          >
-            Submitted
-          </li>
-          <li
-            className={historyFilter === "comments" ? "active" : ""}
-            onClick={() => setHistoryFilter("comments")}
-          >
-            Comments
-          </li>
-          <li
-            className={historyFilter === "bookmarked" ? "active" : ""}
-            onClick={() => setHistoryFilter("bookmarked")}
-          >
-            Bookmarked
-          </li>
-        </HistoryFilters>
-        <UserHistory>
-          <br />
-          <div>
-            {(() => {
-              const allHistory = [...usersComments, ...usersPosts]
-                .sort((historyItemA, historyItemB) => {
-                  const timestampA = moment(historyItemA.created_at);
-                  const timestampB = moment(historyItemB.created_at);
-
-                  return timestampA.isAfter(timestampB) ? -1 : 1;
-                })
-                .filter(historyItem => {
-                  if (historyFilter === "overview") {
-                    return historyItem;
-                  } else if (historyFilter === "submitted") {
-                    return historyItem.postID !== undefined;
-                  } else if (historyFilter === "comments") {
-                    return historyItem.commenter_id !== undefined;
-                  }
-                });
-
-              console.log([...usersComments, ...usersPosts]);
-
-              return allHistory.map(historyItem => {
-                if (historyItem.postID !== undefined) {
-                  return <Post post={historyItem} options={false} />;
-                } else {
-                  return (
-                    <CommentItem>
-                      <p>
-                        <NavLink to="/">NBA predictions</NavLink> in{" "}
-                        <NavLink to="/">Sports</NavLink> (Commented{" "}
-                        {moment(historyItem.created_at).fromNow()})
-                      </p>
-                      <p>{historyItem.content}</p>
-                    </CommentItem>
-                  );
-                }
-              });
-            })()}
-          </div>
-          {/* {usersPosts.map(post => (
-            <Post post={post} options={false} />
-          ))} */}
-      {/* </UserHistory>
-      </Container> */} */}
+        </div>
+        <div>
+          <p>
+            <strong>Signed in as user1337</strong>
+          </p>
+          <InboxLink>
+            Inbox<span>1</span>
+          </InboxLink>
+          <span>Logout</span>
+        </div>
+      </Container>
     </div>
   );
 }

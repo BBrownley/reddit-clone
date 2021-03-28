@@ -24,6 +24,7 @@ import UserView from "./components/UserView/UserView";
 import InboxView from "./components/InboxView/InboxView";
 import MessageForm from "./components/MessageForm/MessageForm";
 import MessageView from "./components/MessageView/MessageView";
+import UserCard from "./components/UserCard/UserCard";
 import Sandbox from "./components/Sandbox";
 
 const Wrapper = styled.div`
@@ -54,6 +55,7 @@ const Branding = styled.h1`
 const Navigation = styled.nav`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   ul {
     display: flex;
     li {
@@ -63,6 +65,13 @@ const Navigation = styled.nav`
       &:last-of-type {
         margin-right: 0;
       }
+    }
+  }
+  > div {
+    display: flex;
+    align-items: center;
+    > *:not(:last-child) {
+      margin-right: 2rem;
     }
   }
 `;
@@ -144,38 +153,33 @@ const App = () => {
               <StyledLink to="/">
                 <Branding>Hello! ^_^</Branding>
               </StyledLink>
-              <ul>
-                <li>
+
+              <div>
+                <h2>
                   <StyledLink to="/groups">Groups</StyledLink>
-                </li>
-                <li>
-                  <StyledLink to="/inbox">Inbox</StyledLink>
-                </li>
+                </h2>
                 {(() => {
                   if (user.username) {
                     return (
-                      <li>
-                        Signed in as {user.username}{" "}
-                        <StyledLink onClick={handleLogout} to="/">
-                          {" "}
-                          Logout
-                        </StyledLink>
-                      </li>
+                      <UserCard
+                        username={user.username}
+                        handleLogout={handleLogout}
+                      />
                     );
                   } else {
                     return (
-                      <>
+                      <ul>
                         <li>
                           <StyledLink to="/login">Log in</StyledLink>
                         </li>
                         <li>
                           <StyledLink to="/register">Register</StyledLink>
                         </li>
-                      </>
+                      </ul>
                     );
                   }
                 })()}
-              </ul>
+              </div>
             </Navigation>
 
             <Switch>
