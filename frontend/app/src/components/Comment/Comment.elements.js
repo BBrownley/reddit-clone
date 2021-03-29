@@ -73,7 +73,7 @@ export const CommentVoteButton = styled(FontAwesome)`
   }};
   &:hover {
     cursor: pointer;
-    opacity: .75;
+    opacity: 0.75;
   }
 `;
 

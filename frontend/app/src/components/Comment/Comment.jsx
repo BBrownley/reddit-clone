@@ -51,6 +51,11 @@ export default function Comment(props) {
   const [initialVoteValue, setInitialVoteValue] = useState(0);
   const [commentScoreDelta, setCommentScoreDelta] = useState(0);
   const [content, setContent] = useState(props.comment.content);
+  const [confirmDeletion, setConfirmDeletion] = useState(false);
+  const [removed, setRemoved] = useState(
+    props.comment.deleted === "Y" ? true : false
+  );
+  console.log(props.comment);
 
   const match = useRouteMatch("/groups/:groupName/:groupId");
 
@@ -101,7 +106,6 @@ export default function Comment(props) {
         (existingCommentVote.vote_value === 1 && action === "upvote") ||
         (existingCommentVote.vote_value === -1 && action === "downvote")
       ) {
-        console.log("removing vote");
         dispatch(removeVote(currentCommentId));
         setCommentScoreDelta(
           existingCommentVote.vote_value === 1
@@ -109,10 +113,7 @@ export default function Comment(props) {
             : commentScoreDelta + 1
         );
       } else {
-        console.log("change vote");
         const newVoteValue = action === "upvote" ? 1 : -1;
-
-        console.log(newVoteValue);
 
         dispatch(changeVote(currentCommentId, newVoteValue));
 
@@ -141,7 +142,6 @@ export default function Comment(props) {
           }
         };
 
-        console.log("upvote");
         dispatch(vote(currentCommentId, 1));
         setCommentScoreDelta(newScoreDelta);
       } else {
@@ -164,11 +164,14 @@ export default function Comment(props) {
   };
 
   const handleEditComment = () => {
-    console.log(`Comment ID: ${props.comment.comment_id}`);
-    console.log(`New content: ${editValue}`);
     setEditing(false);
     setContent(editValue);
     commentsService.editComment(props.comment.comment_id, editValue);
+  };
+
+  const handleRemoveComment = async () => {
+    setRemoved(true);
+    commentsService.remove(props.comment.comment_id);
   };
 
   return (
@@ -181,90 +184,101 @@ export default function Comment(props) {
           alt="user profile image"
         ></img>
       </div>
-      <p>{initialVoteValue}</p>
       <MainContent>
         <Link to={`/users/${props.comment.user_id}`}>
           {props.comment.username}
         </Link>
-        <span className="comment">{content}</span>
-        <p>
-          <CommentVotes>
-            <CommentVoteButton
-              name="thumbs-up"
-              onClick={() => handleVoteComment("upvote")}
-              upvoted={existingCommentVote?.vote_value === 1 ? 1 : 0}
-            />
-            <span>{props.comment.comment_score + commentScoreDelta}</span>
-            <CommentVoteButton
-              name="thumbs-down"
-              onClick={() => handleVoteComment("downvote")}
-              downvoted={existingCommentVote?.vote_value === -1 ? 1 : 0}
-            />
-          </CommentVotes>
-          {replying === false && (
-            <span onClick={() => setReplying(true)}>
-              <a className="reply">Reply</a>
-            </span>
-          )}
-          <BookmarkButton
-            bookmarked={userBookmarked}
-            commentId={props.comment.comment_id}
-          />
-          <a href="#">Delete</a>
-          <span onClick={() => setEditing(true)}>Edit</span>
-          {replying === true && (
-            <ReplyForm>
-              <ReplyInput
-                type="text"
-                value={newComment}
-                onChange={e => setNewComment(e.target.value)}
+        <span className="comment">{removed ? "Comment removed" : content}</span>
+        {!removed && (
+          <p>
+            <CommentVotes>
+              <CommentVoteButton
+                name="thumbs-up"
+                onClick={() => handleVoteComment("upvote")}
+                upvoted={existingCommentVote?.vote_value === 1 ? 1 : 0}
               />
-              <button
-                onClick={() => {
-                  props.handleSubmitComment(
-                    currentUser,
-                    newComment,
-                    match.params.groupId,
-                    props.comment.comment_id,
-                    true,
-                    children,
-                    setChildren
-                  );
-                  sendNotificationToRepliedUser(
-                    props.comment.commenter_id,
-                    newComment
-                  );
-                  setReplying(false);
-                  setNewComment("");
-                }}
-              >
-                Send
-              </button>
-              <a onClick={() => setReplying(false)}>Cancel</a>
-            </ReplyForm>
-          )}
-          {editing === true && (
-            <div>
-              <input
-                value={editValue}
-                onChange={e => setEditValue(e.target.value)}
+              <span>{props.comment.comment_score + commentScoreDelta}</span>
+              <CommentVoteButton
+                name="thumbs-down"
+                onClick={() => handleVoteComment("downvote")}
+                downvoted={existingCommentVote?.vote_value === -1 ? 1 : 0}
               />
-              <button onClick={() => handleEditComment()}>Edit comment</button>
-              <p
-                onClick={() => {
-                  setEditing(false);
-                  setEditValue(content);
-                }}
-              >
-                Cancel
-              </p>
-            </div>
-          )}
-        </p>
+            </CommentVotes>
+            {replying === false && (
+              <span onClick={() => setReplying(true)}>
+                <a className="reply">Reply</a>
+              </span>
+            )}
+            <BookmarkButton
+              bookmarked={userBookmarked}
+              commentId={props.comment.comment_id}
+            />
+            <button onClick={() => setConfirmDeletion(true)}>Delete</button>
+            {confirmDeletion && (
+              <>
+                <span>Are you sure?</span>
+                <span onClick={handleRemoveComment}>yes</span>
+                <span onClick={() => setConfirmDeletion(false)}>no</span>
+              </>
+            )}
+            <span onClick={() => setEditing(true)}>Edit</span>
+            {replying === true && (
+              <ReplyForm>
+                <ReplyInput
+                  type="text"
+                  value={newComment}
+                  onChange={e => setNewComment(e.target.value)}
+                />
+                <button
+                  onClick={() => {
+                    props.handleSubmitComment(
+                      currentUser,
+                      newComment,
+                      match.params.groupId,
+                      props.comment.comment_id,
+                      true,
+                      children,
+                      setChildren
+                    );
+                    sendNotificationToRepliedUser(
+                      props.comment.commenter_id,
+                      newComment
+                    );
+                    setReplying(false);
+                    setNewComment("");
+                  }}
+                >
+                  Send
+                </button>
+                <a onClick={() => setReplying(false)}>Cancel</a>
+              </ReplyForm>
+            )}
+            {editing === true && (
+              <div>
+                <input
+                  value={editValue}
+                  onChange={e => setEditValue(e.target.value)}
+                />
+                <button onClick={() => handleEditComment()}>
+                  Edit comment
+                </button>
+                <p
+                  onClick={() => {
+                    setEditing(false);
+                    setEditValue(content);
+                  }}
+                >
+                  Cancel
+                </p>
+              </div>
+            )}
+          </p>
+        )}
       </MainContent>
       <CommentAge>
         <span>{moment(props.comment.created_at).fromNow()}</span>
       </CommentAge>
+      <p>{props.comment.comment_id}</p>
 
       {children.map(childComment => (
         <Comment

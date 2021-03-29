@@ -123,6 +123,7 @@ export default function Comments({ postId, authorId, postTitle }) {
                   comment={comment}
                   handleSubmitComment={handleSubmitComment}
                   key={comment.comment_id}
+                
                 />
               );
             })}

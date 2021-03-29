@@ -65,6 +65,18 @@ const add = async (user, comment, postId, parentId) => {
   return req.data;
 };
 
+const remove = (id) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      Authorization: storedToken
+    }
+  };
+
+  axios.put(`http://localhost:5000/comments/${id}/remove`, config);
+}
+
 export default {
   getCommentsByPostId,
   getRootCommentsByPostId,
@@ -72,5 +84,6 @@ export default {
   getCommentChildren,
   editComment,
   add,
+  remove,
   setToken
 };

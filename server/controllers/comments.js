@@ -15,6 +15,7 @@ commentsRouter.get("/post/:postId", async (req, res, next) => {
         post_id,
         users.id AS user_id,
         users.username AS username,
+        deleted,
         (
         SELECT CASE WHEN
             SUM(vote_value) < 1 OR SUM(vote_value) IS NULL THEN 0 
@@ -84,6 +85,7 @@ commentsRouter.get("/:commentId/children", async (req, res, next) => {
         post_id,
         users.id AS user_id,
         users.username AS username,
+        deleted,
         (
         SELECT CASE WHEN
             SUM(vote_value) < 1 OR SUM(vote_value) IS NULL THEN 0 
@@ -182,6 +184,32 @@ commentsRouter.put(`/:commentId`, async (req, res, next) => {
   try {
     await updateComment(req.body.updatedContent, req.params.commentId);
     res.sendStatus(200);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
+commentsRouter.put("/:commentId/remove", async (req, res, next) => {
+  const removeComment = commentId => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        UPDATE comments
+        SET content = "comment removed", deleted = "Y"
+        WHERE id = ?        
+      `;
+      connection.query(query, [commentId], (err, results) => {
+        if (err) {
+          reject(new Error("Unable to remove comment"));
+        } else {
+          resolve({ message: "Comment successfully removed" });
+        }
+      });
+    });
+  };
+
+  try {
+    const success = await removeComment(req.params.commentId);
+    res.send(success);
   } catch (exception) {
     next(exception);
   }
