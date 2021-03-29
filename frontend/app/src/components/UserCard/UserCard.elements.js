@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+
+import StyledLink from "../shared/NavLink.elements";
 
 export const Container = styled.div`
   border: 1px solid black;
@@ -14,7 +15,7 @@ export const ProfileImage = styled.img`
   margin-right: 1rem;
 `;
 
-export const InboxLink = styled(Link)`
+export const InboxLink = styled(StyledLink)`
   margin-right: 2rem;
   font-weight: bold;
   color: blue;

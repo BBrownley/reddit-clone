@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import {
   initializeVotes as initializePostVotes,
   addVote
 } from "../../reducers/userPostVotesReducer";
-import { initializePosts, removePost } from "../../reducers/postsReducer";
+import {
+  initializePosts,
+  removePost,
+  editPost
+} from "../../reducers/postsReducer";
 
 import {
   Post as Container,
@@ -18,12 +23,14 @@ import {
   CommentCount
 } from "../PostList/PostList.elements";
 
+import { FormContainer, FormField, ButtonGroup } from "../shared/Form.elements";
+
 import FollowButton from "../FollowButton/FollowButton";
 
 import FontAwesome from "react-fontawesome";
 import PostHeader from "../shared/PostHeader";
 
-const Post = ({ post, options, expand }) => {
+const Post = ({ post, options, expand, viewMode }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
   const userPostVote = useSelector(state =>
@@ -32,7 +39,12 @@ const Post = ({ post, options, expand }) => {
     })
   );
 
+  const history = useHistory();
+
   const [confirmDeletion, setConfirmDeletion] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editValue, setEditValue] = useState(post.content);
+  const [postContent, setPostContent] = useState(post.content);
 
   const handleUpvotePost = async postID => {
     await dispatch(addVote(postID, 1));
@@ -48,8 +60,24 @@ const Post = ({ post, options, expand }) => {
     dispatch(initializePosts());
   };
 
+  const handleEditPost = () => {
+    console.log(editValue);
+    console.log(post.postID);
+    dispatch(editPost(post.postID, editValue));
+    setPostContent(editValue);
+    setEditing(false);
+  };
+
+  const handleCancelEdit = () => {
+    setEditing(false);
+    setEditValue(postContent);
+  };
+
   const handleDeletePost = async postId => {
     dispatch(removePost(postId));
+    if (viewMode) {
+      history.push("/");
+    }
   };
 
   const DeleteConfirmation = () => {
@@ -100,7 +128,23 @@ const Post = ({ post, options, expand }) => {
               userId={post.user_id}
             />
 
-            <Content expand={expand}>{post.content}</Content>
+            {editing ? (
+              <FormContainer>
+                <FormField>
+                  <textarea
+                    value={editValue}
+                    onChange={e => setEditValue(e.target.value)}
+                  />
+                </FormField>
+                <ButtonGroup>
+                  <button onClick={handleEditPost}>Edit post</button>
+                  <button onClick={handleCancelEdit}>Cancel</button>
+                </ButtonGroup>
+              </FormContainer>
+            ) : (
+              <Content expand={expand}>{postContent}</Content>
+            )}
+
             {options !== false && (
               <PostOptions>
                 {user.token && (
@@ -109,11 +153,17 @@ const Post = ({ post, options, expand }) => {
                 {user && (
                   <span>
                     {user.userPosts && user.userPosts.includes(post.postID) ? (
-                      <span
-                        onClick={() => setConfirmDeletion(!confirmDeletion)}
-                      >
-                        <FontAwesome name="trash" /> Delete
-                      </span>
+                      <>
+                        {viewMode && editing === false && (
+                          <span onClick={() => setEditing(true)}>Edit</span>
+                        )}
+
+                        <span
+                          onClick={() => setConfirmDeletion(!confirmDeletion)}
+                        >
+                          <FontAwesome name="trash" /> Delete
+                        </span>
+                      </>
                     ) : (
                       ""
                     )}

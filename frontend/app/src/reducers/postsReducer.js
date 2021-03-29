@@ -55,11 +55,21 @@ export const downvote = downvotedPost => {
 
 export const removePost = postId => {
   return async dispatch => {
-    // TODO: Is "await" needed here?
     postService.removePost(postId);
     dispatch({
       type: "REMOVE_POST",
       postId
+    });
+  };
+};
+
+export const editPost = (postId, newValue) => {
+  return async dispatch => {
+    postService.editPost(postId, newValue);
+    dispatch({
+      type: "EDIT_POST",
+      postId,
+      newValue
     });
   };
 };
@@ -86,9 +96,16 @@ const reducer = (state = initialState, action) => {
           return action.updatedPost;
         }
       });
+    case "EDIT_POST":
+      return state.map(post => {
+        if (post.postID !== action.postId) {
+          return post;
+        } else {
+          return { ...post, content: action.newValue };
+        }
+      });
     case "REMOVE_POST":
       return state.filter(post => post.postID !== action.postId);
-
     default:
       return state;
   }

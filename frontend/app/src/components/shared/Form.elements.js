@@ -45,3 +45,7 @@ export const FormField = styled.div`
     max-height: 1000px;
   }
 `;
+
+export const ButtonGroup = styled.div`
+  display: flex;
+`

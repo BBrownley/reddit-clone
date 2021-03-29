@@ -154,6 +154,18 @@ const getPostFollows = async () => {
   }
 }
 
+const editPost = async (id, newValue) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      Authorization: storedToken
+    }
+  };
+
+  axios.put(`http://localhost:5000/posts/${id}`, {newValue}, config);
+}
+
 const postService = {
   getAll,
   getByUser,
@@ -165,7 +177,8 @@ const postService = {
   getPostsByUID,
   followPost,
   unfollowPost,
-  getPostFollows
+  getPostFollows,
+  editPost
 };
 
 export default postService;

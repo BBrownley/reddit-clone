@@ -140,4 +140,31 @@ postsRouter.post("/follow", async (req, res, next) => {
   }
 });
 
+postsRouter.put("/:id", async (req, res, next) => {
+  const editPost = (postId, newValue) => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        UPDATE posts
+        SET content = ?
+        WHERE id = ?
+      `;
+
+      connection.query(query, [newValue, postId], (err, results) => {
+        if (err) {
+          reject(new Error("Unable to edit post"));
+        } else {
+          resolve({ message: "Post succeessfully updated" });
+        }
+      });
+    });
+  };
+
+  try {
+    const success = await editPost(req.params.id, req.body.newValue);
+    res.json(success);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
 module.exports = postsRouter;

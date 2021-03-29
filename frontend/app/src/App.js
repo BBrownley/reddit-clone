@@ -10,12 +10,9 @@ import { initializeVotes as initializePostVotes } from "./reducers/userPostVotes
 import { setUser, initializeFollows } from "./reducers/userReducer";
 import { initializeSubscriptions } from "./reducers/groupSubscribesReducer";
 
-import GroupInfo from "./components/GroupInfo/GroupInfo";
-import PostList from "./components/PostList/PostList";
 import PostView from "./components/PostView/PostView";
 import GroupForm from "./components/GroupForm/GroupForm";
 import PostForm from "./components/PostForm/PostForm";
-import GroupActions from "./components/GroupActions/GroupActions";
 import GroupList from "./components/GroupList/GroupList";
 import RegisterForm from "./components/RegisterForm/RegisterForm";
 import LoginForm from "./components/LoginForm/LoginForm";
@@ -32,9 +29,6 @@ import SingleGroupView from "./components/SingleGroupView/SingleGroupView";
 const App = () => {
   const dispatch = useDispatch();
 
-  const [sortBy, setSortBy] = useState("new");
-  const [searchBy, setSearchBy] = useState("title");
-  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
 
   const user = useSelector(state => {
@@ -59,7 +53,6 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializePostVotes());
-    // dispatch(initializeCommentVotes());
     dispatch(initializeSubscriptions());
   }, [user, dispatch]);
 
