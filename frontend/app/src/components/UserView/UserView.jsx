@@ -48,9 +48,6 @@ export default function UserView() {
   const loggedUserId = useSelector(state => state.user.userId);
   const [matchesLoggedUser, setMatchesLoggedUser] = useState(false);
 
-  console.log(loggedUserId);
-  console.log(loggedUserId === Number(match.params.id));
-
   useEffect(() => {
     // TODO: Implement caching
     const fetchUser = async () => {
@@ -76,7 +73,7 @@ export default function UserView() {
       const userBookmarks = await bookmarkService.getAllBookmarks(
         match.params.id
       );
-      console.log(userBookmarks);
+
       setUserBookmarks(userBookmarks);
       return usersComments;
     };
@@ -178,42 +175,111 @@ export default function UserView() {
                   }
                 });
 
-              console.log(allHistory);
+              let toBeDisplayed;
 
-              return allHistory.map(historyItem => {
-                if (historyItem.postID !== undefined) {
-                  return <Post post={historyItem} options={false} />;
-                } else if (historyItem.commenter_id !== undefined) {
-                  return (
-                    <CommentItem>
-                      <p>
-                        <NavLink
-                          to={`/groups/${historyItem.group_name.toLowerCase()}/${
-                            historyItem.post_id
-                          }`}
-                        >
-                          {historyItem.post_title}
-                        </NavLink>{" "}
-                        in{" "}
-                        <NavLink
-                          to={`/groups/${historyItem.group_name.toLowerCase()}`}
-                        >
-                          {historyItem.group_name}
-                        </NavLink>{" "}
-                        (Commented {moment(historyItem.created_at).fromNow()})
-                      </p>
-                      <p>{historyItem.content}</p>
-                    </CommentItem>
-                  );
-                } else {
-                  return <p>{historyItem.content}</p>;
-                }
-              });
+              // switch (historyFilter) {
+              //   case "overview":
+              //     toBeDisplayed = allHistory;
+              //   case "submitted":
+              //     toBeDisplayed = allHistory.filter(
+              //       item => item.type === "post"
+              //     );
+              //   case "comments":
+              //     toBeDisplayed = allHistory.filter(
+              //       item => item.type === "comment"
+              //     );
+              //   case "bookmarked":
+              //     toBeDisplayed = allHistory.filter(
+              //       item => item.type === "bookmark"
+              //     );
+              // }
+
+              // console.log(toBeDisplayed);
+
+              // return toBeDisplayed.map(item => {
+              //   if (item.type === "post") {
+              //     return <Post post={item} options={false} />;
+              //   } else {
+              //     return (
+              //       <CommentItem>
+              //         <p>
+              //           <NavLink
+              //             to={`/groups/${item.group_name.toLowerCase()}/${
+              //               item.post_id
+              //             }`}
+              //           >
+              //             {item.post_title}
+              //           </NavLink>{" "}
+              //           in{" "}
+              //           <NavLink
+              //             to={`/groups/${item.group_name.toLowerCase()}`}
+              //           >
+              //             {item.group_name}
+              //           </NavLink>{" "}
+              //           ({item.type === "bookmark" ? "Bookmarked" : "Commented"}{" "}
+              //           {moment(item.created_at).fromNow()})
+              //         </p>
+              //         <p>{item.content}</p>
+              //       </CommentItem>
+              //     );
+              //   }
+              // });
+
+              // Display a particular set of historyItems based on the current filter
+
+              // return allHistory.map(historyItem => {
+              //   if (historyItem.postID !== undefined) {
+              //     return <Post post={historyItem} options={false} />;
+              //   } else if (historyItem.commenter_id !== undefined) {
+              //     return (
+              //       <CommentItem>
+              //         <p>
+              //           <NavLink
+              //             to={`/groups/${historyItem.group_name.toLowerCase()}/${
+              //               historyItem.post_id
+              //             }`}
+              //           >
+              //             {historyItem.post_title}
+              //           </NavLink>{" "}
+              //           in{" "}
+              //           <NavLink
+              //             to={`/groups/${historyItem.group_name.toLowerCase()}`}
+              //           >
+              //             {historyItem.group_name}
+              //           </NavLink>{" "}
+              //           (Commented {moment(historyItem.created_at).fromNow()})
+              //         </p>
+              //         <p>{historyItem.content}</p>
+              //       </CommentItem>
+              //     );
+              //   } else {
+              //     return (
+              //       <CommentItem>
+              //         <p>
+              //           <NavLink
+              //             to={`/groups/${historyItem.group_name.toLowerCase()}/${
+              //               historyItem.post_id
+              //             }`}
+              //           >
+              //             {historyItem.post_title}
+              //           </NavLink>{" "}
+              //           in{" "}
+              //           <NavLink
+              //             to={`/groups/${historyItem.group_name.toLowerCase()}`}
+              //           >
+              //             {historyItem.group_name}
+              //           </NavLink>{" "}
+              //           (Bookmarked {moment(historyItem.created_at).fromNow()})
+              //         </p>
+              //         <p>{historyItem.content}</p>
+              //       </CommentItem>
+              //     );
+              //     console.log(historyItem);
+              //     return <p>{historyItem.content}</p>;
+              //   }
+              // });
             })()}
           </div>
-          {/* {usersPosts.map(post => (
-            <Post post={post} options={false} />
-          ))} */}
         </UserHistory>
       </Container>
     </div>

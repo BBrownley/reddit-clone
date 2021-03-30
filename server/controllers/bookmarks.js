@@ -6,14 +6,21 @@ bookmarksRouter.get("/", async (req, res, next) => {
   const getUserBookmarks = (userId, postId) => {
     return new Promise((resolve, reject) => {
       const query = `
-        SELECT bookmarks.*, comments.post_id AS post_id, comments.content AS content FROM bookmarks
+        SELECT bookmarks.*, 
+          posts.title AS post_title, 
+          posts.id AS post_id, 
+          comments.content AS content, 
+          groups.group_name AS group_name 
+        FROM bookmarks
         JOIN comments ON bookmarks.comment_id = comments.id
+        JOIN posts ON comments.post_id = posts.id
+        JOIN groups ON posts.group_id = groups.id
         WHERE user_id = ?
       `;
 
       connection.query(query, [userId], (err, results) => {
         if (err) {
-          console.log(query);
+          console.log(err);
           reject(new Error("Unable to get user bookmarks"));
         } else {
           resolve(results);
@@ -23,6 +30,8 @@ bookmarksRouter.get("/", async (req, res, next) => {
   };
   try {
     const token = req.headers.authorization;
+    console.log(token);
+    console.log(token);
     console.log(token);
     const user = await jwt.verify(token.split(" ")[1], process.env.SECRET);
 

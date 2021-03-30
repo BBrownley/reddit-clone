@@ -24,7 +24,13 @@ const getPostsByUID = async userId => {
     `http://localhost:5000/posts/users/${userId}`,
     config
   );
-  return req.data;
+  const data = req.data.map(post => {
+    return {
+      ...post,
+      type: "post"
+    }
+  })
+  return data;
 };
 
 const getByUser = async user => {

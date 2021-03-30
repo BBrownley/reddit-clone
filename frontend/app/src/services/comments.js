@@ -13,7 +13,13 @@ const getCommentsByPostId = async postId => {
 
 const getCommentsByUserId = async userId => {
   const req = await axios.get(`http://localhost:5000/comments/users/${userId}`);
-  return req.data;
+  const data = req.data.map(comment => {
+    return {
+      ...comment,
+      type: "comment"
+    }
+  })
+  return data;
 };
 
 const getRootCommentsByPostId = async postId => {
