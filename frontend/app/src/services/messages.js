@@ -47,11 +47,16 @@ const sendAll = async (message, postId) => {
   );
 };
 
+const setRead = async id => {
+  axios.put(`http://localhost:5000/messages`, { id }, config);
+};
+
 const messageService = {
   setToken,
   getAll,
   send,
-  sendAll
+  sendAll,
+  setRead
 };
 
 export default messageService;

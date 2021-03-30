@@ -11,10 +11,12 @@ import moment from "moment";
 import MessageView from "../MessageView/MessageView";
 
 import { Message, MessageHeader } from "./InboxView.elements";
+import ButtonGroup from "../shared/ButtonGroup.elements";
+import messageService from "../../services/messages";
 
 export default function InboxView() {
   const [messages, setMessages] = useState([]);
-  const [messageFilter, setMessageFilter] = useState("all");
+  const [messageFilter, setMessageFilter] = useState("unread");
 
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
@@ -43,6 +45,7 @@ export default function InboxView() {
         body: message.content
       }
     });
+    messageService.setRead(message.id);
   };
 
   const filterMessages = messages => {
@@ -51,28 +54,47 @@ export default function InboxView() {
         return messages;
       case "server":
         return messages.filter(message => message.sender_id === null);
-      case "direct messages":
+      case "direct":
         return messages.filter(message => message.sender_id !== null);
       case "unread":
-        return messages.filter(message => message.has_read === 0);
+        return messages.filter(message => message.has_read === "N");
     }
   };
 
   return (
     <div>
       <h1>Messages</h1>
-      <ul>
-        <li onClick={() => setMessageFilter("all")}>All</li>
-        <li onClick={() => setMessageFilter("server")}>Server</li>
-        <li onClick={() => setMessageFilter("direct messages")}>
-          Direct messages
+      <ButtonGroup>
+        <li
+          className={messageFilter === "unread" ? "active" : ""}
+          onClick={() => setMessageFilter("unread")}
+        >
+          Unread
         </li>
-        <li onClick={() => setMessageFilter("unread")}>Unread</li>
-      </ul>
+        <li
+          className={messageFilter === "all" ? "active" : ""}
+          onClick={() => setMessageFilter("all")}
+        >
+          All
+        </li>
+
+        <li
+          className={messageFilter === "server" ? "active" : ""}
+          onClick={() => setMessageFilter("server")}
+        >
+          Server
+        </li>
+        <li
+          className={messageFilter === "direct" ? "active" : ""}
+          onClick={() => setMessageFilter("direct")}
+        >
+          Direct Messages
+        </li>
+      </ButtonGroup>
       {messages.length === 0 && <h3>Inbox empty</h3>}
       {filterMessages(messages).map(message => (
         <Message
-          className={!!message.has_read ? ".message-read" : ""}
+          className={message.has_read === "Y" ? ".message-read" : ""}
           onClick={() => openMessage(message)}
         >
           <MessageHeader>

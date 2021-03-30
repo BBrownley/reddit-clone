@@ -8,6 +8,7 @@ import commentService from "../../services/comments";
 import bookmarkService from "../../services/bookmarks";
 
 import NavLink from "../shared/NavLink.elements.js";
+import ButtonGroup from "../shared/ButtonGroup.elements";
 
 import Post from "../Post/Post";
 
@@ -32,36 +33,6 @@ const UserHistory = styled.div`
 const CommentItem = styled.div`
   padding: 10px 10px 10px 5px;
   border-bottom: 1px solid #dddddd;
-`;
-
-const HistoryFilters = styled.ul`
-  display: flex;
-  margin-left: -10px;
-  /* justify-content: center; */
-  li {
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid #eee;
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Old versions of Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Edge, Opera and Firefox */
-  }
-  li:hover {
-    cursor: pointer;
-    background-color: #4385f5;
-    color: white;
-    transition: 0.2s all;
-  }
-  li[class="active"] {
-    background-color: #4385f5;
-    color: white;
-    font-weight: bold;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
-  }
 `;
 
 export default function UserView() {
@@ -141,7 +112,7 @@ export default function UserView() {
           <p>Account created {moment(user.created_at).fromNow()}</p>
           <button onClick={handleSendMessageButton}>Send message</button>
         </ProfileInfo>
-        <HistoryFilters>
+        <ButtonGroup>
           <li
             className={historyFilter === "overview" ? "active" : ""}
             onClick={() => setHistoryFilter("overview")}
@@ -168,7 +139,7 @@ export default function UserView() {
               Bookmarked
             </li>
           )}
-        </HistoryFilters>
+        </ButtonGroup>
         <p>This is {matchesLoggedUser ? "your account" : "not your account"}</p>
         <UserHistory>
           <br />

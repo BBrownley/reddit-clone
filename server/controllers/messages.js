@@ -10,6 +10,7 @@ messageRouter.get("/", async (req, res, next) => {
       const query = `
         SELECT * FROM messages
         WHERE recipient_id = ?
+        ORDER BY created_at DESC
       `;
       connection.query(query, [decodedToken.id], (err, results) => {
         if (err) {
@@ -112,6 +113,32 @@ messageRouter.post("/followers/:postId", async (req, res, next) => {
   try {
     console.log(req.body.message);
     await notifyFollowers(req.body.message);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
+messageRouter.put("/", async (req, res, next) => {
+  const setMessageRead = messageId => {
+    return new Promise((resolve, reject) => {
+      const query = `
+      UPDATE messages
+      SET has_read = "Y"
+      WHERE messages.id = ?
+    `;
+      connection.query(query, [messageId], (err, results) => {
+        if (err) {
+          reject(new Error("Unable to set read status on message"));
+        } else {
+          resolve({ message: "Message set as read" });
+        }
+      });
+    });
+  };
+
+  try {
+    const success = setMessageRead(req.body.id);
+    res.json(success);
   } catch (exception) {
     next(exception);
   }
