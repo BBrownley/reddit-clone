@@ -42,7 +42,8 @@ export default function InboxView() {
         subject: message.subject,
         sender: message.sender_id,
         time: message.created_at,
-        body: message.content
+        body: message.content,
+        id: message.id
       }
     });
     messageService.setRead(message.id);

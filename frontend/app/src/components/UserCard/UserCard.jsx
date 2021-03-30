@@ -32,7 +32,8 @@ export default function UserCard({ username, handleLogout }) {
             </strong>
           </p>
           <InboxLink to="/inbox">
-            Inbox<span>1</span>
+            Inbox
+            {/* <span>1</span> */}
           </InboxLink>
           <StyledLink onClick={handleLogout}>Logout</StyledLink>
         </div>

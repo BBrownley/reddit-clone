@@ -23,7 +23,6 @@ messageRouter.get("/", async (req, res, next) => {
   };
   try {
     const messages = await getMessages();
-    console.log(messages);
     res.json(messages);
   } catch (exception) {
     next(exception);
@@ -137,7 +136,35 @@ messageRouter.put("/", async (req, res, next) => {
   };
 
   try {
+    // TODO: Authentication
     const success = setMessageRead(req.body.id);
+    res.json(success);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
+messageRouter.delete("/", async (req, res, next) => {
+  const deleteMessage = messageId => {
+    return new Promise((resolve, reject) => {
+      const query = `
+      DELETE FROM messages
+      WHERE id = ?
+    `;
+      connection.query(query, [messageId], (err, results) => {
+        if (err) {
+          console.log(err);
+          reject(new Error("Unable to delete message"));
+        } else {
+          resolve({ message: "Message deleted" });
+        }
+      });
+    });
+  };
+
+  try {
+    // TODO: Authentication
+    const success = deleteMessage(req.body.id);
     res.json(success);
   } catch (exception) {
     next(exception);

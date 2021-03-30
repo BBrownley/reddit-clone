@@ -51,12 +51,25 @@ const setRead = async id => {
   axios.put(`http://localhost:5000/messages`, { id }, config);
 };
 
+const deleteMessage = async id => {
+  const headers = {
+    Authorization: storedToken
+  };
+  axios.delete(`http://localhost:5000/messages`, {
+    data: {
+      id
+    },
+    headers
+  });
+};
+
 const messageService = {
   setToken,
   getAll,
   send,
   sendAll,
-  setRead
+  setRead,
+  deleteMessage
 };
 
 export default messageService;

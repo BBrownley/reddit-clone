@@ -15,6 +15,7 @@ import {
 export default function MessageView() {
   const [reply, setReply] = useState("");
   const [replyOpen, setReplyOpen] = useState(false);
+  const [confirmDeletion, setConfirmDeletion] = useState(false);
 
   const location = useLocation();
   const history = useHistory();
@@ -32,6 +33,11 @@ export default function MessageView() {
     history.push("/inbox");
   };
 
+  const handleDeleteMessage = () => {
+    messageService.deleteMessage(location.state.id);
+    history.push("/inbox");
+  };
+
   return (
     <Message>
       <h2>{location.state.subject}</h2>
@@ -46,6 +52,16 @@ export default function MessageView() {
           <a onClick={() => setReplyOpen(true)}>Reply</a>
         ) : (
           ""
+        )}
+        <span onClick={() => setConfirmDeletion(true)}>Delete</span>
+        {confirmDeletion && (
+          <div>
+            <p>Are you sure?</p>
+            <span>
+              <span onClick={() => handleDeleteMessage()}>Yes</span>
+              <span onClick={() => setConfirmDeletion(false)}>No</span>
+            </span>
+          </div>
         )}
       </Actions>
       {replyOpen && (
