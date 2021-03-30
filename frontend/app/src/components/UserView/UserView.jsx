@@ -84,7 +84,7 @@ export default function UserView() {
     fetchUserBookmarks();
 
     setMatchesLoggedUser(loggedUserId === Number(match.params.id));
-  }, [loggedUserId]);
+  }, [match.params.id, loggedUserId]);
 
   const handleSendMessageButton = () => {
     history.push({
@@ -146,138 +146,68 @@ export default function UserView() {
                 ...usersComments,
                 ...usersPosts,
                 ...userBookmarks
-              ]
-                .sort((historyItemA, historyItemB) => {
-                  const timestampA = moment(historyItemA.created_at);
-                  const timestampB = moment(historyItemB.created_at);
+              ].sort((historyItemA, historyItemB) => {
+                const timestampA = moment(historyItemA.created_at);
+                const timestampB = moment(historyItemB.created_at);
 
-                  return timestampA.isAfter(timestampB) ? -1 : 1;
-                })
-                // TODO: Refactor this
-                .filter(historyItem => {
-                  if (
-                    historyFilter === "overview" &&
-                    historyItem.type !== "bookmark"
-                  ) {
-                    return historyItem;
-                  } else if (
-                    historyFilter === "submitted" &&
-                    historyItem.type !== "bookmark"
-                  ) {
-                    return historyItem.postID !== undefined;
-                  } else if (
-                    historyFilter === "comments" &&
-                    historyItem.type !== "bookmark"
-                  ) {
-                    return historyItem.commenter_id !== undefined;
-                  } else if (historyFilter === "bookmarked") {
-                    return historyItem.type === "bookmark";
-                  }
-                });
+                return timestampA.isAfter(timestampB) ? -1 : 1;
+              });
 
               let toBeDisplayed;
 
-              // switch (historyFilter) {
-              //   case "overview":
-              //     toBeDisplayed = allHistory;
-              //   case "submitted":
-              //     toBeDisplayed = allHistory.filter(
-              //       item => item.type === "post"
-              //     );
-              //   case "comments":
-              //     toBeDisplayed = allHistory.filter(
-              //       item => item.type === "comment"
-              //     );
-              //   case "bookmarked":
-              //     toBeDisplayed = allHistory.filter(
-              //       item => item.type === "bookmark"
-              //     );
-              // }
+              switch (historyFilter) {
+                case "overview":
+                  toBeDisplayed = allHistory.filter(
+                    item => item.type !== "bookmark"
+                  );
+                  break;
+                case "submitted":
+                  toBeDisplayed = allHistory.filter(
+                    item => item.type === "post"
+                  );
+                  break;
+                case "comments":
+                  toBeDisplayed = allHistory.filter(
+                    item => item.type === "comment"
+                  );
+                  break;
+                case "bookmarked":
+                  toBeDisplayed = allHistory.filter(
+                    item => item.type === "bookmark"
+                  );
+                  break;
+                default:
+                  return {};
+              }
 
-              // console.log(toBeDisplayed);
-
-              // return toBeDisplayed.map(item => {
-              //   if (item.type === "post") {
-              //     return <Post post={item} options={false} />;
-              //   } else {
-              //     return (
-              //       <CommentItem>
-              //         <p>
-              //           <NavLink
-              //             to={`/groups/${item.group_name.toLowerCase()}/${
-              //               item.post_id
-              //             }`}
-              //           >
-              //             {item.post_title}
-              //           </NavLink>{" "}
-              //           in{" "}
-              //           <NavLink
-              //             to={`/groups/${item.group_name.toLowerCase()}`}
-              //           >
-              //             {item.group_name}
-              //           </NavLink>{" "}
-              //           ({item.type === "bookmark" ? "Bookmarked" : "Commented"}{" "}
-              //           {moment(item.created_at).fromNow()})
-              //         </p>
-              //         <p>{item.content}</p>
-              //       </CommentItem>
-              //     );
-              //   }
-              // });
-
-              // Display a particular set of historyItems based on the current filter
-
-              // return allHistory.map(historyItem => {
-              //   if (historyItem.postID !== undefined) {
-              //     return <Post post={historyItem} options={false} />;
-              //   } else if (historyItem.commenter_id !== undefined) {
-              //     return (
-              //       <CommentItem>
-              //         <p>
-              //           <NavLink
-              //             to={`/groups/${historyItem.group_name.toLowerCase()}/${
-              //               historyItem.post_id
-              //             }`}
-              //           >
-              //             {historyItem.post_title}
-              //           </NavLink>{" "}
-              //           in{" "}
-              //           <NavLink
-              //             to={`/groups/${historyItem.group_name.toLowerCase()}`}
-              //           >
-              //             {historyItem.group_name}
-              //           </NavLink>{" "}
-              //           (Commented {moment(historyItem.created_at).fromNow()})
-              //         </p>
-              //         <p>{historyItem.content}</p>
-              //       </CommentItem>
-              //     );
-              //   } else {
-              //     return (
-              //       <CommentItem>
-              //         <p>
-              //           <NavLink
-              //             to={`/groups/${historyItem.group_name.toLowerCase()}/${
-              //               historyItem.post_id
-              //             }`}
-              //           >
-              //             {historyItem.post_title}
-              //           </NavLink>{" "}
-              //           in{" "}
-              //           <NavLink
-              //             to={`/groups/${historyItem.group_name.toLowerCase()}`}
-              //           >
-              //             {historyItem.group_name}
-              //           </NavLink>{" "}
-              //           (Bookmarked {moment(historyItem.created_at).fromNow()})
-              //         </p>
-              //         <p>{historyItem.content}</p>
-              //       </CommentItem>
-              //     );
-              //     console.log(historyItem);
-              //     return <p>{historyItem.content}</p>;
-              //   }
-              // });
+              return toBeDisplayed.map(item => {
+                if (item.type === "post") {
+                  return <Post post={item} options={false} />;
+                } else {
+                  return (
+                    <CommentItem>
+                      <p>
+                        <NavLink
+                          to={`/groups/${item.group_name.toLowerCase()}/${
+                            item.post_id
+                          }`}
+                        >
+                          {item.post_title}
+                        </NavLink>{" "}
+                        in{" "}
+                        <NavLink
+                          to={`/groups/${item.group_name.toLowerCase()}`}
+                        >
+                          {item.group_name}
+                        </NavLink>{" "}
+                        ({item.type === "bookmark" ? "Bookmarked" : "Commented"}{" "}
+                        {moment(item.created_at).fromNow()})
+                      </p>
+                      <p>{item.content}</p>
+                    </CommentItem>
+                  );
+                }
+              });
             })()}
           </div>
         </UserHistory>
