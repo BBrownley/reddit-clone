@@ -54,7 +54,7 @@ const App = () => {
   useEffect(() => {
     dispatch(initializePostVotes());
     dispatch(initializeSubscriptions());
-  }, [user, dispatch]);
+  }, []);
 
   return (
     <Router>

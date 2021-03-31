@@ -14,6 +14,7 @@ const PostView = () => {
   const posts = useSelector(state => {
     return state.posts;
   });
+  const user = useSelector(state => state.user);
 
   const match = useRouteMatch("/groups/:group/:id");
   const post = match
@@ -27,7 +28,7 @@ const PostView = () => {
       await dispatch(initializeBookmarks(match.params.id));
       await dispatch(initializeCommentVotes());
     };
-    init();
+    if (user.token !== null) init();
   }, [dispatch]);
 
   if (!post) {

@@ -36,6 +36,14 @@ export const removeVote = id => {
   };
 };
 
+export const clearVotes = () => {
+  return async dispatch => {
+    dispatch({
+      type: "CLEAR_POST_VOTES"
+    });
+  };
+};
+
 const reducer = (state = [], action) => {
   switch (action.type) {
     case "INITIALIZE_POST_VOTES":
@@ -46,6 +54,8 @@ const reducer = (state = [], action) => {
       return state.filter(vote => {
         return vote.id !== action.data.id;
       });
+    case "CLEAR_POST_VOTES":
+      return [];
     default:
       return state;
   }

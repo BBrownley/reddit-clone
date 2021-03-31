@@ -2,6 +2,8 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { logout } from "../../reducers/userReducer";
+import { clearVotes as clearPostVotes } from "../../reducers/userPostVotesReducer";
+import { clearVotes as clearCommentVotes } from "../../reducers/commentVotesReducer";
 
 import UserCard from "../UserCard/UserCard";
 
@@ -18,6 +20,8 @@ export default function Navigation() {
   const handleLogout = () => {
     localStorage.removeItem("loggedUser");
     dispatch(logout());
+    dispatch(clearPostVotes());
+    dispatch(clearCommentVotes());
   };
 
   return (

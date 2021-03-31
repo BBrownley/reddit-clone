@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useRouteMatch } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-import moment from "moment";
-
 import { useSelector, useDispatch } from "react-redux";
 
 import { initializePosts, removePost } from "../../reducers/postsReducer";
@@ -48,7 +46,11 @@ const PostList = ({ sortBy, searchBy, searchTerm, posts = undefined }) => {
     return posts;
   });
 
-  postsToDisplay = postListHelpers.sortPosts(postListHelpers.filterPosts(postsToDisplay));
+  postsToDisplay = postListHelpers.sortPosts(
+    postListHelpers.filterPosts(postsToDisplay)
+  );
+
+  // Infinite scrolling setup
 
   const initialNumItems = 20;
   const increment = 20;
@@ -57,7 +59,7 @@ const PostList = ({ sortBy, searchBy, searchTerm, posts = undefined }) => {
   const [postsToRender, setPostsToRender] = useState(
     postsToDisplay.slice(0, index)
   );
-  const allPosts = postsToDisplay; // array of posts
+  const allPosts = postsToDisplay;
 
   const continueScroll = () => {
     const next = allPosts.slice(index, index + increment);
@@ -72,15 +74,18 @@ const PostList = ({ sortBy, searchBy, searchTerm, posts = undefined }) => {
   };
 
   return (
-    <InfiniteScroll
-      dataLength={postsToRender.length}
-      next={continueScroll}
-      hasMore={true}
-    >
-      {postsToRender.map((post, index) => (
-        <Post post={post} key={post.postID} />
-      ))}
-    </InfiniteScroll>
+    <div>
+      <InfiniteScroll
+        dataLength={postsToRender.length}
+        next={continueScroll}
+        hasMore={true}
+        scrollThreshold={0.95}
+      >
+        {postsToRender.map(post => (
+          <Post post={post} key={post.postID} />
+        ))}
+      </InfiniteScroll>
+    </div>
   );
 };
 

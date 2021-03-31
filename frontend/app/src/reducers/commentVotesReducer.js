@@ -46,6 +46,14 @@ export const changeVote = (commentId, newValue) => {
   };
 };
 
+export const clearVotes = () => {
+  return async dispatch => {
+    dispatch({
+      type: "CLEAR_COMMENT_VOTES"
+    })
+  }
+}
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "INITIALIZE_COMMENT_VOTES":
@@ -62,6 +70,8 @@ const reducer = (state = initialState, action) => {
       });
     case "REMOVE_COMMENT_VOTE":
       return [...state.filter(vote => vote.comment_id !== action.commentId)];
+    case "CLEAR_COMMENT_VOTES":
+      return [];
     default:
       return state;
   }
