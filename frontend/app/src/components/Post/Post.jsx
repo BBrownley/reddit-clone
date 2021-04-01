@@ -20,7 +20,8 @@ import {
   Content,
   PostOptions,
   PostScore,
-  CommentCount
+  CommentCountSm,
+  CommentCountLg
 } from "../PostList/PostList.elements";
 
 import { FormContainer, FormField, ButtonGroup } from "../shared/Form.elements";
@@ -46,18 +47,12 @@ const Post = ({ post, options, expand, viewMode }) => {
   const [editValue, setEditValue] = useState(post.content);
   const [postContent, setPostContent] = useState(post.content);
 
-  const handleUpvotePost = async postID => {
-    await dispatch(addVote(postID, 1));
+  const handleVotePost = (postID, value) => {
+    if (user.token === undefined) {
+      return history.push("/login");
+    }
 
-    dispatch(initializePostVotes());
-    dispatch(initializePosts());
-  };
-
-  const handleDownvotePost = async postID => {
-    await dispatch(addVote(postID, -1));
-
-    dispatch(initializePostVotes());
-    dispatch(initializePosts());
+    dispatch(addVote(postID, value));
   };
 
   const handleEditPost = () => {
@@ -94,14 +89,14 @@ const Post = ({ post, options, expand, viewMode }) => {
   return (
     <Container key={post.postID} expand={expand}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", width: "100%" }}>
           {options !== false && (
             <VoteContainer>
               <VoteButton upvoted={userPostVote?.vote_value === 1 ? 1 : 0}>
                 <FontAwesome
                   name="arrow-circle-up"
                   className="upvote"
-                  onClick={() => handleUpvotePost(post.postID)}
+                  onClick={() => handleVotePost(post.postID, 1)}
                 />
               </VoteButton>
               <PostScore>{post.score}</PostScore>
@@ -109,13 +104,13 @@ const Post = ({ post, options, expand, viewMode }) => {
                 <FontAwesome
                   name="arrow-circle-down"
                   className="downvote"
-                  onClick={() => handleDownvotePost(post.postID)}
+                  onClick={() => handleVotePost(post.postID, -1)}
                 />
               </VoteButton>
             </VoteContainer>
           )}
 
-          <div>
+          <div style={{ flex: 1 }}>
             <PostHeader
               postLink={`/groups/${post.groupName.toLowerCase()}/${
                 post.postID
@@ -147,42 +142,61 @@ const Post = ({ post, options, expand, viewMode }) => {
 
             {options !== false && (
               <PostOptions>
-                {user.token && (
-                  <FollowButton followers={10} postId={post.postID} />
-                )}
-                {user && (
-                  <span>
-                    {user.userPosts && user.userPosts.includes(post.postID) ? (
-                      <>
-                        {viewMode && editing === false && (
-                          <span onClick={() => setEditing(true)}>Edit</span>
-                        )}
+                <div>
+                  {user.token && (
+                    <FollowButton followers={10} postId={post.postID} />
+                  )}
+                  {user && (
+                    <span>
+                      {user.userPosts &&
+                      user.userPosts.includes(post.postID) ? (
+                        <>
+                          {viewMode && editing === false && (
+                            <span onClick={() => setEditing(true)}>Edit</span>
+                          )}
 
-                        <span
-                          onClick={() => setConfirmDeletion(!confirmDeletion)}
-                        >
-                          <FontAwesome name="trash" /> Delete
-                        </span>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                    {confirmDeletion && <DeleteConfirmation />}
-                  </span>
-                )}
+                          <span
+                            onClick={() => setConfirmDeletion(!confirmDeletion)}
+                          >
+                            <FontAwesome name="trash" /> Delete
+                          </span>
+                        </>
+                      ) : (
+                        ""
+                      )}
+                      {confirmDeletion && <DeleteConfirmation />}
+                    </span>
+                  )}
+                </div>
+                <CommentCountLg>
+                  <div>
+                    <FontAwesome name="comments" className="comment-icon" /> {post.total_comments}{" "}
+                    Comments
+                  </div>
+                </CommentCountLg>
+                <CommentCountSm>
+                  <div>
+                    <FontAwesome name="comments"  className="comment-icon"/> {post.total_comments}
+                  </div>
+                </CommentCountSm>
               </PostOptions>
             )}
           </div>
         </div>
-        {options !== false && (
+        {/* {options !== false && (
           <div style={{ display: "flex", alignItems: "flex-end" }}>
-            <CommentCount>
+            <CommentCountLg>
               <div>
                 <FontAwesome name="comments" /> {post.total_comments} Comments
               </div>
-            </CommentCount>
+            </CommentCountLg>
+            <CommentCountSm>
+              <div>
+                <FontAwesome name="comments" /> {post.total_comments}
+              </div>
+            </CommentCountSm>
           </div>
-        )}
+        )} */}
       </div>
     </Container>
   );

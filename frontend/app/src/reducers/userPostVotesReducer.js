@@ -19,7 +19,8 @@ export const addVote = (id, vote_value) => {
     dispatch({
       type: "ADD_VOTE",
       data: {
-        id
+        id,
+        vote_value
       }
     });
   };
@@ -49,7 +50,10 @@ const reducer = (state = [], action) => {
     case "INITIALIZE_POST_VOTES":
       return action.data;
     case "ADD_VOTE":
-      return [...state, action.data];
+      return [
+        ...state,
+        { post_id: action.data.id, vote_value: action.data.vote_value }
+      ];
     case "REMOVE_VOTE":
       return state.filter(vote => {
         return vote.id !== action.data.id;

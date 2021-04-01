@@ -18,6 +18,9 @@ export const Post = styled.div`
     display: flex;
     width: 100%;
   }
+  .comment-icon {
+    margin-right: 5px;
+  }
 `;
 
 export const PostMain = styled.span`
@@ -61,6 +64,12 @@ export const Content = styled.div`
       `;
     }
   }}
+  @media (max-width: 900px) {
+    max-width: 60ch;
+  })
+  @media (max-width: 720px) {
+    max-width: 45ch;
+  })
 `;
 
 export const PostScore = styled.span`
@@ -68,9 +77,21 @@ export const PostScore = styled.span`
   font-size: 1.5rem;
 `;
 
-export const CommentCount = styled.span`
+export const CommentCountSm = styled.span`
   font-size: 24px;
   color: #777777;
+  display: inline-block;
+  @media (min-width: 1041px) {
+    display: none;
+  }
+`;
+
+export const CommentCountLg = styled.span`
+  font-size: 24px;
+  color: #777777;
+  @media (max-width: 1040px) {
+    display: none;
+  }
 `;
 
 export const VoteContainer = styled.div`
@@ -81,20 +102,6 @@ export const VoteContainer = styled.div`
   margin-right: 20px;
   color: #777;
   font-size: 25px;
-  /* position: relative;
-
-  .upvote,
-  .downvote {
-    position: absolute;
-  }
-
-  .upvote {
-    margin-bottom: 20px;
-  }
-
-  .downvote {
-    margin-top: 20px;
-  } */
 `;
 
 export const VoteButton = styled.span`
@@ -120,21 +127,9 @@ export const PostOptions = styled.div`
   color: #777;
   display: flex;
   align-items: center;
-  /* & > span {
-    margin-right: 10px;
-    padding: 4px;
-    border-radius: 5px;
-    &:hover {
-      background-color: #eee;
-      cursor: pointer;
-    }
+  justify-content: space-between;
+  div:nth-child(1) {
+    display: flex;
+    align-items: center;
   }
-  .favorite-active {
-    background-color: #eee;
-    color: #333;
-    font-weight: bold;
-    .fa-heart {
-      color: #fc74a4;
-    }
-  } */
 `;
