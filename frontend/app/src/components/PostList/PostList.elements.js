@@ -1,5 +1,9 @@
 import styled, { css } from "styled-components";
 
+export const Container = styled.div`
+ 
+`
+
 export const Post = styled.div`
   border-bottom: 1px solid #ddd;
   padding: 10px;
@@ -7,13 +11,7 @@ export const Post = styled.div`
   line-height: 1.5;
   display: flex;
   width: 100%;
-  &:hover {
-    ${props => {
-      if (props.expand !== true) {
-        return `background-color: #f5f5f5;`;
-      }
-    }}
-  }
+
   & > div {
     display: flex;
     width: 100%;

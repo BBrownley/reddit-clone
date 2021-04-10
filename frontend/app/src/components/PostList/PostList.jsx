@@ -10,16 +10,18 @@ import Post from "../Post/Post";
 
 import postListHelpers from "./helpers";
 
+import { Container } from "./PostList.elements";
+
 const PostList = ({ sortBy, searchBy, searchTerm, posts = undefined }) => {
   const match = useRouteMatch("/groups/:group");
 
   const userPostVotes = useSelector(state => state.userPostVotes);
 
-  const dispatch = useDispatch();
+  const increment = 20;
 
-  useEffect(() => {
-    dispatch(initializePosts());
-  }, [posts]);
+  const [currentIndex, setCurrentIndex] = useState(20);
+
+  const dispatch = useDispatch();
 
   let postsToDisplay = useSelector(state => {
     let posts = [];
@@ -43,49 +45,34 @@ const PostList = ({ sortBy, searchBy, searchTerm, posts = undefined }) => {
       }
     });
 
-    return posts;
+    return posts.slice(0, currentIndex);
   });
 
   postsToDisplay = postListHelpers.sortPosts(
     postListHelpers.filterPosts(postsToDisplay)
   );
 
-  // Infinite scrolling setup
-
-  const initialNumItems = 20;
-  const increment = 20;
-
-  const [index, setIndex] = useState(initialNumItems);
-  const [postsToRender, setPostsToRender] = useState(
-    postsToDisplay.slice(0, index)
-  );
-  const allPosts = postsToDisplay;
-
   const continueScroll = () => {
-    const next = allPosts.slice(index, index + increment);
-
-    if (index + increment > allPosts.length) {
-      setIndex(prevIndex => prevIndex + (allPosts.length - prevIndex));
-    } else {
-      setIndex(prevIndex => prevIndex + increment);
-    }
-
-    setPostsToRender(prevState => [...prevState, ...next]);
+    setCurrentIndex(prevState => prevState + increment);
   };
 
+  useEffect(() => {
+    dispatch(initializePosts());
+  }, []);
+
   return (
-    <div>
+    <Container>
       <InfiniteScroll
-        dataLength={postsToRender.length}
+        dataLength={currentIndex}
         next={continueScroll}
         hasMore={true}
-        scrollThreshold={0.95}
+        scrollThreshold={1}
       >
-        {postsToRender.map(post => (
+        {postsToDisplay.map(post => (
           <Post post={post} key={post.postID} />
         ))}
       </InfiniteScroll>
-    </div>
+    </Container>
   );
 };
 

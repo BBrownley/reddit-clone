@@ -39,12 +39,12 @@ const App = () => {
     const initialize = async () => {
       const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
       if (loggedUser) {
-        await dispatch(setUser(loggedUser));
+        dispatch(setUser(loggedUser));
       }
 
-      await dispatch(initializePosts());
-      await dispatch(initializeGroups());
-      await dispatch(initializeFollows());
+       dispatch(initializePosts());
+       dispatch(initializeGroups());
+       dispatch(initializeFollows());
       setLoading(false);
     };
 
