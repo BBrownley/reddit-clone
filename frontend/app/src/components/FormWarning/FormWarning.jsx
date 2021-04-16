@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-export default function Notification() {
+export default function FormWarning() {
   const notification = useSelector(state => state.notification);
 
   return (

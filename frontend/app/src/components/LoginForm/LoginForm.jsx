@@ -8,7 +8,7 @@ import { initializeVotes as initializePostVotes } from "../../reducers/userPostV
 import { clearRedirectPath } from "../../reducers/redirectReducer";
 import { removeNotification } from "../../reducers/notificationReducer";
 
-import Notification from "../../components/Notification/Notification";
+import FormWarning from "../FormWarning/FormWarning";
 
 const LoginForm = props => {
   const [username, setUsername] = useState("");
@@ -92,12 +92,6 @@ const LoginForm = props => {
         </FormField>
       </form>
 
-      {/* <Link to={{
-      pathname: '/template',
-      search: '?query=abc',
-      state: { detail: response.data }
-    }}> My Link </Link> */}
-
       <p>
         New user? Register{" "}
         <Link
@@ -114,7 +108,7 @@ const LoginForm = props => {
       <button type="submit" form="login-form">
         Login
       </button>
-      <Notification />
+      <FormWarning />
     </FormContainer>
   );
 };

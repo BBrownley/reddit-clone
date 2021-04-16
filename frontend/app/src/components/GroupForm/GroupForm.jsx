@@ -66,7 +66,7 @@ const GroupForm = () => {
       <button type="submit" form="group-form">
         Create Group
       </button>
-      {/* <Notification /> */}
+      {/* <FormWarning /> */}
     </FormContainer>
   );
 };

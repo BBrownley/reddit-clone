@@ -52,7 +52,7 @@ export default function MessageForm() {
       <button type="submit" form="register-form">
         Send
       </button>
-      {/* <Notification /> */}
+      {/* <FormWarning /> */}
     </FormContainer>
   );
 

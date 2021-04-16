@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { login, register } from "../../reducers/userReducer";
 import { removeNotification } from "../../reducers/notificationReducer";
 
-import Notification from "../../components/Notification/Notification";
+import FormWarning from "../FormWarning/FormWarning";
 
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 
@@ -115,7 +115,7 @@ const RegisterForm = () => {
       <button type="submit" form="register-form">
         Register
       </button>
-      <Notification />
+      <FormWarning />
     </FormContainer>
   );
 };

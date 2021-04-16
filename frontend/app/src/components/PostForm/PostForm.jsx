@@ -11,7 +11,7 @@ import { removeNotification } from "../../reducers/notificationReducer";
 import { addPostToUser } from "../../reducers/userReducer";
 import { addVote } from "../../reducers/userPostVotesReducer";
 
-import Notification from "../../components/Notification/Notification";
+import FormWarning from "../FormWarning/FormWarning";
 
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 
@@ -110,7 +110,7 @@ const PostForm = () => {
           Create Post
         </button>
       </div>
-      <Notification />
+      <FormWarning />
     </FormContainer>
   );
 };
