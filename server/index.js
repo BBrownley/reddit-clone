@@ -18,6 +18,7 @@ const commentsRouter = require("./controllers/comments");
 const messageRouter = require("./controllers/messages");
 const commentvotesRouter = require("./controllers/commentvotes");
 const bookmarksRouter = require("./controllers/bookmarks");
+const postVotesRouter = require("./controllers/postvotes");
 
 app.use("/groups", groupsRouter);
 app.use("/posts", postsRouter);
@@ -26,6 +27,7 @@ app.use("/comments", commentsRouter);
 app.use("/messages", messageRouter);
 app.use("/commentvotes", commentvotesRouter);
 app.use("/bookmarks", bookmarksRouter);
+app.use("/postvotes", postVotesRouter);
 
 app.get("/", async (req, res) => {
   let posts = await postsDB.all();

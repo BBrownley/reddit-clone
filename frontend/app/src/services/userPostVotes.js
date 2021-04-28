@@ -18,9 +18,30 @@ const getUserPostVotes = async () => {
   return req.data;
 };
 
+const removePostVote = async id => {
+  const config = {
+    headers: {
+      Authorization: storedToken
+    }
+  };
+  await axios.delete(`http://localhost:5000/postvotes/${id}`, config);
+};
+
+const changePostVote = async (id, updatedValue) => {
+  const config = {
+    headers: {
+      Authorization: storedToken
+    }
+  };
+
+  axios.put(`http://localhost:5000/postvotes/${id}`, { updatedValue }, config);
+};
+
 const userPostVotesService = {
   getUserPostVotes,
-  setToken
+  setToken,
+  removePostVote,
+  changePostVote
 };
 
 export default userPostVotesService;
