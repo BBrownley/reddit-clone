@@ -5,7 +5,7 @@ import { GroupInfo as Container } from "./GroupInfo.elements";
 
 import groupService from "../../services/groups";
 
-const GroupInfo = () => {
+const GroupInfo = ({ handleSetGroupExists }) => {
   const [group, setGroup] = useState({});
 
   const groupMatch = useRouteMatch("/groups/:groupName");
@@ -17,6 +17,10 @@ const GroupInfo = () => {
     };
     fetchGroup(groupMatch.params.groupName);
   }, [groupMatch.params.groupName]);
+
+  if (!group) {
+    handleSetGroupExists(false);
+  }
 
   return (
     <Container>

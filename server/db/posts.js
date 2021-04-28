@@ -27,7 +27,6 @@ const q = `
 `;
 
 const all = () => {
-  console.log("Fetching posts");
   return new Promise((resolve, reject) => {
     connection.query(q, (err, results) => {
       if (err) {
@@ -44,7 +43,6 @@ const create = (data, token) => {
     const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
 
     // Ensure title and group are filled in, content can be empty
-    console.log(data);
 
     const title = data.title;
     const groupID = data.groupID;
@@ -100,25 +98,16 @@ const create = (data, token) => {
 
 const vote = (data, postID, token) => {
   return new Promise((resolve, reject) => {
-    //console.log(data);
     // Verify user
     const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
-    console.log({
-      user_id: decodedToken.id,
-      post_id: postID,
-      value: data.value
-    });
-    // Check to see if user already voted or not
 
+    // Check to see if user already voted or not
     connection.query(
       `SELECT * FROM post_votes WHERE user_id = ? AND post_id = ?`,
       [decodedToken.id, postID],
       (err, results) => {
         if (results.length !== 0) {
           const prevVoteValue = results[0].vote_value;
-
-          console.log(`Previous vote value: ${prevVoteValue}`);
-          console.log(`Passed in vote value: ${data.value}`);
 
           // Two cases:
 
@@ -128,7 +117,6 @@ const vote = (data, postID, token) => {
               `DELETE FROM post_votes WHERE user_id = ? AND post_id = ?`,
               [decodedToken.id, postID],
               (err, results) => {
-                console.log(`Vote object: ${results[0]}`);
                 resolve({ ...data, hasVoted: true, prevVoteValue });
               }
             );
@@ -143,7 +131,6 @@ const vote = (data, postID, token) => {
               `,
               [data.value, decodedToken.id, postID],
               (err, results) => {
-                console.log(`Vote object: ${results[0]}`);
                 resolve({ ...data, hasVoted: true, prevVoteValue });
               }
             );
@@ -173,32 +160,22 @@ const vote = (data, postID, token) => {
 
 const getPostsByToken = token => {
   return new Promise(async (resolve, reject) => {
-    console.log(`LINE 173 ${token} LINE 173`);
-
     const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
     const userId = decodedToken.id;
 
-    console.log(decodedToken);
+    const query = `SELECT id FROM posts WHERE submitter_id = ?`;
 
-    connection.query(
-      `
-    
-    SELECT id FROM posts WHERE submitter_id = ?
-
-    `,
-      [userId],
-      (err, results) => {
-        if (err) {
-          return reject(err);
-        }
-        // Return their IDs
-        resolve(
-          results.reduce((acc, curr) => {
-            return [...acc, curr.id];
-          }, [])
-        );
+    connection.query(query, [userId], (err, results) => {
+      if (err) {
+        return reject(err);
       }
-    );
+      // Return their IDs
+      resolve(
+        results.reduce((acc, curr) => {
+          return [...acc, curr.id];
+        }, [])
+      );
+    });
   });
 };
 
@@ -206,24 +183,16 @@ const deletePost = (token, postId) => {
   return new Promise(async (resolve, reject) => {
     const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
     const submitterId = decodedToken.id;
+    const query = `DELETE FROM posts WHERE posts.id = ? AND submitter_id = ?`;
+    connection.query(query, [postId, submitterId], (err, results) => {
+      console.log(JSON.stringify(results));
 
-    connection.query(
-      `
-    
-   DELETE FROM posts WHERE posts.id = ? AND submitter_id = ?
-
-    `,
-      [postId, submitterId],
-      (err, results) => {
-        console.log(JSON.stringify(results));
-
-        if (err) {
-          return reject(new Error("An unexpected error has occured"));
-        }
-
-        resolve({ message: "Post successfully deleted" });
+      if (err) {
+        return reject(new Error("An unexpected error has occured"));
       }
-    );
+
+      resolve({ message: "Post successfully deleted" });
+    });
   });
 };
 

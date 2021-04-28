@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouteMatch } from "react-router-dom";
 
 import GroupInfo from "../GroupInfo/GroupInfo";
 import PostList from "../PostList/PostList";
 import GroupActions from "../GroupActions/GroupActions";
 
-export default function SingleGroupView({ all }) {
+export default function SingleGroupView({ all, handleSetGroupExists }) {
   const [sortBy, setSortBy] = useState("new");
   const [searchBy, setSearchBy] = useState("title");
   const [searchTerm, setSearchTerm] = useState("");
@@ -30,9 +30,19 @@ export default function SingleGroupView({ all }) {
     setSearchTerm("");
   };
 
+  const checkForGroup = () => {
+
+  }
+
+  useEffect(() => {
+    return () => {
+      handleSetGroupExists(true);
+    };
+  });
+
   return (
     <div>
-      {!all && <GroupInfo />}
+      {!all && <GroupInfo handleSetGroupExists={handleSetGroupExists} />}
       <GroupActions />
       <div>
         <strong>Sort posts by:</strong>

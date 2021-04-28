@@ -37,6 +37,18 @@ export const removeVote = id => {
   };
 };
 
+export const switchVote = (postId, newValue) => {
+  return async dispatch => {
+    dispatch({
+      type: "SWITCH_VOTE",
+      data: {
+        postId,
+        newValue
+      }
+    });
+  };
+};
+
 export const clearVotes = () => {
   return async dispatch => {
     dispatch({
@@ -56,7 +68,14 @@ const reducer = (state = [], action) => {
       ];
     case "REMOVE_VOTE":
       return state.filter(vote => {
-        return vote.id !== action.data.id;
+        return vote.post_id !== action.data.id;
+      });
+    case "SWITCH_VOTE":
+      return state.map(vote => {
+        if (vote.post_id === action.data.postId) {
+          return { ...vote, vote_value: vote.vote_value * -1 };
+        }
+        return vote;
       });
     case "CLEAR_POST_VOTES":
       return [];

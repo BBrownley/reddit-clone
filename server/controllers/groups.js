@@ -47,9 +47,19 @@ groupsRouter.get("/subscriptions", async (req, res, next) => {
   }
 });
 
+groupsRouter.param("groupName", async (req, res, next, groupName) => {
+  const group = await groupsDB.getGroupByName(groupName);
+  if (group) {
+    req.group = group;
+  } else {
+    next(new Error("Group not found"));
+  };
+  next();
+});
+
 groupsRouter.get("/:groupName", async (req, res) => {
-  let group = await groupsDB.getGroupByName(req.params.groupName);
-  res.json(group);
+  // let group = await groupsDB.getGroupByName(req.params.groupName);
+  res.json(req.group);
 });
 
 module.exports = groupsRouter;

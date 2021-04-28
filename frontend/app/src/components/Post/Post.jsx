@@ -5,7 +5,9 @@ import { useSelector, useDispatch } from "react-redux";
 
 import {
   initializeVotes as initializePostVotes,
-  addVote
+  addVote,
+  removeVote,
+  switchVote
 } from "../../reducers/userPostVotesReducer";
 import {
   initializePosts,
@@ -47,12 +49,27 @@ const Post = ({ post, options, expand, viewMode }) => {
   const [editValue, setEditValue] = useState(post.content);
   const [postContent, setPostContent] = useState(post.content);
 
-  const handleVotePost = (postID, value) => {
+  const handleVotePost = (postId, clickedValue) => {
     if (user.token === undefined) {
       return history.push("/login");
     }
 
-    dispatch(addVote(postID, value));
+    if (userPostVote) {
+      // Determine whether to just remove the vote, or switch it
+      // dispatch(removeVote(postID, value));
+      console.log(userPostVote);
+      console.log(clickedValue);
+
+      if (userPostVote.vote_value !== clickedValue) {
+        console.log("Switch vote");
+        dispatch(switchVote(postId, clickedValue));
+      } else {
+        console.log("Remove vote");
+        dispatch(removeVote(postId));
+      }
+    } else {
+      dispatch(addVote(postId, clickedValue));
+    }
   };
 
   const handleEditPost = () => {
@@ -99,7 +116,12 @@ const Post = ({ post, options, expand, viewMode }) => {
                   onClick={() => handleVotePost(post.postID, 1)}
                 />
               </VoteButton>
-              <PostScore>{post.score}</PostScore>
+              <PostScore>
+                {userPostVote
+                  ? Math.max(post.score + userPostVote.vote_value, 0)
+                  : Math.max(post.score, 0)}
+              </PostScore>
+
               <VoteButton downvoted={userPostVote?.vote_value === -1 ? 1 : 0}>
                 <FontAwesome
                   name="arrow-circle-down"
@@ -170,13 +192,14 @@ const Post = ({ post, options, expand, viewMode }) => {
                 </div>
                 <CommentCountLg>
                   <div>
-                    <FontAwesome name="comments" className="comment-icon" /> {post.total_comments}{" "}
-                    Comments
+                    <FontAwesome name="comments" className="comment-icon" />{" "}
+                    {post.total_comments} Comments
                   </div>
                 </CommentCountLg>
                 <CommentCountSm>
                   <div>
-                    <FontAwesome name="comments"  className="comment-icon"/> {post.total_comments}
+                    <FontAwesome name="comments" className="comment-icon" />{" "}
+                    {post.total_comments}
                   </div>
                 </CommentCountSm>
               </PostOptions>

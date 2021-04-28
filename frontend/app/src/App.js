@@ -30,6 +30,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(true);
+  const [groupExists, setGroupExists] = useState(true);
 
   const user = useSelector(state => {
     return state.user;
@@ -42,9 +43,9 @@ const App = () => {
         dispatch(setUser(loggedUser));
       }
 
-       dispatch(initializePosts());
-       dispatch(initializeGroups());
-       dispatch(initializeFollows());
+      dispatch(initializePosts());
+      dispatch(initializeGroups());
+      dispatch(initializeFollows());
       setLoading(false);
     };
 
@@ -67,7 +68,10 @@ const App = () => {
             <Switch>
               <Route exact path="/">
                 <h2>Welcome to my Reddit clone! :)</h2>
-                <SingleGroupView all={true} />
+                <SingleGroupView
+                  all={true}
+                  handleSetGroupExists={setGroupExists}
+                />
               </Route>
 
               <Route exact path="/register" component={RegisterForm} />
@@ -76,9 +80,14 @@ const App = () => {
               <Route exact path="/inbox/message" component={MessageView} />
               <Route exact path="/sandbox" component={Sandbox} />
 
-              <Route exact path={["/groups/:group"]}>
-                <SingleGroupView />
-              </Route>
+              {groupExists && (
+                <Route exact path={["/groups/:group"]}>
+                  <SingleGroupView
+                    all={false}
+                    handleSetGroupExists={setGroupExists}
+                  />
+                </Route>
+              )}
 
               <Route exact path="/creategroup" component={GroupForm} />
               <Route path="/create" component={PostForm} />

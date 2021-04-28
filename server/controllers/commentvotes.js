@@ -97,9 +97,7 @@ commentvotesRouter.post("/", async (req, res, next) => {
 commentvotesRouter.put("/", async (req, res, next) => {
   const updateVote = (userId, commentId, newValue) => {
     return new Promise((resolve, reject) => {
-      console.log(newValue);
-      console.log(commentId);
-      console.log(userId);
+
       const query = `
         UPDATE comment_votes
         SET vote_value = ?
@@ -116,7 +114,7 @@ commentvotesRouter.put("/", async (req, res, next) => {
           `;
           connection.query(query, [commentId, userId], (err, results) => {
             if (err) {
-              console.log("Unable to fetch recently updated comment");
+  
               reject(new Error("Unable to fetch recently updated comment"));
             } else {
               resolve(results[0]);
@@ -152,14 +150,12 @@ commentvotesRouter.delete("/", async (req, res, next) => {
         DELETE FROM comment_votes
         WHERE user_id = ? AND comment_id = ?
       `;
-      console.log(query);
+    
       connection.query(query, [userId, commentId], err => {
         if (err) {
-          console.log("unable to remove vote");
           console.log(err);
           return reject(new Error("Unable to delete comment vote"));
         } else {
-          console.log("vote removed");
           resolve();
         }
       });
@@ -167,7 +163,7 @@ commentvotesRouter.delete("/", async (req, res, next) => {
   };
 
   try {
-    console.log("hello");
+   
     const token = req.headers.authorization;
 
     const decodedToken = await jwt.verify(
@@ -175,8 +171,7 @@ commentvotesRouter.delete("/", async (req, res, next) => {
       process.env.SECRET
     );
     const userId = decodedToken.id;
-    console.log(userId);
-    console.log(req.body.commentId);
+
     deleteVote(userId, req.body.commentId);
     res.json({ message: "Comment vote deleted" });
   } catch (exception) {

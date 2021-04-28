@@ -1,16 +1,17 @@
 const connection = require("./index").connection;
 const jwt = require("jsonwebtoken");
 
-const q = `
-  SELECT 
-    group_name,
-    created_at AS created_at,
-    id,
-    blurb
-  FROM groups
-`;
+
 
 const all = () => {
+  const q = `
+    SELECT 
+      group_name,
+      created_at AS created_at,
+      id,
+      blurb
+    FROM groups
+`;
   return new Promise((resolve, reject) => {
     connection.query(q, (err, results) => {
       if (err) {

@@ -89,6 +89,16 @@ const vote = async (postID, value) => {
   return data;
 };
 
+const removeVote = async (postId) => {
+  const config = {
+    headers: {
+      Authorization: storedToken
+    }
+  };
+  const body = {postId};
+  axios.delete()
+}
+
 const removePost = async postId => {
   const config = {
     headers: {
