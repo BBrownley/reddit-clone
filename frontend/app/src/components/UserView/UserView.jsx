@@ -107,7 +107,13 @@ export default function UserView() {
           <p>Posts: 0</p>
           <p>Comments: 0</p>
           <p>Account created {moment(user.created_at).fromNow()}</p>
-          <button onClick={handleSendMessageButton}>Send message</button>
+          {(() => {
+            if (loggedUserId !== null && matchesLoggedUser === false) {
+              return (
+                <button onClick={handleSendMessageButton}>Send message</button>
+              );
+            }
+          })()}
         </ProfileInfo>
         <ButtonGroup>
           <li

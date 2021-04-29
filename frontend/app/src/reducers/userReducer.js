@@ -12,6 +12,7 @@ import { timedNotification } from "../reducers/notificationReducer";
 const initialState = {
   username: null,
   token: null,
+  userId: null,
   postFollows: [],
   commentVotes: []
 };
