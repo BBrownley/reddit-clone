@@ -32,7 +32,7 @@ export default function FollowButton({ followers, postId }) {
   return (
     <div>
       {(() => {
-        if (userPostFollows.includes(postId)) {
+        if (userPostFollows !== undefined && userPostFollows.includes(postId)) {
           return (
             <StyledButton color={"pink-secondary"} onClick={() => unfollow()}>
               <InvisText>

@@ -25,6 +25,16 @@ export const register = credentials => {
       dispatch(timedNotification(data.error, 3000));
       return false;
     } else {
+      localStorage.setItem(
+        "loggedUser",
+        JSON.stringify({
+          postFollows: [],
+          token: data.token,
+          userId: data.userId,
+          userPosts: [],
+          username: credentials.username
+        })
+      );
       dispatch({
         type: "LOGIN",
         data

@@ -56,9 +56,10 @@ const register = userInfo => {
         if (error) {
           console.log(error);
         } else {
-          console.log("User registered");
-          console.log(results);
-          resolve(results);
+          const userInfo = { username, id: results.insertId };
+          const token = `bearer ${jwt.sign(userInfo, process.env.SECRET)}`;
+
+          resolve({ userId: results.insertId, token }); // Pass id, token to client for localStorage
         }
       }
     );
