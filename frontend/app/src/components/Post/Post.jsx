@@ -50,21 +50,22 @@ const Post = ({ post, options, expand, viewMode }) => {
   const [postContent, setPostContent] = useState(post.content);
 
   const handleVotePost = (postId, clickedValue) => {
-    if (user.token === undefined) {
-      return history.push("/login");
+    if (user.token === null) {
+      return history.push({
+        pathname: "/login",
+        state: {
+          headerMessage: "Log in to vote on posts",
+          creatingPost: false
+        }
+      });
     }
 
     if (userPostVote) {
       // Determine whether to just remove the vote, or switch it
-      // dispatch(removeVote(postID, value));
-      console.log(userPostVote);
-      console.log(clickedValue);
 
       if (userPostVote.vote_value !== clickedValue) {
-        console.log("Switch vote");
         dispatch(switchVote(postId, clickedValue));
       } else {
-        console.log("Remove vote");
         dispatch(removeVote(postId));
       }
     } else {
@@ -73,8 +74,6 @@ const Post = ({ post, options, expand, viewMode }) => {
   };
 
   const handleEditPost = () => {
-    console.log(editValue);
-    console.log(post.postID);
     dispatch(editPost(post.postID, editValue));
     setPostContent(editValue);
     setEditing(false);

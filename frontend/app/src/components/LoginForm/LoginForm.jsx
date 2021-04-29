@@ -54,17 +54,8 @@ const LoginForm = props => {
     }
   };
 
-  let headerMessage;
-  let creatingPost; // Did the user end up here from attempting to make a new post while not logged in?
-
-  // TODO: Make this more concise!
-  try {
-    headerMessage = location.state.headerMessage;
-    creatingPost = location.state.creatingPost;
-  } catch (e) {
-    headerMessage = "Login";
-    creatingPost = false;
-  }
+  let headerMessage = location.state?.headerMessage || "Login";
+  let creatingPost = location.state?.creatingPost || false; // Did the user end up here from attempting to make a new post while not logged in?
 
   return (
     <FormContainer>

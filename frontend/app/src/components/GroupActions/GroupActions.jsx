@@ -31,7 +31,7 @@ const GroupActions = () => {
   });
 
   const handleCreatePostButton = () => {
-    if (loggedUser) {
+    if (loggedUser.userId !== null) {
       history.push("/create");
     } else {
       dispatch(setRedirectPath("/create"));
@@ -43,7 +43,7 @@ const GroupActions = () => {
   };
 
   const handleSubscribe = () => {
-    if (loggedUser) {
+    if (loggedUser.userId !== null) {
       dispatch(subscribeToGroup(currentGroup, loggedUser));
     } else {
       history.push({
