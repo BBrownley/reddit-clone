@@ -32,7 +32,7 @@ export const register = credentials => {
           token: data.token,
           userId: data.userId,
           userPosts: [],
-          username: credentials.username
+          username: credentials.data.username
         })
       );
       dispatch({
