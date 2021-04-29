@@ -26,7 +26,7 @@ const register = userInfo => {
       [username],
       async (error, results) => {
         if (error) {
-          console.log(error);
+          reject(new Error(error.message));
         }
         if (results.length > 0) {
           return reject(new Error("Username already in use"));
@@ -39,7 +39,7 @@ const register = userInfo => {
       [email],
       async (error, results) => {
         if (error) {
-          console.log(error);
+          reject(new Error(error.message));
         }
         if (results.length > 0) {
           return reject(new Error("Email already in use"));
@@ -54,7 +54,7 @@ const register = userInfo => {
       { username, hashed_password, email },
       (error, results) => {
         if (error) {
-          console.log(error);
+          reject(new Error(error.message));
         } else {
           const userInfo = { username, id: results.insertId };
           const token = `bearer ${jwt.sign(userInfo, process.env.SECRET)}`;

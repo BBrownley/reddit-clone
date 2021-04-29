@@ -97,7 +97,6 @@ commentvotesRouter.post("/", async (req, res, next) => {
 commentvotesRouter.put("/", async (req, res, next) => {
   const updateVote = (userId, commentId, newValue) => {
     return new Promise((resolve, reject) => {
-
       const query = `
         UPDATE comment_votes
         SET vote_value = ?
@@ -114,7 +113,6 @@ commentvotesRouter.put("/", async (req, res, next) => {
           `;
           connection.query(query, [commentId, userId], (err, results) => {
             if (err) {
-  
               reject(new Error("Unable to fetch recently updated comment"));
             } else {
               resolve(results[0]);
@@ -150,7 +148,7 @@ commentvotesRouter.delete("/", async (req, res, next) => {
         DELETE FROM comment_votes
         WHERE user_id = ? AND comment_id = ?
       `;
-    
+
       connection.query(query, [userId, commentId], err => {
         if (err) {
           console.log(err);
@@ -163,7 +161,6 @@ commentvotesRouter.delete("/", async (req, res, next) => {
   };
 
   try {
-   
     const token = req.headers.authorization;
 
     const decodedToken = await jwt.verify(

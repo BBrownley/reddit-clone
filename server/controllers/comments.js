@@ -76,27 +76,27 @@ commentsRouter.get("/:commentId/children", async (req, res, next) => {
   const fetchChildren = () => {
     return new Promise((resolve, reject) => {
       const query = `
-      SELECT
-        comments.id AS comment_id,
-        commenter_id,
-        comments.created_at AS created_at,
-        parent_id,
-        content,
-        post_id,
-        users.id AS user_id,
-        users.username AS username,
-        deleted,
-        (
-        SELECT CASE WHEN
-            SUM(vote_value) < 1 OR SUM(vote_value) IS NULL THEN 0 
-            ELSE SUM(vote_value)
-        END
-        ) AS comment_score FROM comments
+        SELECT
+          comments.id AS comment_id,
+          commenter_id,
+          comments.created_at AS created_at,
+          parent_id,
+          content,
+          post_id,
+          users.id AS user_id,
+          users.username AS username,
+          deleted,
+          (
+          SELECT CASE WHEN
+              SUM(vote_value) < 1 OR SUM(vote_value) IS NULL THEN 0 
+              ELSE SUM(vote_value)
+          END
+          ) AS comment_score FROM comments
 
-      LEFT JOIN comment_votes ON comment_votes.comment_id = comments.id
-      JOIN users ON comments.commenter_id = users.id
-      WHERE parent_id = ?
-      GROUP BY comments.id
+        LEFT JOIN comment_votes ON comment_votes.comment_id = comments.id
+        JOIN users ON comments.commenter_id = users.id
+        WHERE parent_id = ?
+        GROUP BY comments.id
       `;
       connection.query(query, [req.params.commentId], (err, results) => {
         if (err) {
@@ -116,9 +116,6 @@ commentsRouter.get("/:commentId/children", async (req, res, next) => {
 });
 
 commentsRouter.post("/", async (req, res, next) => {
-  const token = req.headers.authorization;
-  const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
-  console.log(req.body);
   const postComment = () => {
     return new Promise((resolve, reject) => {
       const query = `
@@ -128,7 +125,7 @@ commentsRouter.post("/", async (req, res, next) => {
       connection.query(
         query,
         {
-          commenter_id: decodedToken.id,
+          commenter_id: token.id,
           parent_id: req.body.parentId,
           content: req.body.comment,
           post_id: req.body.postId
@@ -145,7 +142,7 @@ commentsRouter.post("/", async (req, res, next) => {
               resolve({
                 ...results[0],
                 comment_id: results[0].id,
-                username: decodedToken.username
+                username: token.username
               });
             });
           }
@@ -154,7 +151,13 @@ commentsRouter.post("/", async (req, res, next) => {
     });
   };
   try {
-    const newComment = await postComment();
+    const token = req.headers.authorization;
+    const decodedToken = await jwt.verify(
+      token.split(" ")[1],
+      process.env.SECRET
+    );
+
+    const newComment = await postComment(decodedToken);
     res.json(newComment);
   } catch (exception) {
     next(exception);
@@ -173,7 +176,6 @@ commentsRouter.put(`/:commentId`, async (req, res, next) => {
       connection.query(query, [updatedContent, commentId], (err, results) => {
         if (err) {
           reject(new Error("Unable to update comment"));
-          console.log(err.message);
         } else {
           resolve({ message: "Comment successfully updated" });
         }
@@ -208,6 +210,8 @@ commentsRouter.put("/:commentId/remove", async (req, res, next) => {
   };
 
   try {
+    const token = req.headers.authorization;
+    await jwt.verify(token.split(" ")[1], process.env.SECRET);
     const success = await removeComment(req.params.commentId);
     res.send(success);
   } catch (exception) {

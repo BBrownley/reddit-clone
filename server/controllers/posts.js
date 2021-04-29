@@ -160,6 +160,8 @@ postsRouter.put("/:id", async (req, res, next) => {
   };
 
   try {
+    const userToken = req.headers.authorization.split(" ")[1];
+    await jwt.verify(userToken, process.env.SECRET);
     const success = await editPost(req.params.id, req.body.newValue);
     res.json(success);
   } catch (exception) {

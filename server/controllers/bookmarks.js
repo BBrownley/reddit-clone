@@ -30,9 +30,6 @@ bookmarksRouter.get("/", async (req, res, next) => {
   };
   try {
     const token = req.headers.authorization;
-    console.log(token);
-    console.log(token);
-    console.log(token);
     const user = await jwt.verify(token.split(" ")[1], process.env.SECRET);
 
     const userBookmarks = await getUserBookmarks(user.id, req.body.postId);
@@ -63,9 +60,6 @@ bookmarksRouter.get("/post/:postId", async (req, res, next) => {
   try {
     const token = req.headers.authorization;
 
-    console.log(token);
-    console.log(token);
-
     const user = await jwt.verify(token.split(" ")[1], process.env.SECRET);
 
     const userPostBookmarks = await getBookmarksByPostId(
@@ -93,7 +87,6 @@ bookmarksRouter.post("/", async (req, res, next) => {
         },
         (err, results) => {
           if (err) {
-            console.log(err.message);
             reject(new Error("Unable to create new bookmark"));
           } else {
             const query = `
@@ -116,9 +109,6 @@ bookmarksRouter.post("/", async (req, res, next) => {
   try {
     const token = req.headers.authorization;
     const user = await jwt.verify(token.split(" ")[1], process.env.SECRET);
-
-    console.log(user.id);
-    console.log(req.body.commentId);
 
     const bookmark = await newBookmark(user.id, req.body.commentId);
     res.json(bookmark);

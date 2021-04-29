@@ -36,8 +36,6 @@ messageRouter.post("/", async (req, res, next) => {
         INSERT INTO messages SET ?
       `;
 
-      console.log(message);
-
       connection.query(
         query,
         {
@@ -97,8 +95,6 @@ messageRouter.post("/followers/:postId", async (req, res, next) => {
             };
           });
 
-          console.log(messageValues);
-
           connection.query(query, [...messageValues], (err, results) => {
             if (err) {
               reject(new Error(err.message));
@@ -110,7 +106,6 @@ messageRouter.post("/followers/:postId", async (req, res, next) => {
     });
   };
   try {
-    console.log(req.body.message);
     await notifyFollowers(req.body.message);
   } catch (exception) {
     next(exception);
@@ -136,7 +131,8 @@ messageRouter.put("/", async (req, res, next) => {
   };
 
   try {
-    // TODO: Authentication
+    const token = req.headers.authorization;
+    await jwt.verify(token.split(" ")[1], process.env.SECRET);
     const success = setMessageRead(req.body.id);
     res.json(success);
   } catch (exception) {
@@ -148,12 +144,11 @@ messageRouter.delete("/", async (req, res, next) => {
   const deleteMessage = messageId => {
     return new Promise((resolve, reject) => {
       const query = `
-      DELETE FROM messages
-      WHERE id = ?
-    `;
+        DELETE FROM messages
+        WHERE id = ?
+      `;
       connection.query(query, [messageId], (err, results) => {
         if (err) {
-          console.log(err);
           reject(new Error("Unable to delete message"));
         } else {
           resolve({ message: "Message deleted" });
@@ -163,7 +158,8 @@ messageRouter.delete("/", async (req, res, next) => {
   };
 
   try {
-    // TODO: Authentication
+    const token = req.headers.authorization;
+    await jwt.verify(token.split(" ")[1], process.env.SECRET);
     const success = deleteMessage(req.body.id);
     res.json(success);
   } catch (exception) {

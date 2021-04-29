@@ -48,6 +48,11 @@ const sendAll = async (message, postId) => {
 };
 
 const setRead = async id => {
+  const config = {
+    headers: {
+      Authorization: storedToken
+    }
+  };
   axios.put(`http://localhost:5000/messages`, { id }, config);
 };
 
