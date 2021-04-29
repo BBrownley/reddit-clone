@@ -28,7 +28,7 @@ export const InboxLink = styled(StyledLink)`
     padding: 0 0.5rem;
     margin-left: 0.5rem;
     border-radius: 1000px;
-    font-size: 12px;
+    font-size: .75rem;
   }
   &:hover {
     text-decoration: underline;

@@ -30,7 +30,7 @@ const InboxLink = styled.a`
     padding: 0 0.5rem;
     margin-left: 0.5rem;
     border-radius: 1000px;
-    font-size: 12px;
+    font-size: .75rem;
   }
 `;
 

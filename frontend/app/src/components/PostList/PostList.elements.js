@@ -37,7 +37,7 @@ export const PostMain = styled.span`
 export const Title = styled.div`
   color: #222;
   font-weight: bold;
-  font-size: 24px;
+  font-size: 1.5rem;
   display: inline-block;
   &:hover {
     cursor: pointer;
@@ -76,7 +76,7 @@ export const PostScore = styled.span`
 `;
 
 export const CommentCountSm = styled.span`
-  font-size: 24px;
+  font-size: 1.5rem;
   color: #777777;
   display: inline-block;
   @media (min-width: 1041px) {
@@ -85,7 +85,7 @@ export const CommentCountSm = styled.span`
 `;
 
 export const CommentCountLg = styled.span`
-  font-size: 24px;
+  font-size: 1.5rem;
   color: #777777;
   @media (max-width: 1040px) {
     display: none;
@@ -99,7 +99,7 @@ export const VoteContainer = styled.div`
   align-items: center;
   margin-right: 20px;
   color: #777;
-  font-size: 25px;
+  font-size: 1.5rem;
 `;
 
 export const VoteButton = styled.span`
@@ -121,7 +121,7 @@ export const VoteButton = styled.span`
 `;
 
 export const PostOptions = styled.div`
-  font-size: 14px;
+  font-size: .875rem;
   color: #777;
   display: flex;
   align-items: center;
