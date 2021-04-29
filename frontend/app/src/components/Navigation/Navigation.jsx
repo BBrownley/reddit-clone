@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import { logout } from "../../reducers/userReducer";
 import { clearVotes as clearPostVotes } from "../../reducers/userPostVotesReducer";
@@ -12,6 +13,7 @@ import StyledLink from "../shared/NavLink.elements";
 
 export default function Navigation() {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const user = useSelector(state => {
     return state.user;
@@ -22,6 +24,12 @@ export default function Navigation() {
     dispatch(logout());
     dispatch(clearPostVotes());
     dispatch(clearCommentVotes());
+
+    const userOnlyRoutes = ["/create", "/creategroup"];
+
+    if (userOnlyRoutes.find(route => window.location.pathname === route)) {
+      history.push("/");
+    }
   };
 
   return (
