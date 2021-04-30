@@ -18,7 +18,7 @@ groupsRouter.post("/create", async (req, res, next) => {
 
 groupsRouter.post("/subscribe", async (req, res, next) => {
   try {
-    const subscriptionInfo = await groupsDB.subscribe(req.body.id);
+    const subscriptionInfo = await groupsDB.subscribe(req.body.id, req.userId);
     res.json(subscriptionInfo);
   } catch (exception) {
     next(exception);
@@ -27,7 +27,7 @@ groupsRouter.post("/subscribe", async (req, res, next) => {
 
 groupsRouter.delete("/subscription", async (req, res, next) => {
   try {
-    const unsub = await groupsDB.unsubscribe(req.body.id);
+    const unsub = await groupsDB.unsubscribe(req.body.id, req.userId);
     res.json(unsub);
   } catch (exception) {
     next(exception);
@@ -36,7 +36,7 @@ groupsRouter.delete("/subscription", async (req, res, next) => {
 
 groupsRouter.get("/subscriptions", async (req, res, next) => {
   try {
-    const subscriptions = await groupsDB.getSubscriptions();
+    const subscriptions = await groupsDB.getSubscriptions(req.userId);
     res.json(subscriptions);
   } catch (exception) {
     next(exception);

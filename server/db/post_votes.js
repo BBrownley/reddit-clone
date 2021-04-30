@@ -17,21 +17,18 @@ const getPostScore = postID => {
   });
 };
 
-const getUserPostVotes = token => {
+const getUserPostVotes = userId => {
   return new Promise((resolve, reject) => {
-    if (req.userId === undefined) {
-      return reject(new Error("No JWT provided - cannot load user post votes"));
-    }
 
     connection.query(
       `
       SELECT post_id, vote_value FROM post_votes
       WHERE user_id = ?
     `,
-      [req.userId],
+      [userId],
       (err, results) => {
         if (err) {
-          return reject(new Error("An unexpected error has occured"));
+          return reject(new Error("Cannot load user post votes"));
         } else {
           resolve(results);
         }

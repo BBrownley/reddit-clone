@@ -36,7 +36,7 @@ const all = () => {
   });
 };
 
-const create = (data, token) => {
+const create = (data, userId) => {
   return new Promise((resolve, reject) => {
     // Ensure title and group are filled in, content can be empty
 
@@ -54,7 +54,7 @@ const create = (data, token) => {
     connection.query(
       `INSERT INTO posts SET ? `,
       {
-        submitter_id: req.userId,
+        submitter_id: userId,
         group_id: data.groupID,
         title: data.title,
         content: data.content
@@ -92,12 +92,12 @@ const create = (data, token) => {
   });
 };
 
-const vote = (data, postID, token) => {
+const vote = (data, postID, userId) => {
   return new Promise((resolve, reject) => {
     // Check to see if user already voted or not
     connection.query(
       `SELECT * FROM post_votes WHERE user_id = ? AND post_id = ?`,
-      [req.userId, postID],
+      [userId, postID],
       (err, results) => {
         if (err) {
           reject(new Error("Unable to vote on post"));
@@ -112,7 +112,7 @@ const vote = (data, postID, token) => {
             // 1) prevVoteValue === data.value => Just remove the vote
             connection.query(
               `DELETE FROM post_votes WHERE user_id = ? AND post_id = ?`,
-              [decodedToken.id, postID],
+              [userId, postID],
               (err, results) => {
                 resolve({ ...data, hasVoted: true, prevVoteValue });
               }
@@ -126,7 +126,7 @@ const vote = (data, postID, token) => {
                   vote_value = ?
                 WHERE user_id = ? AND post_id = ?  
               `,
-              [data.value, decodedToken.id, postID],
+              [data.value, userId, postID],
               (err, results) => {
                 resolve({ ...data, hasVoted: true, prevVoteValue });
               }
@@ -137,7 +137,7 @@ const vote = (data, postID, token) => {
           connection.query(
             `INSERT INTO post_votes SET ? `,
             {
-              user_id: decodedToken.id,
+              user_id: userId,
               post_id: postID,
               vote_value: data.value
             },
@@ -155,11 +155,11 @@ const vote = (data, postID, token) => {
   });
 };
 
-const getPostsByToken = token => {
+const getPostsByUserId = userId => {
   return new Promise(async (resolve, reject) => {
     const query = `SELECT id FROM posts WHERE submitter_id = ?`;
 
-    connection.query(query, [req.userId], (err, results) => {
+    connection.query(query, [userId], (err, results) => {
       if (err) {
         return reject(err);
       }
@@ -173,10 +173,10 @@ const getPostsByToken = token => {
   });
 };
 
-const deletePost = (token, postId) => {
+const deletePost = (userId, postId) => {
   return new Promise(async (resolve, reject) => {
     const query = `DELETE FROM posts WHERE posts.id = ? AND submitter_id = ?`;
-    connection.query(query, [postId, req.userId], (err, results) => {
+    connection.query(query, [postId, userId], (err, results) => {
       if (err) {
         return reject(new Error("An unexpected error has occured"));
       }
@@ -222,14 +222,14 @@ const getPostsByUID = userId => {
   });
 };
 
-const getPostFollows = userToken => {
+const getPostFollowsByUserId = userId => {
   return new Promise((resolve, reject) => {
     const query = `
       SELECT * FROM post_follows
       WHERE user_id = ?
     `;
 
-    connection.query(query, [req.userId], (err, results) => {
+    connection.query(query, [userId], (err, results) => {
       if (err) {
         reject(new Error(err.message));
       } else {
@@ -245,11 +245,11 @@ const getPostFollows = userToken => {
 
 module.exports = {
   all,
-  getPostsByToken,
+  getPostsByUserId,
   create,
   vote,
   deletePost,
   getPostsByUID,
-  getPostFollows,
+  getPostFollowsByUserId,
   connection
 };

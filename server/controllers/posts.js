@@ -6,7 +6,7 @@ const connection = require("../db/posts").connection;
 postsRouter.post("/", async (req, res, next) => {
   try {
     const token = req.headers.authorization;
-    const data = await postsDB.create(req.body, token);
+    const data = await postsDB.create(req.body, req.userId);
 
     res.json(data);
   } catch (exception) {
@@ -17,14 +17,13 @@ postsRouter.post("/", async (req, res, next) => {
 postsRouter.post("/:id/vote", async (req, res) => {
   const token = req.headers.authorization;
   const postID = req.params.id;
-  const vote = await postsDB.vote(req.body, postID, token);
+  const vote = await postsDB.vote(req.body, postID, req.userId);
   res.json(vote);
 });
 
 postsRouter.get("/votes", async (req, res, next) => {
   try {
-    const token = req.headers.authorization;
-    const userPostVotes = await postVotesDB.getUserPostVotes(token);
+    const userPostVotes = await postVotesDB.getUserPostVotes(req.userId);
     res.json(userPostVotes);
   } catch (exception) {
     next(exception);
@@ -85,8 +84,7 @@ postsRouter.delete("/unfollow/:postId", async (req, res, next) => {
 
 postsRouter.delete("/:id", async (req, res, next) => {
   try {
-    const token = req.headers.authorization;
-    await postsDB.deletePost(token, req.params.id);
+    await postsDB.deletePost(req.userId, req.params.id);
   } catch (exception) {
     next(exception);
   }

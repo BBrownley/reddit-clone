@@ -18,8 +18,8 @@ usersRouter.post("/login", async (req, res, next) => {
     let data = await usersDB.login(req.body);
     data = {
       ...data,
-      userPosts: await postsDB.getPostsByToken(data.token),
-      postFollows: await postsDB.getPostFollows(data.token)
+      userPosts: await postsDB.getPostsByUserId(req.userId),
+      postFollows: await postsDB.getPostFollowsByUserId(req.userId)
     };
     res.json(data);
   } catch (exception) {

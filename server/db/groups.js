@@ -53,7 +53,7 @@ const getGroupByName = groupName => {
   });
 };
 
-const create = (data, token) => {
+const create = (data, userId) => {
   return new Promise((resolve, reject) => {
     // Check if group already exists by name
     connection.query(
@@ -78,7 +78,7 @@ const create = (data, token) => {
       {
         group_name: data.groupName,
         blurb: data.blurb,
-        owner_id: req.userId
+        owner_id: userId
       },
       (err, results) => {
         if (err) {
@@ -100,20 +100,20 @@ const create = (data, token) => {
   });
 };
 
-const subscribe = groupId => {
+const subscribe = (groupId, userId) => {
+  const query = `INSERT INTO group_subscribers SET ?`;
+
   return new Promise((resolve, reject) => {
-    if (req.userId) {
+    if (userId) {
       connection.query(
-        `
-        INSERT INTO group_subscribers SET ?
-        `,
+        query,
         {
           group_id: groupId,
-          user_id: req.userId
+          user_id: userId
         },
         (err, results) => {
           if (err) {
-            return reject(new Error("An unexpected error has occured"));
+            return reject(new Error("Unable to subscribe to group"));
           } else {
             return resolve(results[0]);
           }
@@ -123,14 +123,14 @@ const subscribe = groupId => {
   });
 };
 
-const unsubscribe = (groupId, token) => {
+const unsubscribe = (groupId, userId) => {
   return new Promise((resolve, reject) => {
-    if (req.userId) {
+    if (userId) {
       connection.query(
         `
         DELETE FROM group_subscribers WHERE group_id = ? AND user_id = ?
         `,
-        [groupId, req.userId],
+        [groupId, userId],
         (err, results) => {
           if (err) {
             return reject(new Error("An unexpected error has occured"));
@@ -143,19 +143,19 @@ const unsubscribe = (groupId, token) => {
   });
 };
 
-const getSubscriptions = () => {
+const getSubscriptions = userId => {
   return new Promise((resolve, reject) => {
-    if (req.userId) {
+    if (userId) {
       connection.query(
         `
           SELECT group_name, group_subscribers.created_at, groups.id AS id FROM group_subscribers
           LEFT JOIN groups ON groups.id = group_subscribers.group_id
           WHERE group_subscribers.user_id = ?
         `,
-        [req.userId],
+        [userId],
         (err, results) => {
           if (err) {
-            return reject(new Error("An unexpected error has occured"));
+            return reject(new Error("Unable to get user's subscription"));
           } else {
             return resolve(results);
           }

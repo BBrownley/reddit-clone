@@ -79,6 +79,14 @@ export const login = (credentials, hasToken) => {
 
 export const logout = () => {
   return async dispatch => {
+    postService.setToken(null);
+    userPostVoteService.setToken(null);
+    groupService.setToken(null);
+    commentsService.setToken(null);
+    messageService.setToken(null);
+    commentVotesService.setToken(null);
+    bookmarkService.setToken(null);
+
     dispatch({
       type: "LOGOUT"
     });
