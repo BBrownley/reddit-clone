@@ -39,11 +39,7 @@ app.listen(PORT, () => {
 });
 
 const errorHandler = (err, req, res, next) => {
-  console.log("##### FROM THE ERROR HANDLER #####");
   console.log(err);
-  console.log(err.name);
-  console.log(err.message);
-  console.log("##### FROM THE ERROR HANDLER #####");
 
   return res.status(400).json({ error: err.message });
 };

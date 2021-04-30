@@ -116,7 +116,7 @@ commentsRouter.get("/:commentId/children", async (req, res, next) => {
 });
 
 commentsRouter.post("/", async (req, res, next) => {
-  const postComment = () => {
+  const postComment = (token) => {
     return new Promise((resolve, reject) => {
       const query = `
         INSERT INTO comments SET ?

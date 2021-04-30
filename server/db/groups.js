@@ -1,8 +1,6 @@
 const connection = require("./index").connection;
 const jwt = require("jsonwebtoken");
 
-
-
 const all = () => {
   const q = `
     SELECT 
@@ -69,7 +67,6 @@ const create = (data, token) => {
       [data.groupName],
       (err, results) => {
         if (err) {
-          console.log("hey");
           reject(new Error("An unexpected error has occured"));
         }
         if (results.length > 0) {
@@ -156,7 +153,6 @@ const unsubscribe = (groupId, token) => {
 const getSubscriptions = token => {
   return new Promise((resolve, reject) => {
     // Verify token
-    console.log("hello");
     const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
     if (decodedToken.id) {
       connection.query(
