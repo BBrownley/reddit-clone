@@ -1,6 +1,5 @@
 const commentvotesRouter = require("express").Router();
 const connection = require("../db/index").connection;
-const jwt = require("jsonwebtoken");
 
 commentvotesRouter.get("/", async (req, res, next) => {
   const getVotes = userId => {
@@ -21,16 +20,7 @@ commentvotesRouter.get("/", async (req, res, next) => {
   };
 
   try {
-    // TODO: Can we separate this logic into its own middleware?
-    const token = req.headers.authorization;
-    const decodedToken = await jwt.verify(
-      token.split(" ")[1],
-      process.env.SECRET
-    );
-    const userId = decodedToken.id;
-
-    const userCommentVotes = await getVotes(userId);
-
+    const userCommentVotes = await getVotes(req.userId);
     res.json(userCommentVotes);
   } catch (exception) {
     next(exception);
@@ -77,17 +67,10 @@ commentvotesRouter.post("/", async (req, res, next) => {
   };
 
   try {
-    const token = req.headers.authorization;
-    const decodedToken = await jwt.verify(
-      token.split(" ")[1],
-      process.env.SECRET
-    );
-
-    const userId = decodedToken.id;
     const commentId = req.body.commentId;
     const value = req.body.value;
 
-    const newVote = await addVote(userId, commentId, value);
+    const newVote = await addVote(req.userId, commentId, value);
     res.json(newVote);
   } catch (exception) {
     next(exception);
@@ -124,14 +107,8 @@ commentvotesRouter.put("/", async (req, res, next) => {
   };
 
   try {
-    const token = req.headers.authorization;
-    const decodedToken = await jwt.verify(
-      token.split(" ")[1],
-      process.env.SECRET
-    );
-
     const updatedVote = await updateVote(
-      decodedToken.id,
+      req.userId,
       req.body.commentId,
       req.body.newValue
     );
@@ -161,15 +138,7 @@ commentvotesRouter.delete("/", async (req, res, next) => {
   };
 
   try {
-    const token = req.headers.authorization;
-
-    const decodedToken = await jwt.verify(
-      token.split(" ")[1],
-      process.env.SECRET
-    );
-    const userId = decodedToken.id;
-
-    deleteVote(userId, req.body.commentId);
+    deleteVote(req.userId, req.body.commentId);
     res.json({ message: "Comment vote deleted" });
   } catch (exception) {
     next(exception);

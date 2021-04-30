@@ -33,8 +33,6 @@ const vote = async (commentId, value) => {
     config
   );
 
-  console.log(req);
-
   return req.data;
 };
 

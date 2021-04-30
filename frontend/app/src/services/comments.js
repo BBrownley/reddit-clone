@@ -17,8 +17,8 @@ const getCommentsByUserId = async userId => {
     return {
       ...comment,
       type: "comment"
-    }
-  })
+    };
+  });
   return data;
 };
 
@@ -45,7 +45,7 @@ const editComment = (id, updatedContent) => {
     }
   };
 
-  axios.put(`http://localhost:5000/comments/${id}`, {updatedContent}, config);
+  axios.put(`http://localhost:5000/comments/${id}`, { updatedContent }, config);
 };
 
 const add = async (user, comment, postId, parentId) => {
@@ -71,7 +71,7 @@ const add = async (user, comment, postId, parentId) => {
   return req.data;
 };
 
-const remove = (id) => {
+const remove = id => {
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -80,8 +80,8 @@ const remove = (id) => {
     }
   };
 
-  axios.put(`http://localhost:5000/comments/${id}/remove`, config);
-}
+  axios.put(`http://localhost:5000/comments/${id}/remove`, null, config);
+};
 
 export default {
   getCommentsByPostId,

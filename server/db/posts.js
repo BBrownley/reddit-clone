@@ -1,5 +1,4 @@
 const connection = require("./index").connection;
-const jwt = require("jsonwebtoken");
 
 const q = `
   SELECT 
@@ -39,12 +38,9 @@ const all = () => {
 
 const create = (data, token) => {
   return new Promise((resolve, reject) => {
-    // Verify user
-    const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
-
     // Ensure title and group are filled in, content can be empty
 
-    const title = data.title;
+    const title = data.title.trim();
     const groupID = data.groupID;
 
     if (!title) {
@@ -58,7 +54,7 @@ const create = (data, token) => {
     connection.query(
       `INSERT INTO posts SET ? `,
       {
-        submitter_id: decodedToken.id,
+        submitter_id: req.userId,
         group_id: data.groupID,
         title: data.title,
         content: data.content
@@ -98,14 +94,15 @@ const create = (data, token) => {
 
 const vote = (data, postID, token) => {
   return new Promise((resolve, reject) => {
-    // Verify user
-    const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
-
     // Check to see if user already voted or not
     connection.query(
       `SELECT * FROM post_votes WHERE user_id = ? AND post_id = ?`,
-      [decodedToken.id, postID],
+      [req.userId, postID],
       (err, results) => {
+        if (err) {
+          reject(new Error("Unable to vote on post"));
+        }
+
         if (results.length !== 0) {
           const prevVoteValue = results[0].vote_value;
 
@@ -160,12 +157,9 @@ const vote = (data, postID, token) => {
 
 const getPostsByToken = token => {
   return new Promise(async (resolve, reject) => {
-    const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
-    const userId = decodedToken.id;
-
     const query = `SELECT id FROM posts WHERE submitter_id = ?`;
 
-    connection.query(query, [userId], (err, results) => {
+    connection.query(query, [req.userId], (err, results) => {
       if (err) {
         return reject(err);
       }
@@ -181,12 +175,8 @@ const getPostsByToken = token => {
 
 const deletePost = (token, postId) => {
   return new Promise(async (resolve, reject) => {
-    const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
-    const submitterId = decodedToken.id;
     const query = `DELETE FROM posts WHERE posts.id = ? AND submitter_id = ?`;
-    connection.query(query, [postId, submitterId], (err, results) => {
-      console.log(JSON.stringify(results));
-
+    connection.query(query, [postId, req.userId], (err, results) => {
       if (err) {
         return reject(new Error("An unexpected error has occured"));
       }
@@ -234,17 +224,12 @@ const getPostsByUID = userId => {
 
 const getPostFollows = userToken => {
   return new Promise((resolve, reject) => {
-    const decodedToken = jwt.verify(
-      userToken.split(" ")[1],
-      process.env.SECRET
-    );
-    const userId = decodedToken.id;
     const query = `
       SELECT * FROM post_follows
       WHERE user_id = ?
     `;
 
-    connection.query(query, [userId], (err, results) => {
+    connection.query(query, [req.userId], (err, results) => {
       if (err) {
         reject(new Error(err.message));
       } else {

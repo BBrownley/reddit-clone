@@ -1,5 +1,4 @@
 const connection = require("./index").connection;
-const jwt = require("jsonwebtoken");
 
 const q = `
   SELECT post_id, SUM(vote_value) AS score FROM post_votes
@@ -20,19 +19,16 @@ const getPostScore = postID => {
 
 const getUserPostVotes = token => {
   return new Promise((resolve, reject) => {
-    if (token === null) {
+    if (req.userId === undefined) {
       return reject(new Error("No JWT provided - cannot load user post votes"));
     }
-
-    const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
-    const userId = decodedToken.id;
 
     connection.query(
       `
       SELECT post_id, vote_value FROM post_votes
       WHERE user_id = ?
     `,
-      [userId],
+      [req.userId],
       (err, results) => {
         if (err) {
           return reject(new Error("An unexpected error has occured"));

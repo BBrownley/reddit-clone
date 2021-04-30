@@ -9,8 +9,6 @@ const register = userInfo => {
     const password = userInfo.password;
     const confirmPassword = userInfo.confirmPassword;
 
-    console.log(userInfo);
-
     // Check to make sure all fields were filled in
 
     if (!username || !email || !password || !confirmPassword) {
@@ -89,8 +87,6 @@ const login = userInfo => {
           );
 
           if (comparePW) {
-            console.log("Login succeeded");
-
             const userInfo = { username, id: results[0].id };
             const token = `bearer ${jwt.sign(userInfo, process.env.SECRET)}`;
 

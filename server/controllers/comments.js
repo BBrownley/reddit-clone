@@ -1,6 +1,5 @@
 const commentsRouter = require("express").Router();
 const connection = require("../db/index").connection;
-const jwt = require("jsonwebtoken");
 
 commentsRouter.get("/post/:postId", async (req, res, next) => {
   const fetchComments = () => {
@@ -116,7 +115,7 @@ commentsRouter.get("/:commentId/children", async (req, res, next) => {
 });
 
 commentsRouter.post("/", async (req, res, next) => {
-  const postComment = (token) => {
+  const postComment = (username, userId) => {
     return new Promise((resolve, reject) => {
       const query = `
         INSERT INTO comments SET ?
@@ -125,7 +124,7 @@ commentsRouter.post("/", async (req, res, next) => {
       connection.query(
         query,
         {
-          commenter_id: token.id,
+          commenter_id: userId,
           parent_id: req.body.parentId,
           content: req.body.comment,
           post_id: req.body.postId
@@ -142,7 +141,7 @@ commentsRouter.post("/", async (req, res, next) => {
               resolve({
                 ...results[0],
                 comment_id: results[0].id,
-                username: token.username
+                username
               });
             });
           }
@@ -151,13 +150,7 @@ commentsRouter.post("/", async (req, res, next) => {
     });
   };
   try {
-    const token = req.headers.authorization;
-    const decodedToken = await jwt.verify(
-      token.split(" ")[1],
-      process.env.SECRET
-    );
-
-    const newComment = await postComment(decodedToken);
+    const newComment = await postComment(req.username, req.userId);
     res.json(newComment);
   } catch (exception) {
     next(exception);
@@ -192,14 +185,15 @@ commentsRouter.put(`/:commentId`, async (req, res, next) => {
 });
 
 commentsRouter.put("/:commentId/remove", async (req, res, next) => {
-  const removeComment = commentId => {
+  const removeComment = (commentId, userId) => {
     return new Promise((resolve, reject) => {
       const query = `
         UPDATE comments
         SET content = "comment removed", deleted = "Y"
-        WHERE id = ?        
+        WHERE id = ? AND commenter_id = ?     
       `;
-      connection.query(query, [commentId], (err, results) => {
+      console.log(commentId, userId);
+      connection.query(query, [commentId, userId], (err, results) => {
         if (err) {
           reject(new Error("Unable to remove comment"));
         } else {
@@ -210,9 +204,7 @@ commentsRouter.put("/:commentId/remove", async (req, res, next) => {
   };
 
   try {
-    const token = req.headers.authorization;
-    await jwt.verify(token.split(" ")[1], process.env.SECRET);
-    const success = await removeComment(req.params.commentId);
+    const success = await removeComment(req.params.commentId, req.userId);
     res.send(success);
   } catch (exception) {
     next(exception);

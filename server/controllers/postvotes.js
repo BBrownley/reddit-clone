@@ -1,5 +1,4 @@
 const postVotesRouter = require("express").Router();
-const jwt = require("jsonwebtoken");
 
 const connection = require("../db/index").connection;
 
@@ -27,10 +26,7 @@ postVotesRouter.put("/:id", async (req, res, next) => {
   };
 
   try {
-    console.log("Changing post vote...");
-    const userToken = req.headers.authorization.split(" ")[1];
-    const decodedToken = jwt.verify(userToken, process.env.SECRET);
-    await changePostVote(req.params.id, decodedToken.id, req.body.updatedValue);
+    await changePostVote(req.params.id, req.userId, req.body.updatedValue);
   } catch (exception) {
     next(exception);
   }
@@ -53,9 +49,7 @@ postVotesRouter.delete("/:id", async (req, res, next) => {
     });
   };
   try {
-    const userToken = req.headers.authorization.split(" ")[1];
-    const decodedToken = jwt.verify(userToken, process.env.SECRET);
-    await deletePostVote(req.params.id, decodedToken.id);
+    await deletePostVote(req.params.id, req.userId);
   } catch (exception) {
     next(exception);
   }

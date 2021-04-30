@@ -2,8 +2,6 @@
 
 const mysql = require("mysql");
 const faker = require("faker");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
 
 const connection = mysql.createConnection({
   host: "localhost",

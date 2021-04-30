@@ -11,6 +11,8 @@ app.use(bodyParser());
 
 const postsDB = require("./db/posts");
 
+const tokenExtractor = require("./utils/tokenExtractor");
+
 const groupsRouter = require("./controllers/groups");
 const postsRouter = require("./controllers/posts");
 const usersRouter = require("./controllers/users");
@@ -19,6 +21,8 @@ const messageRouter = require("./controllers/messages");
 const commentvotesRouter = require("./controllers/commentvotes");
 const bookmarksRouter = require("./controllers/bookmarks");
 const postVotesRouter = require("./controllers/postvotes");
+
+app.use(tokenExtractor);
 
 app.use("/groups", groupsRouter);
 app.use("/posts", postsRouter);

@@ -1,5 +1,4 @@
 const connection = require("./index").connection;
-const jwt = require("jsonwebtoken");
 
 const all = () => {
   const q = `
@@ -56,9 +55,6 @@ const getGroupByName = groupName => {
 
 const create = (data, token) => {
   return new Promise((resolve, reject) => {
-    // Verify user
-    const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
-
     // Check if group already exists by name
     connection.query(
       `
@@ -82,7 +78,7 @@ const create = (data, token) => {
       {
         group_name: data.groupName,
         blurb: data.blurb,
-        owner_id: decodedToken.id
+        owner_id: req.userId
       },
       (err, results) => {
         if (err) {
@@ -104,18 +100,16 @@ const create = (data, token) => {
   });
 };
 
-const subscribe = (groupId, token) => {
+const subscribe = groupId => {
   return new Promise((resolve, reject) => {
-    // Verify token
-    const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
-    if (decodedToken.id) {
+    if (req.userId) {
       connection.query(
         `
         INSERT INTO group_subscribers SET ?
         `,
         {
           group_id: groupId,
-          user_id: decodedToken.id
+          user_id: req.userId
         },
         (err, results) => {
           if (err) {
@@ -131,13 +125,12 @@ const subscribe = (groupId, token) => {
 
 const unsubscribe = (groupId, token) => {
   return new Promise((resolve, reject) => {
-    const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
-    if (decodedToken.id) {
+    if (req.userId) {
       connection.query(
         `
         DELETE FROM group_subscribers WHERE group_id = ? AND user_id = ?
         `,
-        [groupId, decodedToken.id],
+        [groupId, req.userId],
         (err, results) => {
           if (err) {
             return reject(new Error("An unexpected error has occured"));
@@ -150,18 +143,16 @@ const unsubscribe = (groupId, token) => {
   });
 };
 
-const getSubscriptions = token => {
+const getSubscriptions = () => {
   return new Promise((resolve, reject) => {
-    // Verify token
-    const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
-    if (decodedToken.id) {
+    if (req.userId) {
       connection.query(
         `
           SELECT group_name, group_subscribers.created_at, groups.id AS id FROM group_subscribers
           LEFT JOIN groups ON groups.id = group_subscribers.group_id
           WHERE group_subscribers.user_id = ?
         `,
-        [decodedToken.id],
+        [req.userId],
         (err, results) => {
           if (err) {
             return reject(new Error("An unexpected error has occured"));

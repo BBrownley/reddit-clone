@@ -2,7 +2,6 @@ const postsRouter = require("express").Router();
 const postsDB = require("../db/posts");
 const postVotesDB = require("../db/post_votes");
 const connection = require("../db/posts").connection;
-const jwt = require("jsonwebtoken");
 
 postsRouter.post("/", async (req, res, next) => {
   try {
@@ -33,13 +32,13 @@ postsRouter.get("/votes", async (req, res, next) => {
 });
 
 postsRouter.get("/follows", async (req, res, next) => {
-  const getPostFollows = user => {
+  const getPostFollows = userId => {
     return new Promise((resolve, reject) => {
       const query = `
         SELECT post_id FROM post_follows
         WHERE user_id = ?
       `;
-      connection.query(query, [user.id], (err, results) => {
+      connection.query(query, [userId], (err, results) => {
         if (err) {
           reject(new Error(err.message));
         } else {
@@ -53,9 +52,7 @@ postsRouter.get("/follows", async (req, res, next) => {
     });
   };
   try {
-    const userToken = req.headers.authorization.split(" ")[1];
-    const decodedToken = jwt.verify(userToken, process.env.SECRET);
-    const posts = await getPostFollows(decodedToken);
+    const posts = await getPostFollows(req.userId);
     res.json({ posts });
   } catch (exception) {
     next(exception);
@@ -63,13 +60,13 @@ postsRouter.get("/follows", async (req, res, next) => {
 });
 
 postsRouter.delete("/unfollow/:postId", async (req, res, next) => {
-  const unfollowPost = (postId, user) => {
+  const unfollowPost = (postId, userId) => {
     return new Promise((resolve, reject) => {
       const query = `
         DELETE FROM post_follows
         WHERE post_id = ? AND user_id = ?
       `;
-      connection.query(query, [postId, user.id], (err, results) => {
+      connection.query(query, [postId, userId], (err, results) => {
         if (err) {
           reject(new Error(err.message));
         } else {
@@ -79,10 +76,7 @@ postsRouter.delete("/unfollow/:postId", async (req, res, next) => {
     });
   };
   try {
-    console.log(req.headers.authorization);
-    const userToken = req.headers.authorization.split(" ")[1];
-    const decodedToken = jwt.verify(userToken, process.env.SECRET);
-    const unfollow = await unfollowPost(req.params.postId, decodedToken);
+    const unfollow = await unfollowPost(req.params.postId, req.userId);
     res.json(unfollow);
   } catch (exception) {
     next(exception);
@@ -108,7 +102,7 @@ postsRouter.get("/users/:userId", async (req, res, next) => {
 });
 
 postsRouter.post("/follow", async (req, res, next) => {
-  const followPost = (postId, user) => {
+  const followPost = (postId, userId) => {
     return new Promise((resolve, reject) => {
       const query = `
         INSERT INTO post_follows
@@ -117,7 +111,7 @@ postsRouter.post("/follow", async (req, res, next) => {
       connection.query(
         query,
         {
-          user_id: user.id,
+          user_id: userId,
           post_id: postId
         },
         (err, results) => {
@@ -131,9 +125,7 @@ postsRouter.post("/follow", async (req, res, next) => {
     });
   };
   try {
-    const userToken = req.headers.authorization.split(" ")[1];
-    const decodedToken = jwt.verify(userToken, process.env.SECRET);
-    const followedPost = await followPost(req.body.postId, decodedToken);
+    const followedPost = await followPost(req.body.postId, req.userId);
     res.json(followedPost);
   } catch (exception) {
     next(exception);
@@ -141,15 +133,15 @@ postsRouter.post("/follow", async (req, res, next) => {
 });
 
 postsRouter.put("/:id", async (req, res, next) => {
-  const editPost = (postId, newValue) => {
+  const editPost = (postId, newValue, userId) => {
     return new Promise((resolve, reject) => {
       const query = `
         UPDATE posts
         SET content = ?
-        WHERE id = ?
+        WHERE id = ? AND submitter_id = ?
       `;
 
-      connection.query(query, [newValue, postId], (err, results) => {
+      connection.query(query, [newValue, postId, userId], (err, results) => {
         if (err) {
           reject(new Error("Unable to edit post"));
         } else {
@@ -160,9 +152,11 @@ postsRouter.put("/:id", async (req, res, next) => {
   };
 
   try {
-    const userToken = req.headers.authorization.split(" ")[1];
-    await jwt.verify(userToken, process.env.SECRET);
-    const success = await editPost(req.params.id, req.body.newValue);
+    const success = await editPost(
+      req.params.id,
+      req.body.newValue,
+      req.userId
+    );
     res.json(success);
   } catch (exception) {
     next(exception);

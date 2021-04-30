@@ -1,10 +1,7 @@
 const messageRouter = require("express").Router();
 const connection = require("../db/index").connection;
-const jwt = require("jsonwebtoken");
 
 messageRouter.get("/", async (req, res, next) => {
-  const token = req.headers.authorization;
-  const decodedToken = jwt.verify(token.split(" ")[1], process.env.SECRET);
   const getMessages = () => {
     return new Promise((resolve, reject) => {
       const query = `
@@ -12,7 +9,7 @@ messageRouter.get("/", async (req, res, next) => {
         WHERE recipient_id = ?
         ORDER BY created_at DESC
       `;
-      connection.query(query, [decodedToken.id], (err, results) => {
+      connection.query(query, [req.userId], (err, results) => {
         if (err) {
           reject(new Error("Unable to fetch messages from server"));
         } else {
@@ -113,14 +110,14 @@ messageRouter.post("/followers/:postId", async (req, res, next) => {
 });
 
 messageRouter.put("/", async (req, res, next) => {
-  const setMessageRead = messageId => {
+  const setMessageRead = (messageId, userId) => {
     return new Promise((resolve, reject) => {
       const query = `
-      UPDATE messages
-      SET has_read = "Y"
-      WHERE messages.id = ?
-    `;
-      connection.query(query, [messageId], (err, results) => {
+        UPDATE messages
+        SET has_read = "Y"
+        WHERE messages.id = ? AND recipient_id = ?
+      `;
+      connection.query(query, [messageId, userId], (err, results) => {
         if (err) {
           reject(new Error("Unable to set read status on message"));
         } else {
@@ -131,9 +128,7 @@ messageRouter.put("/", async (req, res, next) => {
   };
 
   try {
-    const token = req.headers.authorization;
-    await jwt.verify(token.split(" ")[1], process.env.SECRET);
-    const success = setMessageRead(req.body.id);
+    const success = setMessageRead(req.body.id, req.userId);
     res.json(success);
   } catch (exception) {
     next(exception);
@@ -141,13 +136,13 @@ messageRouter.put("/", async (req, res, next) => {
 });
 
 messageRouter.delete("/", async (req, res, next) => {
-  const deleteMessage = messageId => {
+  const deleteMessage = (messageId, userId) => {
     return new Promise((resolve, reject) => {
       const query = `
         DELETE FROM messages
-        WHERE id = ?
+        WHERE id = ? AND recipient_id = ?
       `;
-      connection.query(query, [messageId], (err, results) => {
+      connection.query(query, [messageId, userId], (err, results) => {
         if (err) {
           reject(new Error("Unable to delete message"));
         } else {
@@ -158,9 +153,7 @@ messageRouter.delete("/", async (req, res, next) => {
   };
 
   try {
-    const token = req.headers.authorization;
-    await jwt.verify(token.split(" ")[1], process.env.SECRET);
-    const success = deleteMessage(req.body.id);
+    const success = deleteMessage(req.body.id, req.userId);
     res.json(success);
   } catch (exception) {
     next(exception);

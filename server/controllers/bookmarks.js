@@ -1,9 +1,8 @@
 const bookmarksRouter = require("express").Router();
-const jwt = require("jsonwebtoken");
 const connection = require("../db").connection;
 
 bookmarksRouter.get("/", async (req, res, next) => {
-  const getUserBookmarks = (userId, postId) => {
+  const getUserBookmarks = userId => {
     return new Promise((resolve, reject) => {
       const query = `
         SELECT bookmarks.*, 
@@ -20,7 +19,6 @@ bookmarksRouter.get("/", async (req, res, next) => {
 
       connection.query(query, [userId], (err, results) => {
         if (err) {
-          console.log(err);
           reject(new Error("Unable to get user bookmarks"));
         } else {
           resolve(results);
@@ -29,10 +27,7 @@ bookmarksRouter.get("/", async (req, res, next) => {
     });
   };
   try {
-    const token = req.headers.authorization;
-    const user = await jwt.verify(token.split(" ")[1], process.env.SECRET);
-
-    const userBookmarks = await getUserBookmarks(user.id, req.body.postId);
+    const userBookmarks = await getUserBookmarks(req.userId);
     res.json(userBookmarks);
   } catch (exception) {
     next(exception);
@@ -58,12 +53,8 @@ bookmarksRouter.get("/post/:postId", async (req, res, next) => {
   };
 
   try {
-    const token = req.headers.authorization;
-
-    const user = await jwt.verify(token.split(" ")[1], process.env.SECRET);
-
     const userPostBookmarks = await getBookmarksByPostId(
-      user.id,
+      req.userId,
       req.params.postId
     );
     res.json(userPostBookmarks);
@@ -107,10 +98,7 @@ bookmarksRouter.post("/", async (req, res, next) => {
   };
 
   try {
-    const token = req.headers.authorization;
-    const user = await jwt.verify(token.split(" ")[1], process.env.SECRET);
-
-    const bookmark = await newBookmark(user.id, req.body.commentId);
+    const bookmark = await newBookmark(req.userId, req.body.commentId);
     res.json(bookmark);
   } catch (exception) {
     next(exception);
@@ -136,10 +124,7 @@ bookmarksRouter.delete("/", async (req, res, next) => {
   };
 
   try {
-    const token = req.headers.authorization;
-    const user = await jwt.verify(token.split(" ")[1], process.env.SECRET);
-
-    await deleteBookmark(user.id, req.body.commentId);
+    await deleteBookmark(req.userId, req.body.commentId);
   } catch (exception) {
     next(exception);
   }
