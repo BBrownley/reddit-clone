@@ -58,11 +58,8 @@ button {
   font-size: 1.25rem;
   font-weight: bold;
   border: none;
-  border-radius: 5px;
-  -webkit-box-shadow: 3px 3px 8px 1px rgba(76, 139, 245, 0.35);
-  box-shadow: 3px 3px 8px 1px rgba(76, 139, 245, 0.35);
-  /* -webkit-box-shadow: 0px 6px 35px -12px rgba(76, 139, 245, 0.35);
-  box-shadow: 0px 6px 35px -12px rgba(76, 139, 245, 0.35); */
+  -webkit-box-shadow: 3px 3px 5px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 3px 3px 8px 1px rgba(0, 0, 0, 0.35);
   background-color: #4385f5;
   background-image: linear-gradient(
     to right,
@@ -71,8 +68,6 @@ button {
   );
   color: white;
   transition: 0.2s background-color ease-out;
-  border: 2px solid rgba(46, 53, 148, 0.35);
-  /* border-radius: 5px; */
 }
 
 button:hover {
