@@ -105,7 +105,7 @@ const getUserSubscriptions = async () => {
 
     return req.data;
   } catch (error) {
-    return { error: error.response.data.error };
+    return [];
   }
 };
 

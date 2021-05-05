@@ -5,6 +5,7 @@ import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 
 import { login } from "../../reducers/userReducer";
 import { initializeVotes as initializePostVotes } from "../../reducers/userPostVotesReducer";
+import { initializeSubscriptions } from "../../reducers/groupSubscribesReducer";
 import { clearRedirectPath } from "../../reducers/redirectReducer";
 import { removeNotification } from "../../reducers/notificationReducer";
 
@@ -45,6 +46,7 @@ const LoginForm = props => {
 
     if (loginSuccess) {
       dispatch(initializePostVotes());
+      dispatch(initializeSubscriptions());
       localStorage.setItem("loggedUser", JSON.stringify(loginSuccess));
       if (redirectPath) {
         history.push(redirectPath);

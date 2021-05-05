@@ -58,8 +58,8 @@ button {
   font-size: 1.25rem;
   font-weight: bold;
   border: none;
-  -webkit-box-shadow: 3px 3px 5px 1px rgba(0, 0, 0, 0.15);
-  box-shadow: 3px 3px 8px 1px rgba(0, 0, 0, 0.35);
+  -webkit-box-shadow: 3px 3px 15px 1px rgba(112, 144, 176, 0.25);
+  box-shadow: 3px 3px 15px 1px rgba(112, 144, 176, 0.25);
   background-color: #4385f5;
   background-image: linear-gradient(
     to right,
