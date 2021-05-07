@@ -48,14 +48,11 @@ export default function Comment(props) {
   const [editValue, setEditValue] = useState(props.comment.content);
   const [children, setChildren] = useState([]);
   const [newComment, setNewComment] = useState("");
-  const [initialVoteValue, setInitialVoteValue] = useState(0);
-  const [commentScoreDelta, setCommentScoreDelta] = useState(0);
   const [content, setContent] = useState(props.comment.content);
   const [confirmDeletion, setConfirmDeletion] = useState(false);
   const [removed, setRemoved] = useState(
     props.comment.deleted === "Y" ? true : false
   );
-  console.log(props.comment);
 
   const match = useRouteMatch("/groups/:groupName/:groupId");
 
@@ -69,10 +66,6 @@ export default function Comment(props) {
       setChildren(children);
     };
     fetchChildren();
-
-    if (existingCommentVote) {
-      setInitialVoteValue(existingCommentVote.vote_value);
-    }
   }, [existingCommentVote, props.comment.comment_id]);
 
   /*
@@ -83,9 +76,6 @@ export default function Comment(props) {
   */
   const sendNotificationToRepliedUser = (repliedUser, newComment) => {
     // Prevent user from notifying themselves
-
-    console.log(repliedUser);
-    console.log(currentUser.userId);
 
     if (repliedUser === currentUser.userId) return;
 
@@ -107,58 +97,16 @@ export default function Comment(props) {
         (existingCommentVote.vote_value === -1 && action === "downvote")
       ) {
         dispatch(removeVote(currentCommentId));
-        setCommentScoreDelta(
-          existingCommentVote.vote_value === 1
-            ? commentScoreDelta - 1
-            : commentScoreDelta + 1
-        );
       } else {
         const newVoteValue = action === "upvote" ? 1 : -1;
 
         dispatch(changeVote(currentCommentId, newVoteValue));
-
-        const newScoreDelta = () => {
-          if (initialVoteValue === 0) {
-            return action === "upvote" ? 1 : -1;
-          } else if (initialVoteValue === 1) {
-            return action === "upvote" ? 0 : -2;
-          } else {
-            return action === "upvote" ? 2 : 0;
-          }
-        };
-
-        setCommentScoreDelta(newScoreDelta());
       }
     } else {
       if (action === "upvote") {
-        const newScoreDelta = () => {
-          if (initialVoteValue === 0) {
-            return 1;
-          } else if (initialVoteValue === 1) {
-            return 0;
-          } else {
-            // -1
-            return 2;
-          }
-        };
-
         dispatch(vote(currentCommentId, 1));
-        setCommentScoreDelta(newScoreDelta);
       } else {
-        const newScoreDelta = () => {
-          if (initialVoteValue === 0) {
-            return -1;
-          } else if (initialVoteValue === 1) {
-            return -2;
-          } else {
-            // -1
-            return 0;
-          }
-        };
-
-        console.log("downvote");
         dispatch(vote(currentCommentId, -1));
-        setCommentScoreDelta(newScoreDelta());
       }
     }
   };
@@ -173,6 +121,8 @@ export default function Comment(props) {
     setRemoved(true);
     commentsService.remove(props.comment.comment_id);
   };
+
+  const commentScore = props.comment.comment_score || 0;
 
   return (
     <Container child={props.child} key={props.comment.comment_id}>
@@ -197,7 +147,7 @@ export default function Comment(props) {
                 onClick={() => handleVoteComment("upvote")}
                 upvoted={existingCommentVote?.vote_value === 1 ? 1 : 0}
               />
-              <span>{props.comment.comment_score + commentScoreDelta}</span>
+              <span>{commentScore}</span>
               <CommentVoteButton
                 name="thumbs-down"
                 onClick={() => handleVoteComment("downvote")}
