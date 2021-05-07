@@ -104,7 +104,20 @@ export default function Comments({ postId, authorId, postTitle }) {
           );
         } else {
           return (
-            <button onClick={() => setFormOpen(true)}>Add a comment</button>
+            <button
+              onClick={() => {
+                if (currentUser.token === null) {
+                  dispatch(setRedirectPath(window.location.pathname));
+                  history.push({
+                    pathname: "/login",
+                    state: { headerMessage: "Log in to comment on this post" }
+                  });
+                }
+                setFormOpen(true);
+              }}
+            >
+              Add a comment
+            </button>
           );
         }
       })()}
@@ -123,7 +136,6 @@ export default function Comments({ postId, authorId, postTitle }) {
                   comment={comment}
                   handleSubmitComment={handleSubmitComment}
                   key={comment.comment_id}
-                
                 />
               );
             })}
