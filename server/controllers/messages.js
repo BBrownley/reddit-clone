@@ -114,7 +114,7 @@ messageRouter.put("/", async (req, res, next) => {
     return new Promise((resolve, reject) => {
       const query = `
         UPDATE messages
-        SET has_read = "Y"
+        SET has_read = 1
         WHERE messages.id = ? AND recipient_id = ?
       `;
       connection.query(query, [messageId, userId], (err, results) => {

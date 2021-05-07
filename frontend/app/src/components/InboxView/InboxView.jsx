@@ -50,6 +50,7 @@ export default function InboxView() {
   };
 
   const filterMessages = messages => {
+    console.log(messages);
     switch (messageFilter) {
       case "all":
         return messages;
@@ -58,7 +59,7 @@ export default function InboxView() {
       case "direct":
         return messages.filter(message => message.sender_id !== null);
       case "unread":
-        return messages.filter(message => message.has_read === "N");
+        return messages.filter(message => parseInt(message.has_read) === 0);
     }
   };
 
@@ -95,7 +96,7 @@ export default function InboxView() {
       {messages.length === 0 && <h3>Inbox empty</h3>}
       {filterMessages(messages).map(message => (
         <Message
-          className={message.has_read === "Y" ? ".message-read" : ""}
+          className={parseInt(message.has_read) === 1 ? ".message-read" : ""}
           onClick={() => openMessage(message)}
         >
           <MessageHeader>
