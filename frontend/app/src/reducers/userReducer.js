@@ -7,7 +7,7 @@ import messageService from "../services/messages";
 import commentVotesService from "../services/commentVotes";
 import bookmarkService from "../services/bookmarks";
 
-import { timedNotification } from "../reducers/notificationReducer";
+import { setNotification } from "../reducers/notificationReducer";
 
 const initialState = {
   username: null,
@@ -22,7 +22,7 @@ export const register = credentials => {
     const data = await userService.register(credentials);
 
     if (data.error) {
-      dispatch(timedNotification(data.error, 3000));
+      dispatch(setNotification(data.error));
       return false;
     } else {
       localStorage.setItem(
@@ -49,7 +49,7 @@ export const login = (credentials, hasToken) => {
     const res = await userService.login(credentials);
 
     if (res.error) {
-      dispatch(timedNotification(res.error, 3000));
+      dispatch(setNotification(res.error));
       return false;
     } else {
       const data = {

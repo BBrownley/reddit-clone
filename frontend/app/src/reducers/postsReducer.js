@@ -1,6 +1,6 @@
 import postService from "../services/posts";
 
-import { timedNotification } from "../reducers/notificationReducer";
+import { setNotification } from "../reducers/notificationReducer";
 
 const initialState = [];
 
@@ -19,7 +19,7 @@ export const createPost = formData => {
     const data = await postService.createPost(formData);
 
     if (data.error) {
-      dispatch(timedNotification(data.error, 3000));
+      dispatch(setNotification(data.error));
       return false;
     } else {
       dispatch({

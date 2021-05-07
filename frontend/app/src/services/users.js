@@ -26,7 +26,6 @@ const login = async data => {
 
     return req.data;
   } catch (error) {
-    // store.dispatch(timedNotification(error.response.data.error, 5000));
     return { error: error.response.data.error };
   }
 };

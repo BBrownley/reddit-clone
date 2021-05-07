@@ -3,7 +3,10 @@ import { useHistory, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import { login, register } from "../../reducers/userReducer";
-import { removeNotification } from "../../reducers/notificationReducer";
+import {
+  removeNotification,
+  setNotification
+} from "../../reducers/notificationReducer";
 
 import FormWarning from "../FormWarning/FormWarning";
 
@@ -24,6 +27,11 @@ const RegisterForm = () => {
   useEffect(() => {
     return () => dispatch(removeNotification());
   }, [dispatch]);
+
+  // Clear notification on form input
+  useEffect(() => {
+    dispatch(removeNotification());
+  }, [username, email, password, confirmPassword]);
 
   const handleSetUsername = e => {
     setUsername(e.target.value);
@@ -50,9 +58,42 @@ const RegisterForm = () => {
     creatingPost = false;
   }
 
+  const validateRegistration = data => {
+    // All fields must be filled in
+
+    const formValues = Object.values(data);
+
+    for (let i = 0; i < formValues.length; i++) {
+      if (formValues[i].trim().length === 0) {
+        dispatch(setNotification("All fields must be filled in"));
+        return false;
+      }
+    }
+
+    // Passwords must match
+    if (data.password !== data.confirmPassword) {
+      dispatch(setNotification("Passwords do not match"));
+      return false;
+    }
+    // E-mail must be valid
+    const mailformat = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const emailValid = data.email.match(mailformat);
+
+    if (!emailValid) {
+      dispatch(setNotification("E-mail must be valid"));
+      return false;
+    }
+
+    // Validation passes
+    return true;
+  };
+
   const handleRegistration = async e => {
     e.preventDefault();
     const data = { username, email, password, confirmPassword };
+
+    // Front end validation
+    if (!validateRegistration(data)) return;
 
     const success = await dispatch(register({ data }));
 
