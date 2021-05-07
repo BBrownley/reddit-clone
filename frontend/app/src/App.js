@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { Body, Wrapper } from "./components/shared/Body.elements";
 
 import { initializePosts } from "./reducers/postsReducer";
+import { initializeUserPosts } from "./reducers/userPostsReducer";
 import { initializeGroups } from "./reducers/groupsReducer";
 import { initializeVotes as initializePostVotes } from "./reducers/userPostVotesReducer";
 import { setUser, initializeFollows } from "./reducers/userReducer";
@@ -44,8 +45,10 @@ const App = () => {
       }
 
       dispatch(initializePosts());
+      dispatch(initializeUserPosts());
       dispatch(initializeGroups());
       dispatch(initializeFollows());
+
       setLoading(false);
     };
 
@@ -55,7 +58,8 @@ const App = () => {
   useEffect(() => {
     dispatch(initializePostVotes());
     dispatch(initializeSubscriptions());
-  }, []);
+    dispatch(initializeUserPosts(user.userId));
+  }, [user]);
 
   return (
     <Router>

@@ -36,6 +36,7 @@ import PostHeader from "../shared/PostHeader";
 const Post = ({ post, options, expand, viewMode }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
+  const userPosts = useSelector(state => state.userPosts);
   const userPostVote = useSelector(state =>
     state.userPostVotes.find(vote => {
       return vote.post_id === post.postID;
@@ -100,6 +101,10 @@ const Post = ({ post, options, expand, viewMode }) => {
       </>
     );
   };
+
+  const userOwnsPost = userPosts.find(userPost => {
+    return userPost.postID === post.postID;
+  });
 
   // TODO: Remove inline CSS
   return (
@@ -169,8 +174,7 @@ const Post = ({ post, options, expand, viewMode }) => {
                   )}
                   {user && (
                     <span>
-                      {user.userPosts &&
-                      user.userPosts.includes(post.postID) ? (
+                      {userOwnsPost ? (
                         <>
                           {viewMode && editing === false && (
                             <span onClick={() => setEditing(true)}>Edit</span>
@@ -205,20 +209,6 @@ const Post = ({ post, options, expand, viewMode }) => {
             )}
           </div>
         </div>
-        {/* {options !== false && (
-          <div style={{ display: "flex", alignItems: "flex-end" }}>
-            <CommentCountLg>
-              <div>
-                <FontAwesome name="comments" /> {post.total_comments} Comments
-              </div>
-            </CommentCountLg>
-            <CommentCountSm>
-              <div>
-                <FontAwesome name="comments" /> {post.total_comments}
-              </div>
-            </CommentCountSm>
-          </div>
-        )} */}
       </div>
     </Container>
   );

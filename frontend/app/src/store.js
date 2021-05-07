@@ -1,6 +1,7 @@
 import postsReducer from "./reducers/postsReducer";
 import groupsReducer from "./reducers/groupsReducer";
 import userReducer from "./reducers/userReducer";
+import userPostsReducer from "./reducers/userPostsReducer";
 import userPostVotesReducer from "./reducers/userPostVotesReducer";
 import userBookmarksReducer from "./reducers/userBookmarksReducer";
 import commentVotesReducer from "./reducers/commentVotesReducer";
@@ -15,6 +16,7 @@ const reducer = combineReducers({
   posts: postsReducer,
   groups: groupsReducer,
   user: userReducer,
+  userPosts: userPostsReducer,
   userPostVotes: userPostVotesReducer,
   userCommentVotes: commentVotesReducer,
   userBookmarks: userBookmarksReducer,

@@ -23,9 +23,7 @@ const getCommentsByUserId = async userId => {
 };
 
 const getRootCommentsByPostId = async postId => {
-  console.log("calling comments route");
   const req = await axios.get(`http://localhost:5000/comments/post/${postId}`);
-  console.log(req.data);
   return req.data.filter(comment => comment.parent_id === null);
 };
 

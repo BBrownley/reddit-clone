@@ -28,30 +28,16 @@ const getPostsByUID = async userId => {
     return {
       ...post,
       type: "post"
-    }
-  })
+    };
+  });
   return data;
 };
 
-const getByUser = async user => {
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      Authorization: user.token
-    }
-  };
-
+const getUserPosts = async userId => {
   const req = await axios.get(
-    "http://localhost:5000/posts/verifyuserposts",
+    `http://localhost:5000/posts/users/${userId}`,
     config
   );
-  return req.data;
-};
-
-const getUserPosts = async userId => {
-  const req = await axios.get(`http://localhost:5000/posts/${userId}`, config);
-  console.log(req);
   return req.data;
 };
 
@@ -88,16 +74,6 @@ const vote = async (postID, value) => {
 
   return data;
 };
-
-const removeVote = async (postId) => {
-  const config = {
-    headers: {
-      Authorization: storedToken
-    }
-  };
-  const body = {postId};
-  axios.delete()
-}
 
 const removePost = async postId => {
   const config = {
@@ -160,15 +136,12 @@ const getPostFollows = async () => {
     }
   };
   try {
-    const req = await axios.get(
-      `http://localhost:5000/posts/follows/`,
-      config
-    );
+    const req = await axios.get(`http://localhost:5000/posts/follows/`, config);
     return req.data;
   } catch (error) {
     return { error: error.response.data.error };
   }
-}
+};
 
 const editPost = async (id, newValue) => {
   const config = {
@@ -179,12 +152,11 @@ const editPost = async (id, newValue) => {
     }
   };
 
-  axios.put(`http://localhost:5000/posts/${id}`, {newValue}, config);
-}
+  axios.put(`http://localhost:5000/posts/${id}`, { newValue }, config);
+};
 
 const postService = {
   getAll,
-  getByUser,
   createPost,
   setToken,
   vote,

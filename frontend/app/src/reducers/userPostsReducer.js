@@ -1,21 +1,22 @@
-export const logout = () => {
+import postService from "../services/posts";
+
+const initialState = [];
+
+export const initializeUserPosts = userId => {
   return async dispatch => {
+    const posts = await postService.getUserPosts(userId);
+
     dispatch({
-      type: "LOGOUT"
+      type: "INITIALIZE_USER_POSTS",
+      posts
     });
   };
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case "LOGIN":
-      return action.data;
-    case "LOGOUT":
-      return null;
-    case "SET_USER":
-      return action.userInfo;
-    case "ADD_POST":
-      return {...state, userPosts: [...state.userPosts, action.postId]}
+    case "INITIALIZE_USER_POSTS":
+      return action.posts;
     default:
       return state;
   }

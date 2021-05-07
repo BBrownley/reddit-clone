@@ -5,7 +5,6 @@ const connection = require("../db/posts").connection;
 
 postsRouter.post("/", async (req, res, next) => {
   try {
-    const token = req.headers.authorization;
     const data = await postsDB.create(req.body, req.userId);
 
     res.json(data);
@@ -15,7 +14,6 @@ postsRouter.post("/", async (req, res, next) => {
 });
 
 postsRouter.post("/:id/vote", async (req, res) => {
-  const token = req.headers.authorization;
   const postID = req.params.id;
   const vote = await postsDB.vote(req.body, postID, req.userId);
   res.json(vote);
