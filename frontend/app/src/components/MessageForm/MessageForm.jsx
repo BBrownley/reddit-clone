@@ -1,8 +1,15 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useLocation, useHistory } from "react-router-dom";
 
-import {FormContainer, FormHeader, FormField} from "../shared/Form.elements";
+import {
+  setNotification,
+  removeNotification
+} from "../../reducers/notificationReducer";
+
+import FormWarning from "../FormWarning/FormWarning";
+
+import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 
 import messageService from "../../services/messages";
 
@@ -12,8 +19,13 @@ export default function MessageForm() {
 
   const user = useSelector(state => state.user);
   const location = useLocation();
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-  const sendMessage = () => {
+  const sendMessage = e => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
     const message = {
       sender_id: user.userId,
       recipient_id: location.state.recipient_id,
@@ -22,12 +34,29 @@ export default function MessageForm() {
       subject
     };
     messageService.send(message);
+    history.goBack();
   };
+
+  const validateForm = () => {
+    // Check that all fields are filled in
+    if (subject.trim().length === 0 || body.trim().length === 0) {
+      dispatch(setNotification("All fields must be filled in"));
+      return false;
+    }
+    return true;
+  };
+
+  // Clear form error on user input, route change
+  useEffect(() => {
+    return () => {
+      dispatch(removeNotification());
+    };
+  }, [dispatch, subject, body]);
 
   return (
     <FormContainer>
       <FormHeader>Write a new message</FormHeader>
-      <form id="message-form" onSubmit={sendMessage}>
+      <form id="message-form" onSubmit={e => sendMessage(e)}>
         <FormField>
           <label htmlFor="subject">Subject:</label>
           <input
@@ -49,11 +78,10 @@ export default function MessageForm() {
           ></textarea>
         </FormField>
       </form>
-      <button type="submit" form="register-form">
+      <button type="submit" form="message-form">
         Send
       </button>
-      {/* <FormWarning /> */}
+      <FormWarning />
     </FormContainer>
   );
-
 }
