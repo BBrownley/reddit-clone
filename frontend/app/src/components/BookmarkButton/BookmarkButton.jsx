@@ -10,14 +10,10 @@ export default function BookmarkButton({ bookmarked, commentId }) {
   const dispatch = useDispatch();
 
   const handleAddBookmark = commentId => {
-    console.log(`add bookmark comment ${commentId}`);
-
     dispatch(addBookmark(commentId));
   };
 
   const handleDeleteBookmark = commentId => {
-    console.log(`Remove bookmark comment ${commentId}`);
-
     dispatch(deleteBookmark(commentId));
   };
 

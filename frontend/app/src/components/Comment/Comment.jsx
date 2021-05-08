@@ -123,6 +123,8 @@ export default function Comment(props) {
   };
 
   const commentScore = props.comment.comment_score || 0;
+  const userOwnsComment = currentUser.userId === props.comment.commenter_id;
+
 
   return (
     <Container child={props.child} key={props.comment.comment_id}>
@@ -139,7 +141,7 @@ export default function Comment(props) {
           {props.comment.username}
         </Link>
         <span className="comment">{removed ? "Comment removed" : content}</span>
-        {!removed && (
+        {!removed && currentUser.userId !== null && (
           <p>
             <CommentVotes>
               <CommentVoteButton
@@ -163,15 +165,19 @@ export default function Comment(props) {
               bookmarked={userBookmarked}
               commentId={props.comment.comment_id}
             />
-            <button onClick={() => setConfirmDeletion(true)}>Delete</button>
-            {confirmDeletion && (
+            {userOwnsComment && (
               <>
-                <span>Are you sure?</span>
-                <span onClick={handleRemoveComment}>yes</span>
-                <span onClick={() => setConfirmDeletion(false)}>no</span>
+                <button onClick={() => setConfirmDeletion(true)}>Delete</button>
+                {confirmDeletion && (
+                  <>
+                    <span>Are you sure?</span>
+                    <span onClick={handleRemoveComment}>yes</span>
+                    <span onClick={() => setConfirmDeletion(false)}>no</span>
+                  </>
+                )}
+                <span onClick={() => setEditing(true)}>Edit</span>
               </>
             )}
-            <span onClick={() => setEditing(true)}>Edit</span>
             {replying === true && (
               <ReplyForm>
                 <ReplyInput
@@ -228,7 +234,6 @@ export default function Comment(props) {
       <CommentAge>
         <span>{moment(props.comment.created_at).fromNow()}</span>
       </CommentAge>
-      <p>{props.comment.comment_id}</p>
 
       {children.map(childComment => (
         <Comment
