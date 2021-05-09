@@ -91,10 +91,11 @@ export default function InboxView() {
         </li>
       </ButtonGroup>
       {messages.length === 0 && <h3>Inbox empty</h3>}
-      {filterMessages(messages).map(message => (
+      {filterMessages(messages).map((message, index) => (
         <Message
           className={parseInt(message.has_read) === 1 ? ".message-read" : ""}
           onClick={() => openMessage(message)}
+          key={index}
         >
           <MessageHeader>
             <p>

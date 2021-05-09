@@ -87,8 +87,8 @@ const GroupList = () => {
       </button>
       <Container>
         {groups.length !== 0
-          ? filterGroups(groups).map(group => {
-              return <GroupCard group={group} />;
+          ? filterGroups(groups).map((group, index) => {
+              return <GroupCard group={group} key={index}/>;
             })
           : ""}
       </Container>

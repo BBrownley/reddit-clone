@@ -186,12 +186,12 @@ export default function UserView() {
                   return {};
               }
 
-              return toBeDisplayed.map(item => {
+              return toBeDisplayed.map((item, index) => {
                 if (item.type === "post") {
-                  return <Post post={item} options={false} />;
+                  return <Post post={item} options={false} key={index} />;
                 } else {
                   return (
-                    <CommentItem>
+                    <CommentItem key={index}>
                       <p>
                         <NavLink
                           to={`/groups/${item.group_name.toLowerCase()}/${
