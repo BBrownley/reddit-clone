@@ -5,9 +5,10 @@ messageRouter.get("/", async (req, res, next) => {
   const getMessages = () => {
     return new Promise((resolve, reject) => {
       const query = `
-        SELECT * FROM messages
+        SELECT messages.*, users.username AS sender_username FROM messages
+        JOIN users ON users.id = messages.sender_id
         WHERE recipient_id = ?
-        ORDER BY created_at DESC
+        ORDER BY messages.created_at DESC
       `;
       connection.query(query, [req.userId], (err, results) => {
         if (err) {

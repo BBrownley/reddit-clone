@@ -2,13 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 
-import inboxService from "../../services/messages";
-
 import { setUser } from "../../reducers/userReducer";
 
 import moment from "moment";
-
-import MessageView from "../MessageView/MessageView";
 
 import { Message, MessageHeader } from "./InboxView.elements";
 import ButtonGroup from "../shared/ButtonGroup.elements";
@@ -29,7 +25,7 @@ export default function InboxView() {
         await dispatch(setUser(loggedUser));
       }
 
-      const messages = await inboxService.getAll(user.token);
+      const messages = await messageService.getAll(user.token);
       setMessages(messages);
     };
     fetchMessages();
@@ -40,7 +36,7 @@ export default function InboxView() {
       pathname: "/inbox/message",
       state: {
         subject: message.subject,
-        sender: message.sender_id,
+        sender: message.sender_username,
         time: message.created_at,
         body: message.content,
         id: message.id
@@ -101,7 +97,11 @@ export default function InboxView() {
         >
           <MessageHeader>
             <p>
-              <strong>{message.sender_id ? "user" : "(server message)"}</strong>{" "}
+              <strong>
+                {message.sender_id
+                  ? message.sender_username
+                  : "(server message)"}
+              </strong>{" "}
               -{" "}
               {message.subject ? (
                 <strong>{message.subject}</strong>

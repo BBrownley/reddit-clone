@@ -4,6 +4,8 @@ import { Link, useLocation, useHistory } from "react-router-dom";
 
 import messageService from "../../services/messages";
 
+import moment from "moment";
+
 import {
   Message,
   Sender,
@@ -43,7 +45,9 @@ export default function MessageView() {
       <h2>{location.state.subject}</h2>
       <div>
         <Sender>{location.state.sender || "Server"}</Sender> |{" "}
-        <Time>{location.state.time}</Time>
+        <Time>
+          {moment(location.state.time).format("MMMM Do YYYY, h:mm:ss a")}
+        </Time>
       </div>
       <MessageBody>{location.state.body}</MessageBody>
       <Actions>
