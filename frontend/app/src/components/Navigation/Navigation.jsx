@@ -25,7 +25,12 @@ export default function Navigation() {
     dispatch(clearPostVotes());
     dispatch(clearCommentVotes());
 
-    const userOnlyRoutes = ["/create", "/creategroup", "/inbox"];
+    const userOnlyRoutes = [
+      "/create",
+      "/creategroup",
+      "/inbox",
+      "/messages/compose"
+    ];
 
     if (userOnlyRoutes.find(route => window.location.pathname === route)) {
       history.push("/");
