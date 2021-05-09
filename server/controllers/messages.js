@@ -45,6 +45,7 @@ messageRouter.post("/", async (req, res, next) => {
         },
         (err, results) => {
           if (err) {
+            console.log(err);
             reject(new Error("Unable to send message"));
           } else {
             resolve("Message sent");

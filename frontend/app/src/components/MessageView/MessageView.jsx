@@ -11,8 +11,11 @@ import {
   Sender,
   Time,
   Actions,
-  MessageBody
+  MessageBody,
+  ReplyForm
 } from "./MessageView.elements";
+
+import { Button } from "../shared/Button.elements";
 
 export default function MessageView() {
   const [reply, setReply] = useState("");
@@ -26,11 +29,12 @@ export default function MessageView() {
   const sendReply = () => {
     const message = {
       sender_id: currentUser.userId,
-      recipient_id: location.state.sender,
+      recipient_id: location.state.senderId,
       content: reply,
       has_read: 0,
       subject: `Re: ${location.state.subject}`
     };
+    console.log(message);
     messageService.send(message);
     history.push("/inbox");
   };
@@ -69,14 +73,21 @@ export default function MessageView() {
         )}
       </Actions>
       {replyOpen && (
-        <>
-          <input
+        <ReplyForm>
+          <textarea
             type="text"
             value={reply}
             onChange={e => setReply(e.target.value)}
           />
-          <button onClick={sendReply}>Send</button>
-        </>
+          <div className="reply-options">
+            <Button onClick={() => setReplyOpen(false)} color="white">
+              Cancel
+            </Button>
+            <Button onClick={sendReply} color="blue">
+              Send
+            </Button>
+          </div>
+        </ReplyForm>
       )}
     </Message>
   );

@@ -24,6 +24,12 @@ export const Button = styled.div`
           color: white;
           border: 1px solid ${props.theme.cornflowerBlue}
         `;
+      case "white":
+        return `
+          background-color: none;
+          color: black;
+          border: 1px solid ${props.theme.cornflowerBlue}
+        `;
       case "pink-primary":
         return `
           background-color: ${props.theme.persianPink};
@@ -33,10 +39,6 @@ export const Button = styled.div`
             color: white;
           }
         `;
-      // case "pink-secondary":
-      //   return `
-      //     border: 1px solid ${props.theme.persianPink};
-      //   `;
     }
   }}
 

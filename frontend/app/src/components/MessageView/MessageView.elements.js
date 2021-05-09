@@ -28,3 +28,19 @@ export const MessageBody = styled.p`
   line-height: 2;
   margin-top: 10px;
 `;
+
+export const ReplyForm = styled.div`
+  margin-top: 1rem;
+  textarea {
+    width: 75%;
+    max-width: 100%;
+    height: 200px;
+    display: block;
+  }
+  .reply-options {
+    margin-top: 1rem;
+    div {
+      margin-right: 1rem;
+    }
+  }
+`;

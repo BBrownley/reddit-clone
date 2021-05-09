@@ -37,6 +37,7 @@ export default function InboxView() {
       state: {
         subject: message.subject,
         sender: message.sender_username,
+        senderId: message.sender_id,
         time: message.created_at,
         body: message.content,
         id: message.id
