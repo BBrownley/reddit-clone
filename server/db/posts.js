@@ -15,6 +15,7 @@ const q = `
   username,
   users.id AS user_id,
   content,
+  (SELECT COUNT(*) FROM post_follows WHERE posts.id = post_follows.post_id) AS follows,
   (SELECT COUNT(*) FROM comments 
     WHERE posts.id = comments.post_id) AS total_comments
   FROM posts

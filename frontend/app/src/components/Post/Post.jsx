@@ -170,7 +170,10 @@ const Post = ({ post, options, expand, viewMode }) => {
               <PostOptions>
                 <div>
                   {user.token && (
-                    <FollowButton followers={10} postId={post.postID} />
+                    <FollowButton
+                      followers={post.follows}
+                      postId={post.postID}
+                    />
                   )}
                   {user && (
                     <span>
