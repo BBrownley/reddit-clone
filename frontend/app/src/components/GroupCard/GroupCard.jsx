@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+
+import groupService from "../../services/groups";
+
 import { CardWrapper, Card, GroupBlurb } from "./GroupCard.elements";
 import NavLink from "../shared/NavLink.elements";
 import { Button, InvisText, Container } from "../shared/Button.elements";
@@ -10,6 +13,8 @@ import {
 } from "../../reducers/groupSubscribesReducer";
 
 export default function GroupCard({ group }) {
+  const [groupSubs, setGroupSubs] = useState(null);
+
   const { group_name, blurb } = group;
 
   const dispatch = useDispatch();
@@ -24,6 +29,14 @@ export default function GroupCard({ group }) {
   const handleUnsubscribe = () => {
     dispatch(unsubscribeFromGroup(group, loggedUser));
   };
+
+  useEffect(() => {
+    const fetchGroup = async groupName => {
+      const data = await groupService.getGroupByName(groupName);
+      setGroupSubs(data.subscribers);
+    };
+    fetchGroup(group.group_name);
+  }, []);
 
   return (
     <CardWrapper>
@@ -53,9 +66,9 @@ export default function GroupCard({ group }) {
           } else {
             return (
               <Button color={"blue"} size={"fill"} onClick={handleSubscribe}>
-                <InvisText>10 subscribers</InvisText>
+                <InvisText>{groupSubs} subscribers</InvisText>
                 <Container>
-                  <span>10 subscribers</span>
+                  <span>{groupSubs} subscribers</span>
                   <span>Subscribe</span>
                 </Container>
               </Button>
