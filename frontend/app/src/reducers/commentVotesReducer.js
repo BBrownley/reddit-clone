@@ -38,7 +38,6 @@ export const changeVote = (commentId, newValue) => {
       commentId,
       newValue
     );
-    console.log(updatedVote);
     dispatch({
       type: "UPDATE_COMMENT_VOTE",
       updatedVote

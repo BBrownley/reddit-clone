@@ -81,6 +81,11 @@ const remove = id => {
   axios.put(`http://localhost:5000/comments/${id}/remove`, null, config);
 };
 
+const getCommentScoreById = async id => {
+  const req = await axios.get(`http://localhost:5000/comments/${id}/score`);
+  return req.data.score;
+};
+
 export default {
   getCommentsByPostId,
   getRootCommentsByPostId,
@@ -89,5 +94,6 @@ export default {
   editComment,
   add,
   remove,
+  getCommentScoreById,
   setToken
 };

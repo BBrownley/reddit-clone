@@ -54,6 +54,9 @@ export default function Comment(props) {
   const [removed, setRemoved] = useState(
     props.comment.deleted === "Y" ? true : false
   );
+  const [commentScore, setCommentScore] = useState(
+    props.comment.comment_score || 0
+  );
 
   const match = useRouteMatch("/groups/:groupName/:groupId");
 
@@ -120,6 +123,11 @@ export default function Comment(props) {
         dispatch(vote(currentCommentId, -1));
       }
     }
+    const updatedScore = await commentsService.getCommentScoreById(
+      props.comment.comment_id
+    );
+
+    setCommentScore(updatedScore);
   };
 
   const handleEditComment = () => {
@@ -144,7 +152,6 @@ export default function Comment(props) {
     setReplying(true);
   };
 
-  const commentScore = props.comment.comment_score || 0;
   const userOwnsComment = currentUser.userId === props.comment.commenter_id;
 
   return (

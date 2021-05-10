@@ -15,12 +15,8 @@ commentsRouter.get("/post/:postId", async (req, res, next) => {
         users.id AS user_id,
         users.username AS username,
         deleted,
-        (
-        SELECT CASE WHEN
-            SUM(vote_value) < 1 OR SUM(vote_value) IS NULL THEN 0 
-            ELSE SUM(vote_value)
-        END
-        ) AS comment_score FROM comments
+        SUM(vote_value) AS comment_score 
+        FROM comments
 
       LEFT JOIN comment_votes ON comment_votes.comment_id = comments.id
       JOIN users ON comments.commenter_id = users.id
@@ -85,12 +81,8 @@ commentsRouter.get("/:commentId/children", async (req, res, next) => {
           users.id AS user_id,
           users.username AS username,
           deleted,
-          (
-          SELECT CASE WHEN
-              SUM(vote_value) < 1 OR SUM(vote_value) IS NULL THEN 0 
-              ELSE SUM(vote_value)
-          END
-          ) AS comment_score FROM comments
+          SUM(vote_value) AS comment_score 
+          FROM comments
 
         LEFT JOIN comment_votes ON comment_votes.comment_id = comments.id
         JOIN users ON comments.commenter_id = users.id
@@ -206,6 +198,38 @@ commentsRouter.put("/:commentId/remove", async (req, res, next) => {
   try {
     const success = await removeComment(req.params.commentId, req.userId);
     res.send(success);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
+// Get comment score
+commentsRouter.get("/:commentId/score", async (req, res, next) => {
+  const getCommentScore = () => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT *, 
+
+        CASE
+          WHEN SUM(vote_value) IS NULL THEN 0
+            ELSE SUM(vote_value)
+        END AS score FROM comment_votes
+        
+        WHERE comment_id = ?
+      `;
+      connection.query(query, [req.params.commentId], (err, results) => {
+        if (err) {
+          reject(new Error("Unable to fetch comment score"));
+        } else {
+          resolve(results[0]);
+        }
+      });
+    });
+  };
+
+  try {
+    const commentScore = await getCommentScore();
+    res.json(commentScore);
   } catch (exception) {
     next(exception);
   }
