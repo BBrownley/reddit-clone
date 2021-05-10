@@ -106,6 +106,7 @@ commentsRouter.get("/:commentId/children", async (req, res, next) => {
   }
 });
 
+// Add a new comment
 commentsRouter.post("/", async (req, res, next) => {
   const postComment = (username, userId) => {
     return new Promise((resolve, reject) => {
@@ -119,7 +120,8 @@ commentsRouter.post("/", async (req, res, next) => {
           commenter_id: userId,
           parent_id: req.body.parentId,
           content: req.body.comment,
-          post_id: req.body.postId
+          post_id: req.body.postId,
+          deleted: 0
         },
         (err, results) => {
           if (err) {
@@ -181,7 +183,7 @@ commentsRouter.put("/:commentId/remove", async (req, res, next) => {
     return new Promise((resolve, reject) => {
       const query = `
         UPDATE comments
-        SET content = "comment removed", deleted = "Y"
+        SET content = "comment removed", deleted = 1
         WHERE id = ? AND commenter_id = ?     
       `;
       console.log(commentId, userId);

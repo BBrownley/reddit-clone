@@ -52,7 +52,7 @@ export default function Comment(props) {
   const [content, setContent] = useState(props.comment.content);
   const [confirmDeletion, setConfirmDeletion] = useState(false);
   const [removed, setRemoved] = useState(
-    props.comment.deleted === "Y" ? true : false
+    parseInt(props.comment.deleted) === 1 ? true : false
   );
   const [commentScore, setCommentScore] = useState(
     props.comment.comment_score || 0
