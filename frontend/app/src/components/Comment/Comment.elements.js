@@ -19,20 +19,6 @@ export const Container = styled.div`
   }
 `;
 
-// export const Container = styled.div`
-//   margin-bottom: 10px;
-//   position: relative;
-//   background-color: gray;
-//   vertical-align: top;
-//   img {
-//     display: inline-block;
-//     width: 40px;
-//     position: absolute;
-//     top: 0;
-//     background-color: purple;
-//   }
-// `;
-
 export const MainContent = styled.div`
   padding-top: 5px;
   padding-left: 50px;
@@ -49,6 +35,10 @@ export const MainContent = styled.div`
   .comment {
     display: inline-block;
     min-height: 50px;
+  }
+  .comment-options {
+    display: flex;
+    align-content: center;
   }
 `;
 

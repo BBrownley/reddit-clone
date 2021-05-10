@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouteMatch, Link } from "react-router-dom";
+import { useRouteMatch, Link, useHistory } from "react-router-dom";
 
 import moment from "moment";
 
@@ -12,6 +12,7 @@ import {
   vote,
   changeVote
 } from "../../reducers/commentVotesReducer";
+import { setRedirectPath } from "../../reducers/redirectReducer";
 
 import BookmarkButton from "../BookmarkButton/BookmarkButton";
 
@@ -57,6 +58,7 @@ export default function Comment(props) {
   const match = useRouteMatch("/groups/:groupName/:groupId");
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     const fetchChildren = async () => {
@@ -91,6 +93,15 @@ export default function Comment(props) {
 
   // Handles comment voting when the thumbs up or thumbs down is clicked
   const handleVoteComment = async action => {
+    if (currentUser.userId === null) {
+      dispatch(setRedirectPath(window.location.pathname));
+      history.push({
+        pathname: "/login",
+        state: { headerMessage: "Log in to vote on comments" }
+      });
+      return;
+    }
+
     if (existingCommentVote) {
       if (
         (existingCommentVote.vote_value === 1 && action === "upvote") ||
@@ -122,9 +133,19 @@ export default function Comment(props) {
     commentsService.remove(props.comment.comment_id);
   };
 
+  const handleSetReplying = () => {
+    if (currentUser.userId === null) {
+      dispatch(setRedirectPath(window.location.pathname));
+      history.push({
+        pathname: "/login",
+        state: { headerMessage: "Log in to reply to comments" }
+      });
+    }
+    setReplying(true);
+  };
+
   const commentScore = props.comment.comment_score || 0;
   const userOwnsComment = currentUser.userId === props.comment.commenter_id;
-
 
   return (
     <Container child={props.child} key={props.comment.comment_id}>
@@ -141,8 +162,8 @@ export default function Comment(props) {
           {props.comment.username}
         </Link>
         <span className="comment">{removed ? "Comment removed" : content}</span>
-        {!removed && currentUser.userId !== null && (
-          <p>
+        {!removed && (
+          <div className="comment-options">
             <CommentVotes>
               <CommentVoteButton
                 name="thumbs-up"
@@ -157,80 +178,89 @@ export default function Comment(props) {
               />
             </CommentVotes>
             {replying === false && (
-              <span onClick={() => setReplying(true)}>
+              <span onClick={() => handleSetReplying()}>
                 <a className="reply">Reply</a>
               </span>
             )}
-            <BookmarkButton
-              bookmarked={userBookmarked}
-              commentId={props.comment.comment_id}
-            />
-            {userOwnsComment && (
-              <>
-                <button onClick={() => setConfirmDeletion(true)}>Delete</button>
-                {confirmDeletion && (
+            {!removed && currentUser.userId !== null && (
+              <p>
+                <BookmarkButton
+                  bookmarked={userBookmarked}
+                  commentId={props.comment.comment_id}
+                />
+                {userOwnsComment && (
                   <>
-                    <span>Are you sure?</span>
-                    <span onClick={handleRemoveComment}>yes</span>
-                    <span onClick={() => setConfirmDeletion(false)}>no</span>
+                    <button onClick={() => setConfirmDeletion(true)}>
+                      Delete
+                    </button>
+                    {confirmDeletion && (
+                      <>
+                        <span>Are you sure?</span>
+                        <span onClick={handleRemoveComment}>yes</span>
+                        <span onClick={() => setConfirmDeletion(false)}>
+                          no
+                        </span>
+                      </>
+                    )}
+                    <span onClick={() => setEditing(true)}>Edit</span>
                   </>
                 )}
-                <span onClick={() => setEditing(true)}>Edit</span>
-              </>
+                {replying === true && (
+                  <ReplyForm>
+                    <ReplyInput
+                      type="text"
+                      value={newComment}
+                      onChange={e => setNewComment(e.target.value)}
+                    />
+                    <button
+                      onClick={() => {
+                        props.handleSubmitComment(
+                          currentUser,
+                          newComment,
+                          match.params.groupId,
+                          props.comment.comment_id,
+                          true,
+                          children,
+                          setChildren
+                        );
+                        sendNotificationToRepliedUser(
+                          props.comment.commenter_id,
+                          newComment
+                        );
+                        setReplying(false);
+                        setNewComment("");
+                      }}
+                    >
+                      Send
+                    </button>
+                    <a onClick={() => setReplying(false)}>Cancel</a>
+                  </ReplyForm>
+                )}
+                {editing === true && (
+                  <div>
+                    <input
+                      value={editValue}
+                      onChange={e => setEditValue(e.target.value)}
+                    />
+                    <button onClick={() => handleEditComment()}>
+                      Edit comment
+                    </button>
+                    <p
+                      onClick={() => {
+                        setEditing(false);
+                        setEditValue(content);
+                      }}
+                    >
+                      Cancel
+                    </p>
+                  </div>
+                )}
+              </p>
             )}
-            {replying === true && (
-              <ReplyForm>
-                <ReplyInput
-                  type="text"
-                  value={newComment}
-                  onChange={e => setNewComment(e.target.value)}
-                />
-                <button
-                  onClick={() => {
-                    props.handleSubmitComment(
-                      currentUser,
-                      newComment,
-                      match.params.groupId,
-                      props.comment.comment_id,
-                      true,
-                      children,
-                      setChildren
-                    );
-                    sendNotificationToRepliedUser(
-                      props.comment.commenter_id,
-                      newComment
-                    );
-                    setReplying(false);
-                    setNewComment("");
-                  }}
-                >
-                  Send
-                </button>
-                <a onClick={() => setReplying(false)}>Cancel</a>
-              </ReplyForm>
-            )}
-            {editing === true && (
-              <div>
-                <input
-                  value={editValue}
-                  onChange={e => setEditValue(e.target.value)}
-                />
-                <button onClick={() => handleEditComment()}>
-                  Edit comment
-                </button>
-                <p
-                  onClick={() => {
-                    setEditing(false);
-                    setEditValue(content);
-                  }}
-                >
-                  Cancel
-                </p>
-              </div>
-            )}
-          </p>
+          </div>
         )}
       </MainContent>
+
       <CommentAge>
         <span>{moment(props.comment.created_at).fromNow()}</span>
       </CommentAge>
