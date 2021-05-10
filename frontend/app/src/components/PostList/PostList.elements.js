@@ -1,8 +1,6 @@
 import styled, { css } from "styled-components";
 
-export const Container = styled.div`
- 
-`
+export const Container = styled.div``;
 
 export const Post = styled.div`
   border-bottom: 1px solid #ddd;
@@ -12,9 +10,14 @@ export const Post = styled.div`
   display: flex;
   width: 100%;
 
-  & > div {
+  > div {
     display: flex;
+    justify-content: space-between;
     width: 100%;
+    > div {
+      display: flex;
+      width: 100%;
+    }
   }
   .comment-icon {
     margin-right: 5px;
@@ -121,7 +124,7 @@ export const VoteButton = styled.span`
 `;
 
 export const PostOptions = styled.div`
-  font-size: .875rem;
+  font-size: 0.875rem;
   color: #777;
   display: flex;
   align-items: center;

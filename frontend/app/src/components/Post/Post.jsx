@@ -106,11 +106,10 @@ const Post = ({ post, options, expand, viewMode }) => {
     return userPost.postID === post.postID;
   });
 
-  // TODO: Remove inline CSS
   return (
     <Container key={post.postID} expand={expand}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div style={{ display: "flex", width: "100%" }}>
+      <div>
+        <div>
           {options !== false && (
             <VoteContainer>
               <VoteButton upvoted={userPostVote?.vote_value === 1 ? 1 : 0}>
