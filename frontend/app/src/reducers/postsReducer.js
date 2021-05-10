@@ -1,6 +1,7 @@
 import postService from "../services/posts";
 
 import { setNotification } from "../reducers/notificationReducer";
+import {timedToast} from "../reducers/toastReducer"
 
 const initialState = [];
 
@@ -26,6 +27,7 @@ export const createPost = formData => {
         type: "CREATE_POST",
         data
       });
+      dispatch(timedToast(data.toastMessage));
       return data;
     }
   };

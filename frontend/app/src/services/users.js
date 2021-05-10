@@ -24,8 +24,6 @@ const login = async data => {
       config
     );
 
-    console.log(req.data);
-
     return req.data;
   } catch (error) {
     return { error: error.response.data.error };

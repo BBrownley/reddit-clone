@@ -61,7 +61,7 @@ export const login = (credentials, hasToken) => {
         postFollows: res.postFollows
       };
 
-      dispatch(timedToast(res.message));
+      dispatch(timedToast(res.toastMessage));
 
       postService.setToken(data.token);
       userPostVoteService.setToken(data.token);
@@ -93,6 +93,7 @@ export const logout = () => {
     dispatch({
       type: "LOGOUT"
     });
+    dispatch(timedToast("Logged out"));
   };
 };
 

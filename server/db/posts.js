@@ -1,34 +1,35 @@
 const connection = require("./index").connection;
 
-const q = `
-  SELECT 
-  CASE
-    WHEN ISNULL(SUM(post_votes.vote_value)) THEN 0
-      WHEN SUM(post_votes.vote_value) < 1 THEN 0
-      ELSE SUM(post_votes.vote_value)
-  END AS score,
-  title, 
-  posts.created_at AS created_at, 
-  posts.id AS postID,
-  group_name AS groupName,
-  group_id AS groupID,
-  username,
-  users.id AS user_id,
-  content,
-  (SELECT COUNT(*) FROM post_follows WHERE posts.id = post_follows.post_id) AS follows,
-  (SELECT COUNT(*) FROM comments 
-    WHERE posts.id = comments.post_id) AS total_comments
-  FROM posts
-  JOIN users ON users.id = posts.submitter_id
-  JOIN groups ON groups.id = posts.group_id
-  LEFT JOIN post_votes ON post_votes.post_id = posts.id
-  GROUP BY posts.id
-  ORDER BY posts.created_at DESC
-`;
-
 const all = () => {
   return new Promise((resolve, reject) => {
-    connection.query(q, (err, results) => {
+
+    const query = `
+      SELECT 
+      CASE
+        WHEN ISNULL(SUM(post_votes.vote_value)) THEN 0
+          WHEN SUM(post_votes.vote_value) < 1 THEN 0
+          ELSE SUM(post_votes.vote_value)
+      END AS score,
+      title, 
+      posts.created_at AS created_at, 
+      posts.id AS postID,
+      group_name AS groupName,
+      group_id AS groupID,
+      username,
+      users.id AS user_id,
+      content,
+      (SELECT COUNT(*) FROM post_follows WHERE posts.id = post_follows.post_id) AS follows,
+      (SELECT COUNT(*) FROM comments 
+        WHERE posts.id = comments.post_id) AS total_comments
+      FROM posts
+      JOIN users ON users.id = posts.submitter_id
+      JOIN groups ON groups.id = posts.group_id
+      LEFT JOIN post_votes ON post_votes.post_id = posts.id
+      GROUP BY posts.id
+      ORDER BY posts.created_at DESC
+    `;
+
+    connection.query(query, (err, results) => {
       if (err) {
         return reject(err);
       }
@@ -79,7 +80,6 @@ const create = (data, userId) => {
               WHERE posts.id = ?`,
             [results.insertId],
             (err, results) => {
-              console.log(results[0]);
               if (err) {
                 return reject(new Error("An unexpected error has occured"));
               } else {
@@ -191,25 +191,25 @@ const getPostsByUID = userId => {
   return new Promise((resolve, reject) => {
     connection.query(
       `SELECT 
-      CASE
-        WHEN ISNULL(SUM(post_votes.vote_value)) THEN 0
-          WHEN SUM(post_votes.vote_value) < 1 THEN 0
-          ELSE SUM(post_votes.vote_value)
-      END AS score,
-      title, 
-      posts.created_at AS created_at, 
-      posts.id AS postID,
-      group_name AS groupName,
-      group_id AS groupID,
-      username,
-      users.id AS user_id,
-      content FROM posts
-    JOIN users ON users.id = posts.submitter_id
-    JOIN groups ON groups.id = posts.group_id
-    LEFT JOIN post_votes ON post_votes.post_id = posts.id
-    WHERE posts.submitter_id = ?
-    GROUP BY posts.id
-    ORDER BY posts.created_at DESC
+        CASE
+          WHEN ISNULL(SUM(post_votes.vote_value)) THEN 0
+            WHEN SUM(post_votes.vote_value) < 1 THEN 0
+            ELSE SUM(post_votes.vote_value)
+        END AS score,
+        title, 
+        posts.created_at AS created_at, 
+        posts.id AS postID,
+        group_name AS groupName,
+        group_id AS groupID,
+        username,
+        users.id AS user_id,
+        content FROM posts
+      JOIN users ON users.id = posts.submitter_id
+      JOIN groups ON groups.id = posts.group_id
+      LEFT JOIN post_votes ON post_votes.post_id = posts.id
+      WHERE posts.submitter_id = ?
+      GROUP BY posts.id
+      ORDER BY posts.created_at DESC
     `,
       [userId],
       (error, results) => {

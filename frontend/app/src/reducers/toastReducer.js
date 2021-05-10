@@ -16,7 +16,6 @@ export const timedToast = message => {
 
 export const removeToast = () => {
   return dispatch => {
-    console.log("removing toast");
     dispatch({
       type: "REMOVE_TOAST"
     });

@@ -21,7 +21,7 @@ usersRouter.post("/login", async (req, res, next) => {
       userPosts: await postsDB.getPostsByUserId(req.userId),
       postFollows: await postsDB.getPostFollowsByUserId(req.userId)
     };
-    res.json({ ...data, message: "Successfully logged in" });
+    res.json({ ...data, toastMessage: "Successfully logged in" });
   } catch (exception) {
     next(exception);
   }
