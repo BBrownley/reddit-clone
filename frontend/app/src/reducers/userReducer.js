@@ -8,6 +8,7 @@ import commentVotesService from "../services/commentVotes";
 import bookmarkService from "../services/bookmarks";
 
 import { setNotification } from "../reducers/notificationReducer";
+import { timedToast } from "../reducers/toastReducer";
 
 const initialState = {
   username: null,
@@ -59,6 +60,8 @@ export const login = (credentials, hasToken) => {
         userId: res.userId,
         postFollows: res.postFollows
       };
+
+      dispatch(timedToast(res.message));
 
       postService.setToken(data.token);
       userPostVoteService.setToken(data.token);
@@ -143,7 +146,6 @@ export const unfollowPost = postId => {
 export const initializeFollows = () => {
   return async dispatch => {
     const res = await postService.getPostFollows();
-    console.log(res);
     dispatch({
       type: "INITIALIZE_FOLLOWS",
       postFollows: res.posts

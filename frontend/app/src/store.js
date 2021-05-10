@@ -8,6 +8,7 @@ import commentVotesReducer from "./reducers/commentVotesReducer";
 import notificationReducer from "./reducers/notificationReducer";
 import groupSubscribesReducer from "./reducers/groupSubscribesReducer";
 import redirectReducer from "./reducers/redirectReducer";
+import toastReducer from "./reducers/toastReducer";
 import { combineReducers, createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
@@ -22,7 +23,8 @@ const reducer = combineReducers({
   userBookmarks: userBookmarksReducer,
   notification: notificationReducer,
   subscribedGroups: groupSubscribesReducer,
-  redirectPath: redirectReducer
+  redirectPath: redirectReducer,
+  toast: toastReducer
 });
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));

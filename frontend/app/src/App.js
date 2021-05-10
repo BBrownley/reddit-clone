@@ -24,7 +24,7 @@ import MessageForm from "./components/MessageForm/MessageForm";
 import MessageView from "./components/MessageView/MessageView";
 import Navigation from "./components/Navigation/Navigation";
 import NotFound from "./components/NotFound/NotFound";
-import Sandbox from "./components/Sandbox";
+import Toast from "./components/Toast/Toast";
 import SingleGroupView from "./components/SingleGroupView/SingleGroupView";
 
 const App = () => {
@@ -36,6 +36,8 @@ const App = () => {
   const user = useSelector(state => {
     return state.user;
   });
+
+  const toast = useSelector(state => state.toast);
 
   useEffect(() => {
     const initialize = async () => {
@@ -67,6 +69,7 @@ const App = () => {
       <Body>
         <div className="App">
           <Wrapper>
+            <Toast message={toast} />
             <Navigation />
 
             <Switch>
@@ -82,7 +85,7 @@ const App = () => {
               <Route exact path="/login" component={LoginForm} />
               <Route exact path="/users/:userId" component={UserView} />
               <Route exact path="/inbox/message" component={MessageView} />
-              <Route exact path="/sandbox" component={Sandbox} />
+              {/* <Route exact path="/sandbox" component={Sandbox} /> */}
 
               {groupExists && (
                 <Route exact path={["/groups/:group"]}>

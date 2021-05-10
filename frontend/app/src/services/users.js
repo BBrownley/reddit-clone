@@ -24,6 +24,8 @@ const login = async data => {
       config
     );
 
+    console.log(req.data);
+
     return req.data;
   } catch (error) {
     return { error: error.response.data.error };
@@ -41,7 +43,9 @@ const getUserById = async userId => {
 
 const getUserByUsername = async username => {
   try {
-    const req = await axios.get(`http://localhost:5000/users/username/${username}`);
+    const req = await axios.get(
+      `http://localhost:5000/users/username/${username}`
+    );
     return req.data;
   } catch (error) {
     return { error: error.response.data.error };
