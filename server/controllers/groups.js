@@ -9,7 +9,7 @@ groupsRouter.get("/", async (req, res) => {
 
 groupsRouter.post("/create", async (req, res, next) => {
   try {
-    const createdGroup = await groupsDB.create(req.body, token);
+    const createdGroup = await groupsDB.create(req.body, req.userId);
     res.json(createdGroup);
   } catch (exception) {
     next(exception);
