@@ -39,6 +39,10 @@ export default function Comments({ postId, authorId, postTitle }) {
     children = null,
     setChildren = null
   ) => {
+    if (content.trim().length === 0) {
+      return console.log("Comment cannot be empty");
+    }
+
     const newCommentObj = await commentsService.add(
       user,
       content,

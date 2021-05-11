@@ -81,6 +81,13 @@ export const ReplyForm = styled.div`
     margin-right: 20px;
     font-size: 1rem;
   }
+  .form-bottom {
+    display: flex;
+    justify-content: space-between;
+    .warning {
+      color: red;
+    }
+  }
 `;
 
 export const ReplyInput = styled.textarea`

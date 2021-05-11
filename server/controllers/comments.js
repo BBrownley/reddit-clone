@@ -144,6 +144,10 @@ commentsRouter.post("/", async (req, res, next) => {
     });
   };
   try {
+    if (req.body.comment.trim().length === 0) {
+      throw new Error("Comment cannot be empty");
+    }
+
     const newComment = await postComment(req.username, req.userId);
     res.json(newComment);
   } catch (exception) {
@@ -171,6 +175,10 @@ commentsRouter.put(`/:commentId`, async (req, res, next) => {
   };
 
   try {
+    if (req.body.updatedContent.trim().length === 0) {
+      throw new Error("Updated comment cannot be empty");
+    }
+
     await updateComment(req.body.updatedContent, req.params.commentId);
     res.sendStatus(200);
   } catch (exception) {

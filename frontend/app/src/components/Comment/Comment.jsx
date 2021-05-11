@@ -57,6 +57,7 @@ export default function Comment(props) {
   const [commentScore, setCommentScore] = useState(
     props.comment.comment_score || 0
   );
+  const [replyFormWarning, setReplyFormWarning] = useState(null);
 
   const match = useRouteMatch("/groups/:groupName/:groupId");
 
@@ -72,6 +73,10 @@ export default function Comment(props) {
     };
     fetchChildren();
   }, [existingCommentVote, props.comment.comment_id]);
+
+  useEffect(() => {
+    setReplyFormWarning(null);
+  }, [newComment]);
 
   /*
     Whenever a user replies to a comment, notify the user who was replied to
@@ -131,6 +136,10 @@ export default function Comment(props) {
   };
 
   const handleEditComment = () => {
+    if (editValue.trim().length === 0) {
+      return console.log("Updated comment cannot be empty");
+    }
+
     setEditing(false);
     setContent(editValue);
     commentsService.editComment(props.comment.comment_id, editValue);
@@ -139,6 +148,25 @@ export default function Comment(props) {
   const handleRemoveComment = async () => {
     setRemoved(true);
     commentsService.remove(props.comment.comment_id);
+  };
+
+  const handleReplyComment = () => {
+    if (newComment.trim().length === 0) {
+      return setReplyFormWarning("Cannot be empty");
+    }
+
+    props.handleSubmitComment(
+      currentUser,
+      newComment,
+      match.params.groupId,
+      props.comment.comment_id,
+      true,
+      children,
+      setChildren
+    );
+    sendNotificationToRepliedUser(props.comment.commenter_id, newComment);
+    setReplying(false);
+    setNewComment("");
   };
 
   const handleSetReplying = () => {
@@ -219,28 +247,15 @@ export default function Comment(props) {
                       value={newComment}
                       onChange={e => setNewComment(e.target.value)}
                     />
-                    <button
-                      onClick={() => {
-                        props.handleSubmitComment(
-                          currentUser,
-                          newComment,
-                          match.params.groupId,
-                          props.comment.comment_id,
-                          true,
-                          children,
-                          setChildren
-                        );
-                        sendNotificationToRepliedUser(
-                          props.comment.commenter_id,
-                          newComment
-                        );
-                        setReplying(false);
-                        setNewComment("");
-                      }}
-                    >
-                      Send
-                    </button>
-                    <a onClick={() => setReplying(false)}>Cancel</a>
+                    <div className="form-bottom">
+                      <div>
+                        <button onClick={() => handleReplyComment()}>
+                          Send
+                        </button>
+                        <a onClick={() => setReplying(false)}>Cancel</a>
+                      </div>
+                      <span className="warning">{replyFormWarning}</span>
+                    </div>
                   </ReplyForm>
                 )}
                 {editing === true && (
