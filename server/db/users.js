@@ -105,7 +105,7 @@ const login = userInfo => {
 const getUserById = userId => {
   return new Promise((resolve, reject) => {
     connection.query(
-      `SELECT id, username FROM users WHERE id = ?`,
+      `SELECT id, username, created_at FROM users WHERE id = ?`,
       [userId],
       (error, results) => {
         if (error) {

@@ -143,7 +143,6 @@ export default function UserView() {
             </li>
           )}
         </ButtonGroup>
-        <p>This is {matchesLoggedUser ? "your account" : "not your account"}</p>
         <UserHistory>
           <br />
           <div>
