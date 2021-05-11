@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 
 export const Container = styled.div``;
 
@@ -105,6 +105,30 @@ export const VoteContainer = styled.div`
   font-size: 1.5rem;
 `;
 
+const upvoteAnim = keyframes`
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-.25rem);
+  }
+  100% {
+    transform: translateY(0);
+  }
+`;
+
+const downvoteAnim = keyframes`
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(.25rem);
+  }
+  100% {
+    transform: translateY(0);
+  }
+`;
+
 export const VoteButton = styled.span`
   &:hover {
     opacity: 0.75;
@@ -114,10 +138,12 @@ export const VoteButton = styled.span`
     if (props.upvoted) {
       return css`
         color: ${props.theme.cornflowerBlue};
+        animation: 0.2s ${upvoteAnim} ease-out;
       `;
     } else if (props.downvoted) {
       return css`
         color: ${props.theme.crimson};
+        animation: 0.2s ${downvoteAnim} ease-out;
       `;
     }
   }}
