@@ -6,7 +6,7 @@ messageRouter.get("/", async (req, res, next) => {
     return new Promise((resolve, reject) => {
       const query = `
         SELECT messages.*, users.username AS sender_username FROM messages
-        JOIN users ON users.id = messages.sender_id
+        LEFT JOIN users ON users.id = messages.sender_id
         WHERE recipient_id = ?
         ORDER BY messages.created_at DESC
       `;

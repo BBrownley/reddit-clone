@@ -6,7 +6,7 @@ const connection = require("../db/posts").connection;
 postsRouter.post("/", async (req, res, next) => {
   try {
     const data = await postsDB.create(req.body, req.userId);
-    res.json({...data, toastMessage: "Post created"});
+    res.json({ ...data, toastMessage: "Post created" });
   } catch (exception) {
     next(exception);
   }
