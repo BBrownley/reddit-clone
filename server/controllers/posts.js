@@ -19,6 +19,8 @@ postsRouter.post("/:id/vote", async (req, res) => {
 });
 
 postsRouter.get("/votes", async (req, res, next) => {
+  if (req.userId === undefined) return;
+
   try {
     const userPostVotes = await postVotesDB.getUserPostVotes(req.userId);
     res.json(userPostVotes);
@@ -28,6 +30,8 @@ postsRouter.get("/votes", async (req, res, next) => {
 });
 
 postsRouter.get("/follows", async (req, res, next) => {
+  if (req.userId === undefined) return;
+
   const getPostFollows = userId => {
     return new Promise((resolve, reject) => {
       const query = `
