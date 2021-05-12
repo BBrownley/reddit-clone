@@ -11,3 +11,4 @@ frontend/app/db.json
 node_modules
 server/node_modules
 server/.env
+.vscode
