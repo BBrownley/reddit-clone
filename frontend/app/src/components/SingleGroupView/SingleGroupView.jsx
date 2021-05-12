@@ -45,7 +45,7 @@ export default function SingleGroupView({ all, handleSetGroupExists }) {
       {!all && <GroupInfo handleSetGroupExists={handleSetGroupExists} />}
       <GroupActions />
       <div>
-        <strong>Sort posts by:</strong>
+        {/* <strong>Sort posts by:</strong>
         <select
           name="sortBy"
           id="sort-by"
@@ -57,7 +57,7 @@ export default function SingleGroupView({ all, handleSetGroupExists }) {
           <option value="followers">Followers</option>
           <option value="commentsDesc">Comments (high to low)</option>
           <option value="commentsAsc">Comments (low to high)</option>
-        </select>
+        </select> */}
         <strong>
           Search posts by{" "}
           <select

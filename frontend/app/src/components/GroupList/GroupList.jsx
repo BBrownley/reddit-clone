@@ -55,12 +55,9 @@ const GroupList = () => {
     return result;
   };
 
-  // TODO: Try making the search into its own component (as its also being used in App.js)
-
   return (
     <div>
       <br />
-      <h2>Here's all our groups:</h2>
       <br />
       <button onClick={handleCreateGroupButton}>Create your own group</button>
       <br />

@@ -17,10 +17,6 @@ const PostList = ({ sortBy, searchBy, searchTerm, posts = undefined }) => {
 
   const userPostVotes = useSelector(state => state.userPostVotes);
 
-  const increment = 20;
-
-  const [currentIndex, setCurrentIndex] = useState(20);
-
   const dispatch = useDispatch();
 
   let postsToDisplay = useSelector(state => {
@@ -45,16 +41,12 @@ const PostList = ({ sortBy, searchBy, searchTerm, posts = undefined }) => {
       }
     });
 
-    return posts.slice(0, currentIndex);
+    return posts
   });
 
   postsToDisplay = postListHelpers.sortPosts(
     postListHelpers.filterPosts(postsToDisplay)
   );
-
-  const continueScroll = () => {
-    setCurrentIndex(prevState => prevState + increment);
-  };
 
   useEffect(() => {
     dispatch(initializePosts());
@@ -62,16 +54,19 @@ const PostList = ({ sortBy, searchBy, searchTerm, posts = undefined }) => {
 
   return (
     <Container>
-      <InfiniteScroll
-        dataLength={currentIndex}
-        next={continueScroll}
-        hasMore={true}
-        scrollThreshold={1}
-      >
-        {postsToDisplay.map(post => (
+      {postsToDisplay
+        .filter(post => {
+          if (searchBy === "title") {
+            return post.title.toLowerCase().includes(searchTerm.toLowerCase());
+          } else if (searchBy === "content") {
+            return post.content
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase());
+          }
+        })
+        .map(post => (
           <Post post={post} key={post.postID} />
         ))}
-      </InfiniteScroll>
     </Container>
   );
 };

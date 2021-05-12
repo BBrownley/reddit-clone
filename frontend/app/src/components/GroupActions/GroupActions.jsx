@@ -79,9 +79,9 @@ const GroupActions = () => {
           </button>
         ))}
 
-      <button>
+      {/* <button>
         <FontAwesome name="info-circle"></FontAwesome> More Info
-      </button>
+      </button> */}
     </Container>
   );
 };
