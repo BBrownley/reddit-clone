@@ -27,6 +27,8 @@ import NotFound from "./components/NotFound/NotFound";
 import Toast from "./components/Toast/Toast";
 import SingleGroupView from "./components/SingleGroupView/SingleGroupView";
 
+import redditto from "./redditto.png";
+
 const App = () => {
   const dispatch = useDispatch();
 
@@ -74,7 +76,6 @@ const App = () => {
 
             <Switch>
               <Route exact path="/">
-                <h2>Welcome to my Reddit clone! :)</h2>
                 <SingleGroupView
                   all={true}
                   handleSetGroupExists={setGroupExists}

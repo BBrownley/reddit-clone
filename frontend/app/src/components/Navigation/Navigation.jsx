@@ -40,7 +40,7 @@ export default function Navigation() {
   return (
     <Container>
       <StyledLink to="/">
-        <Branding>Hello! ^_^</Branding>
+        <Branding></Branding>
       </StyledLink>
 
       <div>
