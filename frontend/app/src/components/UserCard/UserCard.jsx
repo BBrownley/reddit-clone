@@ -18,12 +18,12 @@ export default function UserCard({ username, handleLogout }) {
   return (
     <div>
       <Container>
-        <div>
+        {/* <div>
           <ProfileImage
             src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
             alt=""
           />
-        </div>
+        </div> */}
         <div>
           <p>
             <strong>

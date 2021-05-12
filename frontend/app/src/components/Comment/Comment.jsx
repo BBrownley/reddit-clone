@@ -184,14 +184,14 @@ export default function Comment(props) {
 
   return (
     <Container child={props.child} key={props.comment.comment_id}>
-      <div>
+      {/* <div>
         <img
           src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
           width="35"
           height="35"
           alt="user profile image"
         ></img>
-      </div>
+      </div> */}
       <MainContent>
         <Link to={`/users/${props.comment.user_id}`}>
           {props.comment.username}

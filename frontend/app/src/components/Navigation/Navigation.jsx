@@ -43,29 +43,27 @@ export default function Navigation() {
         <Branding></Branding>
       </StyledLink>
 
-      <div>
-        <h2>
-          <StyledLink to="/groups">Groups</StyledLink>
-        </h2>
-        {(() => {
-          if (user.username) {
-            return (
-              <UserCard username={user.username} handleLogout={handleLogout} />
-            );
-          } else {
-            return (
-              <ul>
-                <li>
-                  <StyledLink to="/login">Log in</StyledLink>
-                </li>
-                <li>
-                  <StyledLink to="/register">Register</StyledLink>
-                </li>
-              </ul>
-            );
-          }
-        })()}
-      </div>
+      <h2>
+        <StyledLink to="/groups">Groups</StyledLink>
+      </h2>
+      {(() => {
+        if (user.username) {
+          return (
+            <UserCard username={user.username} handleLogout={handleLogout} />
+          );
+        } else {
+          return (
+            <ul>
+              <li>
+                <StyledLink to="/login">Log in</StyledLink>
+              </li>
+              <li>
+                <StyledLink to="/register">Register</StyledLink>
+              </li>
+            </ul>
+          );
+        }
+      })()}
     </Container>
   );
 }

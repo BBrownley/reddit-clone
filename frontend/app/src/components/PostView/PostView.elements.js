@@ -8,7 +8,7 @@ export const Post = styled.div`
 `;
 
 export const PostMain = styled.div`
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
   .fa-history {
     color: #999;
   }

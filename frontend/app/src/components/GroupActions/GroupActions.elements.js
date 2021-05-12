@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const GroupActions = styled.div`
   display: flex;
+  width: 31rem;
   margin: 30px 0;
 
   justify-content: space-between;

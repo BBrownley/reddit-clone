@@ -21,7 +21,7 @@ export const Container = styled.div`
 
 export const MainContent = styled.div`
   padding-top: 5px;
-  padding-left: 50px;
+  /* padding-left: 50px; */
   padding-right: 150px;
   line-height: 1.75;
 

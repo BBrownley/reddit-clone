@@ -4,11 +4,13 @@ export const Container = styled.div``;
 
 export const Post = styled.div`
   border-bottom: 1px solid #ddd;
-  padding: 10px;
+  padding: 0 .5rem;
   padding-left: 5px;
   line-height: 1.5;
   display: flex;
   width: 100%;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
 
   > div {
     display: flex;

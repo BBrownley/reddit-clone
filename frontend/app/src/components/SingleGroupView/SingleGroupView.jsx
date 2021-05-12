@@ -5,6 +5,8 @@ import GroupInfo from "../GroupInfo/GroupInfo";
 import PostList from "../PostList/PostList";
 import GroupActions from "../GroupActions/GroupActions";
 
+import { GroupHeader } from "./SingleGroupView.elements";
+
 export default function SingleGroupView({ all, handleSetGroupExists }) {
   const [sortBy, setSortBy] = useState("new");
   const [searchBy, setSearchBy] = useState("title");
@@ -30,9 +32,7 @@ export default function SingleGroupView({ all, handleSetGroupExists }) {
     setSearchTerm("");
   };
 
-  const checkForGroup = () => {
-
-  }
+  const checkForGroup = () => {};
 
   useEffect(() => {
     return () => {
@@ -43,9 +43,10 @@ export default function SingleGroupView({ all, handleSetGroupExists }) {
   return (
     <div>
       {!all && <GroupInfo handleSetGroupExists={handleSetGroupExists} />}
-      <GroupActions />
-      <div>
-        {/* <strong>Sort posts by:</strong>
+      <GroupHeader>
+        <GroupActions />
+        <div>
+          {/* <strong>Sort posts by:</strong>
         <select
           name="sortBy"
           id="sort-by"
@@ -58,24 +59,28 @@ export default function SingleGroupView({ all, handleSetGroupExists }) {
           <option value="commentsDesc">Comments (high to low)</option>
           <option value="commentsAsc">Comments (low to high)</option>
         </select> */}
-        <strong>
-          Search posts by{" "}
-          <select
-            name="searchOption"
-            id="search-option"
-            onChange={handleSearchBy}
-            value={searchBy}
+          <strong>
+            Search posts by{" "}
+            <select
+              name="searchOption"
+              id="search-option"
+              onChange={handleSearchBy}
+              value={searchBy}
+            >
+              <option value="title">Title</option>
+              <option value="content">Content</option>
+            </select>
+            :{" "}
+          </strong>
+          <input onChange={handleSearchTerm} value={searchTerm}></input>
+          <button
+            className="button-small no-shadow ml-10"
+            onClick={resetFilters}
           >
-            <option value="title">Title</option>
-            <option value="content">Content</option>
-          </select>
-          :{" "}
-        </strong>
-        <input onChange={handleSearchTerm} value={searchTerm}></input>
-        <button className="button-small no-shadow ml-10" onClick={resetFilters}>
-          Clear search
-        </button>
-      </div>
+            Clear search
+          </button>
+        </div>
+      </GroupHeader>
       <PostList sortBy={sortBy} searchBy={searchBy} searchTerm={searchTerm} />
     </div>
   );

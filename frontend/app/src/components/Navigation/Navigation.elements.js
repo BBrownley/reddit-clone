@@ -5,8 +5,11 @@ export const Navigation = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 2rem;
   ul {
     display: flex;
+    width: 14rem;
+    justify-content: space-between;
     li {
       margin: 10px 20px;
       font-weight: bold;

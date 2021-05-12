@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
+import FontAwesome from "react-fontawesome";
+
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Container } from "./GroupList.elements";
+import { Container, GroupListHeader } from "./GroupList.elements";
 
 import GroupCard from "../GroupCard/GroupCard";
 
@@ -57,35 +59,39 @@ const GroupList = () => {
 
   return (
     <div>
-      <br />
-      <br />
-      <button onClick={handleCreateGroupButton}>Create your own group</button>
-      <br />
-      <br />
-      <strong>
-        Search groups by{" "}
-        <select
-          name="searchOption"
-          id="search-option"
-          onChange={e => setSearchBy(e.target.value)}
-          value={searchBy}
-        >
-          <option value="name">Name</option>
-          <option value="blurb">Blurb</option>
-        </select>
-        :{" "}
-      </strong>
-      <input
-        onChange={e => setSearchTerm(e.target.value)}
-        value={searchTerm}
-      ></input>
-      <button className="button-small no-shadow ml-10" onClick={resetFilters}>
-        Clear search
-      </button>
+      <GroupListHeader>
+        <button onClick={handleCreateGroupButton} className="create-group-button"> <FontAwesome name="users" className="fa-users" />Create your own group</button>
+        <div>
+          <strong>
+            Search groups by{" "}
+            <select
+              name="searchOption"
+              id="search-option"
+              onChange={e => setSearchBy(e.target.value)}
+              value={searchBy}
+            >
+              <option value="name">Name</option>
+              <option value="blurb">Blurb</option>
+            </select>
+            :{" "}
+          </strong>
+          <input
+            onChange={e => setSearchTerm(e.target.value)}
+            value={searchTerm}
+          ></input>
+
+          <button
+            className="button-small no-shadow ml-10"
+            onClick={resetFilters}
+          >
+            Clear search
+          </button>
+        </div>
+      </GroupListHeader>
       <Container>
         {groups.length !== 0
           ? filterGroups(groups).map((group, index) => {
-              return <GroupCard group={group} key={index}/>;
+              return <GroupCard group={group} key={index} />;
             })
           : ""}
       </Container>

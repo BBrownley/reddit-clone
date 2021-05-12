@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const GroupInfo = styled.div`
   text-align: center;
+  margin-bottom: 2rem;
 
   .group-desc {
     max-width: 80ch;

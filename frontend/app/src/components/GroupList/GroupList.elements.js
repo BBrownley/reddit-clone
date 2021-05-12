@@ -17,3 +17,16 @@ export const Container = styled.div`
     grid-template-columns: 1fr;
   }
 `;
+
+export const GroupListHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  .fa-users {
+    margin-right: 1rem;
+  }
+  .create-group-button {
+    width: 500px;
+  }
+`;
