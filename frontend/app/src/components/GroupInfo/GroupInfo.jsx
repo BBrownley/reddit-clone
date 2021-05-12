@@ -5,22 +5,18 @@ import { GroupInfo as Container } from "./GroupInfo.elements";
 
 import groupService from "../../services/groups";
 
-const GroupInfo = ({ handleSetGroupExists }) => {
-  const [group, setGroup] = useState({});
+const GroupInfo = ({ handleSetGroupExists, group }) => {
+  // const [group, setGroup] = useState({});
 
-  const groupMatch = useRouteMatch("/groups/:groupName");
+  // const groupMatch = useRouteMatch("/groups/:groupName");
 
-  useEffect(() => {
-    const fetchGroup = async groupName => {
-      const data = await groupService.getGroupByName(groupName);
-      setGroup(data);
-    };
-    fetchGroup(groupMatch.params.groupName);
-  }, [groupMatch.params.groupName]);
-
-  if (!group) {
-    handleSetGroupExists(false);
-  }
+  // useEffect(() => {
+  //   const fetchGroup = async groupName => {
+  //     const data = await groupService.getGroupByName(groupName);
+  //     setGroup(data);
+  //   };
+  //   fetchGroup(groupMatch.params.groupName);
+  // }, [groupMatch.params.groupName]);
 
   return (
     <Container>

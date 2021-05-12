@@ -19,11 +19,15 @@ const getAll = async () => {
 };
 
 const getGroupByName = async groupName => {
-  const req = await axios.get(
-    `http://localhost:5000/groups/${groupName}`,
-    config
-  );
-  return req.data;
+  try {
+    const req = await axios.get(
+      `http://localhost:5000/groups/${groupName}`,
+      config
+    );
+    return req.data;
+  } catch (exception) {
+    return false;
+  }
 };
 
 const create = async groupData => {

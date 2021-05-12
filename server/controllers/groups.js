@@ -48,7 +48,7 @@ groupsRouter.param("groupName", async (req, res, next, groupName) => {
   if (group) {
     req.group = group;
   } else {
-    next(new Error("Group not found"));
+    return res.json(400, { message: "Cannot find group" });
   }
   next();
 });

@@ -31,10 +31,18 @@ const PostForm = () => {
     };
   });
 
+  const currentUser = useSelector(state => state.user);
+
   // Clear notification on component unmount/view change
   useEffect(() => {
     return () => dispatch(removeNotification());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (currentUser.userId === null) {
+      history.push("/");
+    }
+  });
 
   const handleSetTitle = e => {
     setTitle(e.target.value);
