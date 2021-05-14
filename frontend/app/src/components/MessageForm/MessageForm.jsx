@@ -53,6 +53,12 @@ export default function MessageForm() {
     };
   }, [dispatch, subject, body]);
 
+  useEffect(() => {
+    if (user.userId === null) {
+      history.push("/");
+    }
+  });
+
   return (
     <FormContainer>
       <FormHeader>Write a new message</FormHeader>

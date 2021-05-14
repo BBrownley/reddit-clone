@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 
+import NotFound from "../NotFound/NotFound";
+
 import { useSelector, useDispatch } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
 
@@ -31,18 +33,19 @@ const PostView = () => {
     if (user.token !== null) init();
   }, [dispatch]);
 
-  if (!post) {
-    return null;
-  }
-
   return (
     <>
-      <Post post={post} key={post.postID} expand={true} viewMode={true} />
-      <Comments
-        postId={post.postID}
-        authorId={post.user_id}
-        postTitle={post.title}
-      />
+      {!post && <NotFound />}
+      {post && (
+        <div>
+          <Post post={post} key={post.postID} expand={true} viewMode={true} />
+          <Comments
+            postId={post.postID}
+            authorId={post.user_id}
+            postTitle={post.title}
+          />
+        </div>
+      )}
     </>
   );
 };

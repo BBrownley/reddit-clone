@@ -7,6 +7,8 @@ import postService from "../../services/posts";
 import commentService from "../../services/comments";
 import bookmarkService from "../../services/bookmarks";
 
+import NotFound from "../NotFound/NotFound";
+
 import NavLink from "../shared/NavLink.elements.js";
 import ButtonGroup from "../shared/ButtonGroup.elements";
 
@@ -21,6 +23,7 @@ const Container = styled.div`
 const ProfileInfo = styled.div`
   text-align: center;
   line-height: 2;
+  margin-bottom: 2rem;
   img {
     height: 150px;
   }
@@ -97,126 +100,130 @@ export default function UserView() {
 
   return (
     <div>
-      <Container>
-        <ProfileInfo>
-          <img
-            src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
-            alt=""
-          />
-          <h2>{user.username}</h2>
-          <p>Posts: 0</p>
-          <p>Comments: 0</p>
-          <p>Account created {moment(user.created_at).fromNow()}</p>
-          {(() => {
-            if (loggedUserId !== null && matchesLoggedUser === false) {
-              return (
-                <button onClick={handleSendMessageButton}>Send message</button>
-              );
-            }
-          })()}
-        </ProfileInfo>
-        <ButtonGroup>
-          <li
-            className={historyFilter === "overview" ? "active" : ""}
-            onClick={() => setHistoryFilter("overview")}
-          >
-            Overview
-          </li>
-          <li
-            className={historyFilter === "submitted" ? "active" : ""}
-            onClick={() => setHistoryFilter("submitted")}
-          >
-            Submitted
-          </li>
-          <li
-            className={historyFilter === "comments" ? "active" : ""}
-            onClick={() => setHistoryFilter("comments")}
-          >
-            Comments
-          </li>
-          {matchesLoggedUser && (
-            <li
-              className={historyFilter === "bookmarked" ? "active" : ""}
-              onClick={() => setHistoryFilter("bookmarked")}
-            >
-              Bookmarked
-            </li>
-          )}
-        </ButtonGroup>
-        <UserHistory>
-          <br />
-          <div>
+      {!user && <NotFound />}
+      {user && (
+        <Container>
+          <ProfileInfo>
+            <h2>{user.username}</h2>
+            <p>Posts: 0</p>
+            <p>Comments: 0</p>
+            <p>Account created {moment(user.created_at).fromNow()}</p>
             {(() => {
-              const allHistory = [
-                ...usersComments,
-                ...usersPosts,
-                ...userBookmarks
-              ].sort((historyItemA, historyItemB) => {
-                const timestampA = moment(historyItemA.created_at);
-                const timestampB = moment(historyItemB.created_at);
-
-                return timestampA.isAfter(timestampB) ? -1 : 1;
-              });
-
-              let toBeDisplayed;
-
-              switch (historyFilter) {
-                case "overview":
-                  toBeDisplayed = allHistory.filter(
-                    item => item.type !== "bookmark"
-                  );
-                  break;
-                case "submitted":
-                  toBeDisplayed = allHistory.filter(
-                    item => item.type === "post"
-                  );
-                  break;
-                case "comments":
-                  toBeDisplayed = allHistory.filter(
-                    item => item.type === "comment"
-                  );
-                  break;
-                case "bookmarked":
-                  toBeDisplayed = allHistory.filter(
-                    item => item.type === "bookmark"
-                  );
-                  break;
-                default:
-                  return {};
+              if (loggedUserId !== null && matchesLoggedUser === false) {
+                return (
+                  <button onClick={handleSendMessageButton}>
+                    Send message
+                  </button>
+                );
               }
-
-              return toBeDisplayed.map((item, index) => {
-                if (item.type === "post") {
-                  return <Post post={item} options={false} key={index} />;
-                } else {
-                  return (
-                    <CommentItem key={index}>
-                      <p>
-                        <NavLink
-                          to={`/groups/${item.group_name.toLowerCase()}/${
-                            item.post_id
-                          }`}
-                        >
-                          {item.post_title}
-                        </NavLink>{" "}
-                        in{" "}
-                        <NavLink
-                          to={`/groups/${item.group_name.toLowerCase()}`}
-                        >
-                          {item.group_name}
-                        </NavLink>{" "}
-                        ({item.type === "bookmark" ? "Bookmarked" : "Commented"}{" "}
-                        {moment(item.created_at).fromNow()})
-                      </p>
-                      <p>{item.content}</p>
-                    </CommentItem>
-                  );
-                }
-              });
             })()}
-          </div>
-        </UserHistory>
-      </Container>
+          </ProfileInfo>
+          <ButtonGroup>
+            <li
+              className={historyFilter === "overview" ? "active" : ""}
+              onClick={() => setHistoryFilter("overview")}
+            >
+              Overview
+            </li>
+            <li
+              className={historyFilter === "submitted" ? "active" : ""}
+              onClick={() => setHistoryFilter("submitted")}
+            >
+              Submitted
+            </li>
+            <li
+              className={historyFilter === "comments" ? "active" : ""}
+              onClick={() => setHistoryFilter("comments")}
+            >
+              Comments
+            </li>
+            {matchesLoggedUser && (
+              <li
+                className={historyFilter === "bookmarked" ? "active" : ""}
+                onClick={() => setHistoryFilter("bookmarked")}
+              >
+                Bookmarked
+              </li>
+            )}
+          </ButtonGroup>
+          <UserHistory>
+            <br />
+            <div>
+              {(() => {
+                const allHistory = [
+                  ...usersComments,
+                  ...usersPosts,
+                  ...userBookmarks
+                ].sort((historyItemA, historyItemB) => {
+                  const timestampA = moment(historyItemA.created_at);
+                  const timestampB = moment(historyItemB.created_at);
+
+                  return timestampA.isAfter(timestampB) ? -1 : 1;
+                });
+
+                let toBeDisplayed;
+
+                switch (historyFilter) {
+                  case "overview":
+                    toBeDisplayed = allHistory.filter(
+                      item => item.type !== "bookmark"
+                    );
+                    break;
+                  case "submitted":
+                    toBeDisplayed = allHistory.filter(
+                      item => item.type === "post"
+                    );
+                    break;
+                  case "comments":
+                    toBeDisplayed = allHistory.filter(
+                      item => item.type === "comment"
+                    );
+                    break;
+                  case "bookmarked":
+                    toBeDisplayed = allHistory.filter(
+                      item => item.type === "bookmark"
+                    );
+                    break;
+                  default:
+                    return {};
+                }
+
+                return toBeDisplayed.map((item, index) => {
+                  if (item.type === "post") {
+                    return <Post post={item} options={false} key={index} />;
+                  } else {
+                    return (
+                      <CommentItem key={index}>
+                        <p>
+                          <NavLink
+                            to={`/groups/${item.group_name.toLowerCase()}/${
+                              item.post_id
+                            }`}
+                          >
+                            {item.post_title}
+                          </NavLink>{" "}
+                          in{" "}
+                          <NavLink
+                            to={`/groups/${item.group_name.toLowerCase()}`}
+                          >
+                            {item.group_name}
+                          </NavLink>{" "}
+                          (
+                          {item.type === "bookmark"
+                            ? "Bookmarked"
+                            : "Commented"}{" "}
+                          {moment(item.created_at).fromNow()})
+                        </p>
+                        <p>{item.content}</p>
+                      </CommentItem>
+                    );
+                  }
+                });
+              })()}
+            </div>
+          </UserHistory>
+        </Container>
+      )}
     </div>
   );
 }

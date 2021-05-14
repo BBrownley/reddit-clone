@@ -2,6 +2,8 @@ const messageRouter = require("express").Router();
 const connection = require("../db/index").connection;
 
 messageRouter.get("/", async (req, res, next) => {
+  if (!req.userId) return next();
+
   const getMessages = () => {
     return new Promise((resolve, reject) => {
       const query = `
