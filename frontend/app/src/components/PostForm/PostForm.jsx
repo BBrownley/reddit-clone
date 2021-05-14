@@ -14,6 +14,7 @@ import { addVote } from "../../reducers/userPostVotesReducer";
 import FormWarning from "../FormWarning/FormWarning";
 
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
+import StyledLink from "../shared/NavLink.elements";
 
 const PostForm = () => {
   const [title, setTitle] = useState("");
@@ -37,12 +38,6 @@ const PostForm = () => {
   useEffect(() => {
     return () => dispatch(removeNotification());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (currentUser.userId === null) {
-      history.push("/");
-    }
-  });
 
   const handleSetTitle = e => {
     setTitle(e.target.value);
@@ -78,48 +73,63 @@ const PostForm = () => {
   };
 
   return (
-    <FormContainer>
-      <FormHeader>Create a new post</FormHeader>
-      <form onSubmit={addPost} id="post-form">
-        <FormField>
-          <label htmlFor="title">Title: </label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            placeholder="title"
-            value={title}
-            onChange={handleSetTitle}
-          ></input>
-        </FormField>
-        <FormField>
-          <label htmlFor="group">Group: </label>
-          <Select
-            value={groupQuery}
-            onChange={handleSetGroupQuery}
-            options={groups}
-          />
-        </FormField>
-      </form>
+    <>
       <div>
-        <FormField>
-          <label htmlFor="content">Content: </label>
-          <div>
-            <textarea
-              name="content"
-              form="post-form"
-              value={content}
-              onChange={handleSetContent}
-            ></textarea>
-          </div>
-        </FormField>
-
-        <button type="submit" form="post-form">
-          Create Post
-        </button>
+        {currentUser.userId === null && (
+          <>
+            <h2>
+              You must be logged in to create a post. Log in{" "}
+              <StyledLink to="/login">here</StyledLink> or{" "}
+              <StyledLink to="/">go to the home page</StyledLink>.
+            </h2>
+          </>
+        )}
       </div>
-      <FormWarning />
-    </FormContainer>
+      {currentUser.userId && (
+        <FormContainer>
+          <FormHeader>Create a new post</FormHeader>
+          <form onSubmit={addPost} id="post-form">
+            <FormField>
+              <label htmlFor="title">Title: </label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                placeholder="title"
+                value={title}
+                onChange={handleSetTitle}
+              ></input>
+            </FormField>
+            <FormField>
+              <label htmlFor="group">Group: </label>
+              <Select
+                value={groupQuery}
+                onChange={handleSetGroupQuery}
+                options={groups}
+              />
+            </FormField>
+          </form>
+          <div>
+            <FormField>
+              <label htmlFor="content">Content: </label>
+              <div>
+                <textarea
+                  name="content"
+                  form="post-form"
+                  value={content}
+                  onChange={handleSetContent}
+                ></textarea>
+              </div>
+            </FormField>
+
+            <button type="submit" form="post-form">
+              Create Post
+            </button>
+          </div>
+          <FormWarning />
+        </FormContainer>
+      )}
+    </>
   );
 };
 

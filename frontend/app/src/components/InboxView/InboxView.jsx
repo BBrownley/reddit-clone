@@ -7,6 +7,7 @@ import { setUser } from "../../reducers/userReducer";
 import moment from "moment";
 
 import { Message, MessageHeader } from "./InboxView.elements";
+import StyledLink from "../shared/NavLink.elements";
 import ButtonGroup from "../shared/ButtonGroup.elements";
 import messageService from "../../services/messages";
 
@@ -47,7 +48,6 @@ export default function InboxView() {
   };
 
   const filterMessages = messages => {
-    console.log(messages);
     switch (messageFilter) {
       case "all":
         return messages;
@@ -62,63 +62,78 @@ export default function InboxView() {
 
   return (
     <div>
-      <h1>Messages</h1>
-      <ButtonGroup>
-        <li
-          className={messageFilter === "unread" ? "active" : ""}
-          onClick={() => setMessageFilter("unread")}
-        >
-          Unread
-        </li>
-        <li
-          className={messageFilter === "all" ? "active" : ""}
-          onClick={() => setMessageFilter("all")}
-        >
-          All
-        </li>
+      {user.userId === null && (
+        <>
+          <h2>
+            You must be logged in to view your inbox. Log in{" "}
+            <StyledLink to="/login">here</StyledLink> or{" "}
+            <StyledLink to="/">go to the home page</StyledLink>.
+          </h2>
+        </>
+      )}
+      {user.userId && (
+        <>
+          <h1>Messages</h1>
+          <ButtonGroup>
+            <li
+              className={messageFilter === "unread" ? "active" : ""}
+              onClick={() => setMessageFilter("unread")}
+            >
+              Unread
+            </li>
+            <li
+              className={messageFilter === "all" ? "active" : ""}
+              onClick={() => setMessageFilter("all")}
+            >
+              All
+            </li>
 
-        <li
-          className={messageFilter === "server" ? "active" : ""}
-          onClick={() => setMessageFilter("server")}
-        >
-          Server
-        </li>
-        <li
-          className={messageFilter === "direct" ? "active" : ""}
-          onClick={() => setMessageFilter("direct")}
-        >
-          Direct Messages
-        </li>
-      </ButtonGroup>
-      {messages.length === 0 && <h3>Inbox empty</h3>}
-      {filterMessages(messages).map((message, index) => (
-        <Message
-          className={parseInt(message.has_read) === 1 ? ".message-read" : ""}
-          onClick={() => openMessage(message)}
-          key={index}
-        >
-          <MessageHeader>
-            <p>
-              <strong>
-                {message.sender_id
-                  ? message.sender_username
-                  : "(server message)"}
-              </strong>{" "}
-              -{" "}
-              {message.subject ? (
-                <strong>{message.subject}</strong>
-              ) : (
-                "no subject"
-              )}
-            </p>
-            <p>
-              {moment(message.created_at).format("MMMM Do YYYY, h:mm:ss a")}
-            </p>
-          </MessageHeader>
+            <li
+              className={messageFilter === "server" ? "active" : ""}
+              onClick={() => setMessageFilter("server")}
+            >
+              Server
+            </li>
+            <li
+              className={messageFilter === "direct" ? "active" : ""}
+              onClick={() => setMessageFilter("direct")}
+            >
+              Direct Messages
+            </li>
+          </ButtonGroup>
+          {messages.length === 0 && <h3>Inbox empty</h3>}
+          {filterMessages(messages).map((message, index) => (
+            <Message
+              className={
+                parseInt(message.has_read) === 1 ? ".message-read" : ""
+              }
+              onClick={() => openMessage(message)}
+              key={index}
+            >
+              <MessageHeader>
+                <p>
+                  <strong>
+                    {message.sender_id
+                      ? message.sender_username
+                      : "(server message)"}
+                  </strong>{" "}
+                  -{" "}
+                  {message.subject ? (
+                    <strong>{message.subject}</strong>
+                  ) : (
+                    "no subject"
+                  )}
+                </p>
+                <p>
+                  {moment(message.created_at).format("MMMM Do YYYY, h:mm:ss a")}
+                </p>
+              </MessageHeader>
 
-          <p>{message.content}</p>
-        </Message>
-      ))}
+              <p>{message.content}</p>
+            </Message>
+          ))}
+        </>
+      )}
     </div>
   );
 }

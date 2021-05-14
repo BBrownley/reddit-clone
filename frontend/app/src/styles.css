@@ -42,6 +42,10 @@ a {
   text-decoration: none;
 }
 
+a:hover {
+  text-decoration: underline;
+}
+
 select {
   padding: 5px;
   margin: 0 5px;

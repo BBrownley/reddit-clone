@@ -23,7 +23,7 @@ const GroupList = () => {
   const history = useHistory();
 
   const handleCreateGroupButton = () => {
-    if (loggedUser) {
+    if (loggedUser.userId !== null) {
       history.push("/creategroup");
     } else {
       dispatch(setRedirectPath("/creategroup"));
@@ -60,7 +60,14 @@ const GroupList = () => {
   return (
     <div>
       <GroupListHeader>
-        <button onClick={handleCreateGroupButton} className="create-group-button"> <FontAwesome name="users" className="fa-users" />Create your own group</button>
+        <button
+          onClick={handleCreateGroupButton}
+          className="create-group-button"
+        >
+          {" "}
+          <FontAwesome name="users" className="fa-users" />
+          Create your own group
+        </button>
         <div>
           <strong>
             Search groups by{" "}
