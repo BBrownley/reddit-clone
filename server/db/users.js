@@ -18,6 +18,15 @@ const register = userInfo => {
     if (password !== confirmPassword) {
       return reject(new Error("Passwords do not match"));
     }
+
+    // Alphanumeric usernames only
+    const alphanumeric = /^[a-z0-9]+$/i;
+    if (!alphanumeric.test(username)) {
+      return reject(
+        new Error("Username must contain alphanumeric characters only")
+      );
+    }
+
     // Check to make sure username or email isn't in use
     connection.query(
       `SELECT username FROM users WHERE username = ?`,

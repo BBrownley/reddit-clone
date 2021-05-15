@@ -49,7 +49,6 @@ const RegisterForm = () => {
     setConfirmPassword(e.target.value);
   };
 
-  // TODO: Make this more concise!
   let creatingPost;
 
   try {
@@ -81,6 +80,15 @@ const RegisterForm = () => {
 
     if (!emailValid) {
       dispatch(setNotification("E-mail must be valid"));
+      return false;
+    }
+
+    // Alphanumeric usernames only
+    const alphanumeric = /^[a-z0-9]+$/i;
+    if (!alphanumeric.test(data.username)) {
+      dispatch(
+        setNotification("Username must contain alphanumeric characters only")
+      );
       return false;
     }
 
