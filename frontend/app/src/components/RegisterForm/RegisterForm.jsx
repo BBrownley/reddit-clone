@@ -92,6 +92,12 @@ const RegisterForm = () => {
       return false;
     }
 
+    // Username must be 20 chars or less
+    if (username.trim().length > 20) {
+      dispatch(setNotification("Username must be 20 characters or less"));
+      return false;
+    }
+
     // Validation passes
     return true;
   };

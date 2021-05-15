@@ -27,6 +27,13 @@ const register = userInfo => {
       );
     }
 
+    // Username must be 20 chars or less
+    if (username.trim().length > 20) {
+      return reject(
+        new Error("Username must be 20 characters or less")
+      );
+    }
+
     // Check to make sure username or email isn't in use
     connection.query(
       `SELECT username FROM users WHERE username = ?`,
