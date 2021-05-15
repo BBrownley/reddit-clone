@@ -1,3 +1,4 @@
+const http = require("http");
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -8,6 +9,8 @@ require("dotenv").config();
 
 app.use(cors());
 app.use(bodyParser());
+
+const connection = require("./db/index").connection;
 
 const postsDB = require("./db/posts");
 

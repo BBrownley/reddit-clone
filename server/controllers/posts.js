@@ -1,7 +1,7 @@
 const postsRouter = require("express").Router();
 const postsDB = require("../db/posts");
 const postVotesDB = require("../db/post_votes");
-const connection = require("../db/posts").connection;
+const connection = require("../db/index").connection;
 
 postsRouter.post("/", async (req, res, next) => {
   try {
@@ -12,10 +12,46 @@ postsRouter.post("/", async (req, res, next) => {
   }
 });
 
-postsRouter.post("/:id/vote", async (req, res) => {
-  const postID = req.params.id;
-  const vote = await postsDB.vote(req.body, postID, req.userId);
-  res.json(vote);
+postsRouter.post("/:id/vote", async (req, res, next) => {
+  const vote = (data, postID, userId) => {
+    return new Promise((resolve, reject) => {
+      // Check to see if user already voted or not
+      connection.query(
+        `SELECT * FROM post_votes WHERE user_id = ? AND post_id = ?`,
+        [userId, postID],
+        (err, results) => {
+          if (err) {
+            reject(new Error("Unable to vote on post"));
+          }
+          // Add the vote
+          connection.query(
+            `INSERT INTO post_votes SET ? `,
+            {
+              user_id: userId,
+              post_id: postID,
+              vote_value: data.value
+            },
+            (err, results) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve();
+                res.send(200);
+              }
+            }
+          );
+        }
+      );
+    });
+  };
+
+  try {
+    const postID = req.params.id;
+    const newVote = await vote(req.body, postID, req.userId);
+    res.send(newVote);
+  } catch (exception) {
+    next(exception);
+  }
 });
 
 postsRouter.get("/votes", async (req, res, next) => {
@@ -86,6 +122,7 @@ postsRouter.delete("/unfollow/:postId", async (req, res, next) => {
 postsRouter.delete("/:id", async (req, res, next) => {
   try {
     await postsDB.deletePost(req.userId, req.params.id);
+    res.send(200);
   } catch (exception) {
     next(exception);
   }

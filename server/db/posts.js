@@ -2,7 +2,6 @@ const connection = require("./index").connection;
 
 const all = () => {
   return new Promise((resolve, reject) => {
-
     const query = `
       SELECT 
       CASE
@@ -84,69 +83,6 @@ const create = (data, userId) => {
                 return reject(new Error("An unexpected error has occured"));
               } else {
                 resolve(results[0]);
-              }
-            }
-          );
-        }
-      }
-    );
-  });
-};
-
-const vote = (data, postID, userId) => {
-  return new Promise((resolve, reject) => {
-    // Check to see if user already voted or not
-    connection.query(
-      `SELECT * FROM post_votes WHERE user_id = ? AND post_id = ?`,
-      [userId, postID],
-      (err, results) => {
-        if (err) {
-          reject(new Error("Unable to vote on post"));
-        }
-
-        if (results.length !== 0) {
-          const prevVoteValue = results[0].vote_value;
-
-          // Two cases:
-
-          if (prevVoteValue === data.value) {
-            // 1) prevVoteValue === data.value => Just remove the vote
-            connection.query(
-              `DELETE FROM post_votes WHERE user_id = ? AND post_id = ?`,
-              [userId, postID],
-              (err, results) => {
-                resolve({ ...data, hasVoted: true, prevVoteValue });
-              }
-            );
-          } else if (prevVoteValue !== data.value) {
-            // 2) prevVoteValue === data.value => Alter the vote
-            connection.query(
-              `
-                UPDATE post_votes
-                SET 
-                  vote_value = ?
-                WHERE user_id = ? AND post_id = ?  
-              `,
-              [data.value, userId, postID],
-              (err, results) => {
-                resolve({ ...data, hasVoted: true, prevVoteValue });
-              }
-            );
-          }
-        } else {
-          // Add the vote
-          connection.query(
-            `INSERT INTO post_votes SET ? `,
-            {
-              user_id: userId,
-              post_id: postID,
-              vote_value: data.value
-            },
-            (err, results) => {
-              if (err) {
-                reject(err);
-              } else {
-                resolve(results);
               }
             }
           );
@@ -248,7 +184,6 @@ module.exports = {
   all,
   getPostsByUserId,
   create,
-  vote,
   deletePost,
   getPostsByUID,
   getPostFollowsByUserId,

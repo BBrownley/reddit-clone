@@ -127,6 +127,7 @@ bookmarksRouter.delete("/", async (req, res, next) => {
 
   try {
     await deleteBookmark(req.userId, req.body.commentId);
+    res.sendStatus(200);
   } catch (exception) {
     next(exception);
   }

@@ -50,6 +50,7 @@ postVotesRouter.delete("/:id", async (req, res, next) => {
   };
   try {
     await deletePostVote(req.params.id, req.userId);
+    res.sendStatus(200);
   } catch (exception) {
     next(exception);
   }
