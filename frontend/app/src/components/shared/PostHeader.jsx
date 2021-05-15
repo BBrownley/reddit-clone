@@ -3,6 +3,8 @@ import { Title, PostHeaderContainer } from "./PostHeader.elements";
 
 import FontAwesome from "react-fontawesome";
 
+import useScreenWidth from "../custom-hooks/useScreenWidth";
+
 const PostHeader = ({
   postLink,
   title,
@@ -12,6 +14,8 @@ const PostHeader = ({
   author,
   userId
 }) => {
+  const width = useScreenWidth();
+
   return (
     <PostHeaderContainer>
       <NavLink to={postLink}>

@@ -9,7 +9,10 @@ import {
 } from "../../reducers/groupSubscribesReducer";
 import { setRedirectPath } from "../../reducers/redirectReducer";
 
-import { GroupActions as Container } from "./GroupActions.elements";
+import {
+  GroupActions as Container,
+  CreatePostButton
+} from "./GroupActions.elements";
 
 const GroupActions = () => {
   const history = useHistory();
@@ -61,12 +64,17 @@ const GroupActions = () => {
   };
 
   return (
-    <Container>
-      <button onClick={handleCreatePostButton}>
+    <Container singleGroup={!currentGroup}>
+      <button
+        onClick={handleCreatePostButton}
+        
+        className="create-post-button"
+      >
         <FontAwesome name="paper-plane"></FontAwesome> Submit a new post
       </button>
 
-      {(currentGroup && loggedUser.token) &&
+      {currentGroup &&
+        loggedUser.token &&
         (userSubscribedGroups.find(group => group.id === currentGroup.id) ? (
           <button onClick={handleUnsubscribe}>
             <FontAwesome name="check"></FontAwesome>

@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 export const GroupInfo = styled.div`
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
+  margin-top: 0;
 
   .group-desc {
     max-width: 80ch;
@@ -23,5 +24,9 @@ export const GroupInfo = styled.div`
     & > *:last-child {
       margin-right: 0;
     }
+  }
+
+  @media (max-width: 1000px) {
+    margin-bottom: -3rem;
   }
 `;

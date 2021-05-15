@@ -7,7 +7,7 @@ import GroupActions from "../GroupActions/GroupActions";
 
 import NotFound from "../NotFound/NotFound";
 
-import { GroupHeader } from "./SingleGroupView.elements";
+import { GroupHeader, GroupsLoading } from "./SingleGroupView.elements";
 
 import groupService from "../../services/groups";
 
@@ -87,7 +87,7 @@ export default function SingleGroupView({ all, handleSetGroupExists }) {
               <option value="commentsDesc">Comments (high to low)</option>
               <option value="commentsAsc">Comments (low to high)</option>
             </select> */}
-                  <strong>
+                  {/* <strong>
                     Search posts by{" "}
                     <select
                       name="searchOption"
@@ -106,7 +106,7 @@ export default function SingleGroupView({ all, handleSetGroupExists }) {
                     onClick={resetFilters}
                   >
                     Clear search
-                  </button>
+                  </button> */}
                 </div>
               </GroupHeader>
               <PostList
@@ -119,7 +119,7 @@ export default function SingleGroupView({ all, handleSetGroupExists }) {
         } else if (badRequest) {
           return <NotFound></NotFound>;
         } else {
-          return <h3>Loading</h3>;
+          return <GroupsLoading>Loading</GroupsLoading>;
         }
       })()}
     </div>

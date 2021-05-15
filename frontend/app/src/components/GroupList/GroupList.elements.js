@@ -27,6 +27,18 @@ export const GroupListHeader = styled.div`
     margin-right: 1rem;
   }
   .create-group-button {
-    width: 500px;
+    width: 50%;
+  }
+  @media (max-width: 800px) {
+    .create-group-button {
+      width: 100%;
+    }
+  }
+`;
+
+export const Wrapper = styled.div`
+  margin-top: 3.25rem;
+  @media (max-width: 1000px) {
+    margin-top: 0;
   }
 `;

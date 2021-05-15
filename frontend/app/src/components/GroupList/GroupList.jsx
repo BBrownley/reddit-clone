@@ -6,7 +6,7 @@ import FontAwesome from "react-fontawesome";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Container, GroupListHeader } from "./GroupList.elements";
+import { Container, GroupListHeader, Wrapper } from "./GroupList.elements";
 
 import GroupCard from "../GroupCard/GroupCard";
 
@@ -58,7 +58,7 @@ const GroupList = () => {
   };
 
   return (
-    <div>
+    <Wrapper>
       <GroupListHeader>
         <button
           onClick={handleCreateGroupButton}
@@ -69,7 +69,7 @@ const GroupList = () => {
           Create your own group
         </button>
         <div>
-          <strong>
+          {/* <strong>
             Search groups by{" "}
             <select
               name="searchOption"
@@ -92,7 +92,7 @@ const GroupList = () => {
             onClick={resetFilters}
           >
             Clear search
-          </button>
+          </button> */}
         </div>
       </GroupListHeader>
       <Container>
@@ -102,7 +102,7 @@ const GroupList = () => {
             })
           : ""}
       </Container>
-    </div>
+    </Wrapper>
   );
 };
 

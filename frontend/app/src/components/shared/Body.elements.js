@@ -5,7 +5,10 @@ export const Wrapper = styled.div`
   margin: auto;
   background-color: white;
   min-height: 100vh;
-  padding: 30px;
+  padding: 2rem;
+  @media (max-width: 1000px) {
+    padding-top: 6rem;
+  }
 `;
 
 export const Body = styled.div`

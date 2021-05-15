@@ -4,7 +4,7 @@ export const Container = styled.div``;
 
 export const Post = styled.div`
   border-bottom: 1px solid #ddd;
-  padding: 0 .5rem;
+  padding: 0 0.5rem;
   padding-left: 5px;
   line-height: 1.5;
   display: flex;
@@ -69,10 +69,19 @@ export const Content = styled.div`
   }}
   @media (max-width: 900px) {
     max-width: 60ch;
-  })
+  }
   @media (max-width: 720px) {
     max-width: 45ch;
-  })
+  }
+  @media (max-width: 560px) {
+    ${props => {
+      if (!props.expand) {
+        return css`
+          display: none;
+        `;
+      }
+    }}
+  }
 `;
 
 export const PostScore = styled.span`
