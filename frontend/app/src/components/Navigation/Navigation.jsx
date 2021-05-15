@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
@@ -21,6 +21,10 @@ export default function Navigation() {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const hamburgerMenuRef = useRef(null);
+
+  const [hamburgerOpen, setHamburgerOpen] = useState(false);
+
   const user = useSelector(state => {
     return state.user;
   });
@@ -41,7 +45,30 @@ export default function Navigation() {
     if (userOnlyRoutes.find(route => window.location.pathname === route)) {
       history.push("/");
     }
+
+    setHamburgerOpen(false);
   };
+
+  const handleHamburgerMenu = () => {
+    setHamburgerOpen(prevState => !prevState);
+  };
+
+  useEffect(() => {
+    const detectMenuClick = e => {
+      if (e.target.matches(".hamburger-menu *")) {
+        if (e.target.matches("a") || e.target.matches(".branding-icon")) {
+          // User redirected w/ hamburger menu
+          setHamburgerOpen(false);
+        }
+      } else {
+        // User clicked outside hamburger menu
+        setHamburgerOpen(false);
+      }
+    };
+
+    window.addEventListener("click", detectMenuClick);
+    return () => window.removeEventListener("click", detectMenuClick);
+  }, []);
 
   return (
     <>
@@ -51,7 +78,9 @@ export default function Navigation() {
         </StyledLink>
 
         <h2>
-          <StyledLink to="/groups" className="groups-link">Groups</StyledLink>
+          <StyledLink to="/groups" className="groups-link">
+            Groups
+          </StyledLink>
         </h2>
         {(() => {
           if (user.username) {
@@ -72,16 +101,59 @@ export default function Navigation() {
           }
         })()}
       </Container>
-      <HamburgerMenu>
-        <div className="container">
-          <StyledLink to="/">
-            <div className="branding-icon"></div>
-          </StyledLink>
+      <HamburgerMenu ref={hamburgerMenuRef} className="hamburger-menu">
+        <div className="top">
+          <div className="container">
+            <StyledLink to="/">
+              <div className="branding-icon"></div>
+            </StyledLink>
 
-          <div>
-            <FontAwesome name="bars" className="fa-bars"></FontAwesome>
+            {!!user.userId && (
+              <div
+                className={`menu-bars ${hamburgerOpen ? "open" : ""}`}
+                onClick={() => handleHamburgerMenu()}
+              >
+                <div className="bar"></div>
+                <div className="bar"></div>
+                <div className="bar"></div>
+              </div>
+            )}
+            {!user.userId && (
+              <nav className="mini-nav">
+                <ul>
+                  <li>
+                    <StyledLink to="/groups">Groups</StyledLink>
+                  </li>
+                  <li>
+                    <StyledLink to="/login">Log in</StyledLink>
+                  </li>
+                  <li>
+                    <StyledLink to="/register">Register</StyledLink>
+                  </li>
+                </ul>
+              </nav>
+            )}
           </div>
         </div>
+        <nav className={`menu ${hamburgerOpen ? "open" : ""}`}>
+          <ul>
+            <li>
+              <StyledLink to="/">Home</StyledLink>
+            </li>
+            <li>
+              <StyledLink to="/groups">Groups</StyledLink>
+            </li>
+            <li>
+              <StyledLink to={`/users/${user.userId}`}>My Profile</StyledLink>
+            </li>
+            <li>
+              <StyledLink to="/inbox">Inbox</StyledLink>
+            </li>
+            <li>
+              <StyledLink onClick={handleLogout}>Logout</StyledLink>
+            </li>
+          </ul>
+        </nav>
       </HamburgerMenu>
     </>
   );
