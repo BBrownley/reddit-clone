@@ -7,11 +7,4 @@ const connection = mysql.createPool({
   database: "reddit-clone"
 });
 
-// connection.pool.connect(err => {
-//   if (err) {
-//     console.error(`error connecting: ${err.stack}`);
-//   }
-//   console.log(`connected as id ${connection.threadId}`);
-// });
-
 module.exports = { connection };

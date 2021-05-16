@@ -5,55 +5,118 @@ import moment from "moment";
 
 import FontAwesome from "react-fontawesome";
 
+import postService from "../services/posts";
+
 const Container = styled.div`
-  border: 1px solid black;
-  display: inline-block;
-  padding: 1rem;
-  display: inline-flex;
-`;
-
-const ProfileImage = styled.img`
-  height: 50px;
-  margin-right: 1rem;
-`;
-
-const InboxLink = styled.a`
-  margin-right: 2rem;
-  font-weight: bold;
-  color: blue;
-  position: relative;
-  span {
-    ${props => {
-      return `background-color: ${props.theme.crimson};`;
-    }}
-    color: white;
-    padding: 0 0.5rem;
-    margin-left: 0.5rem;
-    border-radius: 1000px;
-    font-size: .75rem;
+  .pagination-button {
+    font-size: 1rem;
+    &.previous {
+      margin-right: 1rem;
+    }
+    &.next {
+      margin-left: 1rem;
+    }
+  }
+  input {
+    width: 3rem;
+    text-align: center;
   }
 `;
 
 export default function Sandbox() {
+
+
+  /* 
+    Cases:
+      - All posts, no user logged in
+      - All posts, user logged in
+      - Group posts
+      - Groups
+      - Inbox
+      - User history
+        > Overview
+        > Submitted
+        > Comments
+        > Bookmarked
+  */
+
+  const options = {
+    type: "ALL_POSTS",
+    user: false
+  }
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageInput, setPageInput] = useState(currentPage);
+  const [maxPages, setMaxPages] = useState(9); // Determined by DB query
+  const [resultsPerPage, setResultsPerPage] = useState(20);
+
+  const handlePageInput = e => {
+    // Allow integers only
+
+    let sanitizedInput = "";
+
+    for (let i = 0; i < e.target.value.length; i++) {
+      const currentCharCode = e.target.value.charAt(i).charCodeAt(0);
+      if (currentCharCode >= 48 && currentCharCode <= 57) {
+        sanitizedInput = sanitizedInput.concat(e.target.value.charAt(i));
+      }
+    }
+
+    // Cannot exceed max pages, must be at least 1
+    if (parseInt(sanitizedInput) > maxPages) {
+      sanitizedInput = maxPages;
+    } else if (sanitizedInput.length === 0) {
+      sanitizedInput = 1;
+    }
+
+    setPageInput(sanitizedInput);
+    setCurrentPage(sanitizedInput);
+  };
+
+  const handlePrevButton = () => {
+    setCurrentPage(prevState => prevState - 1);
+    setPageInput(prevState => prevState - 1);
+  };
+
+  const handleNextButton = () => {
+    setCurrentPage(prevState => prevState + 1);
+    setPageInput(prevState => prevState + 1);
+  };
+
+  useEffect(() => {
+    // Get the max # of pages needed on load and initial data
+    if (options.type === "ALL_POSTS" && options.user === false) {
+      postService.paginate(options);
+    };
+  }, []);
+
+  useEffect(() => {
+    // When the page changes, fetch the appropriate data
+    console.log("changing page");
+  }, [currentPage]);
+
   return (
     <div>
-      <h1>Sandbox</h1>
       <Container>
-        <div>
-          <ProfileImage
-            src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
-            alt=""
-          />
-        </div>
-        <div>
-          <p>
-            <strong>Signed in as user1337</strong>
-          </p>
-          <InboxLink>
-            Inbox<span>1</span>
-          </InboxLink>
-          <span>Logout</span>
-        </div>
+        {currentPage > 1 && (
+          <button
+            className="pagination-button previous"
+            onClick={handlePrevButton}
+          >
+            Previous
+          </button>
+        )}
+
+        <span>
+          Page{" "}
+          <input type="text" value={pageInput} onChange={handlePageInput} /> of{" "}
+          {maxPages}
+        </span>
+        {currentPage < maxPages && (
+          <button className="pagination-button next" onClick={handleNextButton}>
+            Next
+          </button>
+        )}
       </Container>
     </div>
   );

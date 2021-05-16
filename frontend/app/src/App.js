@@ -26,6 +26,7 @@ import Navigation from "./components/Navigation/Navigation";
 import NotFound from "./components/NotFound/NotFound";
 import Toast from "./components/Toast/Toast";
 import SingleGroupView from "./components/SingleGroupView/SingleGroupView";
+import Sandbox from "./components/Sandbox";
 
 import redditto from "./redditto.png";
 
@@ -86,7 +87,7 @@ const App = () => {
               <Route exact path="/login" component={LoginForm} />
               <Route exact path="/users/:userId" component={UserView} />
               <Route exact path="/inbox/message" component={MessageView} />
-              {/* <Route exact path="/sandbox" component={Sandbox} /> */}
+              <Route exact path="/sandbox" component={Sandbox} />
 
               {groupExists && (
                 <Route exact path={["/groups/:group"]}>
