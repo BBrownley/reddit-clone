@@ -1,6 +1,7 @@
 import axios from "axios";
 
 let storedToken = null;
+const baseUrl = process.env.BASE_URL || "http://localhost:5000";
 
 const setToken = token => {
   storedToken = token;
@@ -154,15 +155,22 @@ const editPost = async (id, newValue) => {
   axios.put(`http://localhost:5000/posts/${id}`, { newValue }, config);
 };
 
-const paginate = async (options) => {
+const paginate = async (options, page) => {
   if (options.type === "ALL_POSTS" && options.user === false) {
     // Fetch the 20 most recent posts
+    console.log("fetch 20 most recent w/o user");
+    console.log("page #: " + page);
+
+    const req = await axios.get(
+      `${baseUrl}/posts/all?user=${options.user}&page=${1}`
+    );
+    console.log(req.data);
   }
 
   if (options.type === "ALL_POSTS" && options.user) {
     // Fetch the most 20 most recent posts according to where the user is subscribed to
   }
-}
+};
 
 const postService = {
   getAll,

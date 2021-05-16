@@ -199,4 +199,42 @@ postsRouter.put("/:id", async (req, res, next) => {
   }
 });
 
+// Posts for the client when visiting the index page
+postsRouter.get("/all", async (req, res, next) => {
+  console.log(req.query.user);
+  console.log(req.query.page);
+
+  const getPosts = () => {
+    const user = req.query.user === "true";
+
+    return new Promise((resolve, reject) => {
+      let query;
+
+      // Just get the most recent posts
+      if (!user) {
+        query = `
+          SELECT * FROM posts
+          ORDER BY created_at DESC
+          LIMIT 20 OFFSET ${(parseInt(req.query.page) - 1) * 20}
+        `;
+      }
+
+      connection.query(query, (err, results) => {
+        if (err) {
+          reject(new Error("Unable to get posts"));
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  };
+
+  try {
+    const posts = await getPosts();
+    res.json(posts);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
 module.exports = postsRouter;

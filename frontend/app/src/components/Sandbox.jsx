@@ -24,8 +24,6 @@ const Container = styled.div`
 `;
 
 export default function Sandbox() {
-
-
   /* 
     Cases:
       - All posts, no user logged in
@@ -43,7 +41,7 @@ export default function Sandbox() {
   const options = {
     type: "ALL_POSTS",
     user: false
-  }
+  };
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageInput, setPageInput] = useState(currentPage);
@@ -86,8 +84,8 @@ export default function Sandbox() {
   useEffect(() => {
     // Get the max # of pages needed on load and initial data
     if (options.type === "ALL_POSTS" && options.user === false) {
-      postService.paginate(options);
-    };
+      postService.paginate(options, currentPage);
+    }
   }, []);
 
   useEffect(() => {
