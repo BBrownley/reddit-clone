@@ -63,7 +63,6 @@ export const Content = styled.div`
       padding: 10px;
       overflow: visible;
       white-space: normal;
-      word-break: break-all;
       `;
     }
   }}

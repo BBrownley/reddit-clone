@@ -21,10 +21,10 @@ export default function InboxView() {
 
   useEffect(() => {
     const fetchMessages = async () => {
-      const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-      if (loggedUser) {
-        await dispatch(setUser(loggedUser));
-      }
+      // const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+      // if (loggedUser) {
+      //   await dispatch(setUser(loggedUser));
+      // }
 
       const messages = await messageService.getAll(user.token);
       setMessages(messages);
