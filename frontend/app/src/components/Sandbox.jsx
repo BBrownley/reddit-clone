@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useRouteMatch, useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import moment from "moment";
 
 import FontAwesome from "react-fontawesome";
 
 import postService from "../services/posts";
+
+import { setUser } from "../reducers/userReducer";
 
 const Container = styled.div`
   .pagination-button {
@@ -26,7 +29,7 @@ const Container = styled.div`
 export default function Sandbox() {
   /* 
     Cases:
-      - All posts, no user logged in
+      - All posts, no user logged in (done)
       - All posts, user logged in
       - Group posts
       - Groups
@@ -38,15 +41,24 @@ export default function Sandbox() {
         > Bookmarked
   */
 
+  // const options = {
+  //   type: "ALL_POSTS",
+  //   user: null
+  // };
+
   const options = {
     type: "ALL_POSTS",
-    user: false
+    user: 25
   };
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageInput, setPageInput] = useState(currentPage);
-  const [maxPages, setMaxPages] = useState(9); // Determined by DB query
+  const [maxPages, setMaxPages] = useState(null); // Determined by DB query
   const [resultsPerPage, setResultsPerPage] = useState(20);
+
+  const user = useSelector(state => state.user);
+
+  const dispatch = useDispatch();
 
   const handlePageInput = e => {
     // Allow integers only
@@ -83,14 +95,15 @@ export default function Sandbox() {
 
   useEffect(() => {
     // Get the max # of pages needed on load
+
     postService.countPages().then(result => {
       setMaxPages(result);
     });
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     // When the page changes, fetch the appropriate data
-    if (options.type === "ALL_POSTS" && options.user === false) {
+    if (options.type === "ALL_POSTS") {
       postService.paginate(options, currentPage);
     }
   }, [currentPage]);

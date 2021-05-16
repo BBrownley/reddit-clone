@@ -156,22 +156,35 @@ const editPost = async (id, newValue) => {
 };
 
 const paginate = async (options, page) => {
-  if (options.type === "ALL_POSTS" && options.user === false) {
+  if (options.type === "ALL_POSTS") {
     // Fetch 20 posts by creation date
 
+    const userId = options.user || null;
+
+    console.log(userId);
+
     const req = await axios.get(
-      `${baseUrl}/posts/all?user=${options.user}&page=${page}`
+      `${baseUrl}/posts/all?user=${userId}&page=${page}`
     );
     console.log(req.data);
-  }
-
-  if (options.type === "ALL_POSTS" && options.user) {
-    // Fetch the most 20 most recent posts according to where the user is subscribed to
   }
 };
 
 const countPages = async () => {
-  const req = await axios.get(`${baseUrl}/posts/all/count`);
+  const config = {
+    headers: {
+      Authorization: storedToken
+    }
+  };
+
+  let req;
+
+  if (storedToken === null) {
+    req = await axios.get(`${baseUrl}/posts/all/count`);
+  } else {
+    req = await axios.get(`${baseUrl}/posts/all/count/user`, config);
+  }
+
   return req.data.pages;
 };
 

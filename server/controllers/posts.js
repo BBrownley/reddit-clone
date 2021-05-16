@@ -201,25 +201,36 @@ postsRouter.put("/:id", async (req, res, next) => {
 
 // Posts for the client when visiting the index page
 postsRouter.get("/all", async (req, res, next) => {
-  console.log(req.query.user);
-  console.log(req.query.page);
 
   const getPosts = () => {
-    const user = req.query.user === "true";
+    const user = req.query.user;
 
     return new Promise((resolve, reject) => {
       let query;
 
       // Just get the most recent posts
-      if (!user) {
+      if (user === "null") {
         query = `
           SELECT * FROM posts
           ORDER BY created_at DESC
           LIMIT 20 OFFSET ${(parseInt(req.query.page) - 1) * 20}
         `;
+      } else {
+        // Get posts based on user's subscriptions. Return empty array if they have none
+        console.log("Get posts based on user's subscriptions");
+        query = `
+          SELECT title, content, groups.group_name FROM posts
+          JOIN groups ON groups.id = posts.group_id
+          WHERE group_name IN 
+            (SELECT group_name FROM group_subscribers 
+            JOIN groups ON group_subscribers.group_id = groups.id 
+            WHERE user_id = ?)
+          ORDER BY posts.created_at DESC
+          LIMIT 20 OFFSET ${(parseInt(req.query.page) - 1) * 20}
+        `;
       }
 
-      connection.query(query, (err, results) => {
+      connection.query(query, [user], (err, results) => {
         if (err) {
           reject(new Error("Unable to get posts"));
         } else {
@@ -237,18 +248,55 @@ postsRouter.get("/all", async (req, res, next) => {
   }
 });
 
-// Count the maximum pages for pagination
+// Count the maximum pages for pagination in the index page, no user logged in
 postsRouter.get("/all/count", async (req, res, next) => {
   const countPages = () => {
     return new Promise((resolve, reject) => {
       const query = `
-        SELECT CEILING(COUNT(*) / 20) AS pages FROM posts
-      `;
-      connection.query(query, (err, results) => {
+          SELECT COUNT(*) AS total FROM posts
+        `;
+
+      connection.query(query, [], (err, results) => {
         if (err) {
           reject(new Error("Unable to count pages"));
         } else {
-          resolve(results[0]);
+          resolve({ pages: Math.ceil(Object.values(results[0])[0] / 20) });
+        }
+      });
+    });
+  };
+
+  try {
+    const pages = await countPages();
+    res.json(pages);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
+// Count the maximum pages for pagination in the index page, user logged in
+postsRouter.get("/all/count/user", async (req, res, next) => {
+  const countPages = () => {
+    return new Promise((resolve, reject) => {
+      const query = `
+          SELECT COUNT(*) FROM
+          (
+            SELECT title, content, groups.group_name FROM posts
+            JOIN groups ON groups.id = posts.group_id
+            WHERE group_name IN 
+            (
+              SELECT group_name FROM group_subscribers 
+              JOIN groups ON group_subscribers.group_id = groups.id 
+              WHERE user_id = ?
+            )
+          ) AS total
+        `;
+
+      connection.query(query, [req.userId], (err, results) => {
+        if (err) {
+          reject(new Error("Unable to count pages"));
+        } else {
+          resolve({ pages: Math.ceil(Object.values(results[0])[0] / 20) });
         }
       });
     });
