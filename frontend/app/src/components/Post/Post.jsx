@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import DeleteConfirmation from "../DeleteConfirmation/DeleteConfirmation";
 
 import {
   initializeVotes as initializePostVotes,
@@ -90,16 +91,6 @@ const Post = ({ post, options, expand, viewMode }) => {
     if (viewMode) {
       history.push("/");
     }
-  };
-
-  const DeleteConfirmation = () => {
-    return (
-      <>
-        Are you sure?
-        <span onClick={() => handleDeletePost(post.postID)}>Yes</span>
-        <span onClick={() => setConfirmDeletion(false)}>No</span>
-      </>
-    );
   };
 
   const userOwnsPost = userPosts.find(userPost => {
@@ -191,7 +182,12 @@ const Post = ({ post, options, expand, viewMode }) => {
                       ) : (
                         ""
                       )}
-                      {confirmDeletion && <DeleteConfirmation />}
+                      {confirmDeletion && (
+                        <DeleteConfirmation
+                          confirmDelete={() => handleDeletePost(post.postID)}
+                          cancel={() => setConfirmDeletion(false)}
+                        />
+                      )}
                     </span>
                   )}
                 </div>

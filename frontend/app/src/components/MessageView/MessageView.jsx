@@ -6,6 +6,8 @@ import messageService from "../../services/messages";
 
 import moment from "moment";
 
+import DeleteConfirmation from "../DeleteConfirmation/DeleteConfirmation";
+
 import {
   Message,
   Sender,
@@ -34,7 +36,6 @@ export default function MessageView() {
       has_read: 0,
       subject: `Re: ${location.state.subject}`
     };
-    console.log(message);
     messageService.send(message);
     history.push("/inbox");
   };
@@ -63,13 +64,10 @@ export default function MessageView() {
         )}
         <span onClick={() => setConfirmDeletion(true)}>Delete</span>
         {confirmDeletion && (
-          <div>
-            <p>Are you sure?</p>
-            <span>
-              <span onClick={() => handleDeleteMessage()}>Yes</span>
-              <span onClick={() => setConfirmDeletion(false)}>No</span>
-            </span>
-          </div>
+          <DeleteConfirmation
+            confirmDelete={() => handleDeleteMessage()}
+            cancel={() => setConfirmDeletion(false)}
+          />
         )}
       </Actions>
       {replyOpen && (

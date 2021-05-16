@@ -15,6 +15,7 @@ import {
 import { setRedirectPath } from "../../reducers/redirectReducer";
 
 import BookmarkButton from "../BookmarkButton/BookmarkButton";
+import DeleteConfirmation from "../DeleteConfirmation/DeleteConfirmation";
 
 import {
   Container,
@@ -229,13 +230,10 @@ export default function Comment(props) {
                       Delete
                     </button>
                     {confirmDeletion && (
-                      <>
-                        <span>Are you sure?</span>
-                        <span onClick={handleRemoveComment}>yes</span>
-                        <span onClick={() => setConfirmDeletion(false)}>
-                          no
-                        </span>
-                      </>
+                      <DeleteConfirmation
+                        confirmDelete={() => handleRemoveComment()}
+                        cancel={() => setConfirmDeletion(false)}
+                      />
                     )}
                     <span onClick={() => setEditing(true)}>Edit</span>
                   </>
