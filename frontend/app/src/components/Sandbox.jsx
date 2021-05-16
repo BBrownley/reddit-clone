@@ -82,15 +82,17 @@ export default function Sandbox() {
   };
 
   useEffect(() => {
-    // Get the max # of pages needed on load and initial data
-    if (options.type === "ALL_POSTS" && options.user === false) {
-      postService.paginate(options, currentPage);
-    }
+    // Get the max # of pages needed on load
+    postService.countPages().then(result => {
+      setMaxPages(result);
+    });
   }, []);
 
   useEffect(() => {
     // When the page changes, fetch the appropriate data
-    console.log("changing page");
+    if (options.type === "ALL_POSTS" && options.user === false) {
+      postService.paginate(options, currentPage);
+    }
   }, [currentPage]);
 
   return (

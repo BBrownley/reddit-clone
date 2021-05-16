@@ -237,4 +237,43 @@ postsRouter.get("/all", async (req, res, next) => {
   }
 });
 
+// Count the maximum pages for pagination
+postsRouter.get("/all/count", async (req, res, next) => {
+  const countPages = () => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT CEILING(COUNT(*) / 20) AS pages FROM posts
+      `;
+      connection.query(query, (err, results) => {
+        if (err) {
+          reject(new Error("Unable to count pages"));
+        } else {
+          resolve(results[0]);
+        }
+      });
+    });
+  };
+
+  try {
+    const pages = await countPages();
+    res.json(pages);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
 module.exports = postsRouter;
+
+// postsRouter.get("/all/count", async (req, res, next) => {
+
+//   const myFunc = () => {
+//     console.log("func goes here")
+//   }
+
+//   try {
+//     const data = await myFunc();
+//     res.json(data)
+//   } catch (exception) {
+//     next(exception)
+//   }
+// })

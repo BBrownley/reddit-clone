@@ -157,12 +157,10 @@ const editPost = async (id, newValue) => {
 
 const paginate = async (options, page) => {
   if (options.type === "ALL_POSTS" && options.user === false) {
-    // Fetch the 20 most recent posts
-    console.log("fetch 20 most recent w/o user");
-    console.log("page #: " + page);
+    // Fetch 20 posts by creation date
 
     const req = await axios.get(
-      `${baseUrl}/posts/all?user=${options.user}&page=${1}`
+      `${baseUrl}/posts/all?user=${options.user}&page=${page}`
     );
     console.log(req.data);
   }
@@ -170,6 +168,11 @@ const paginate = async (options, page) => {
   if (options.type === "ALL_POSTS" && options.user) {
     // Fetch the most 20 most recent posts according to where the user is subscribed to
   }
+};
+
+const countPages = async () => {
+  const req = await axios.get(`${baseUrl}/posts/all/count`);
+  return req.data.pages;
 };
 
 const postService = {
@@ -184,7 +187,8 @@ const postService = {
   unfollowPost,
   getPostFollows,
   editPost,
-  paginate
+  paginate,
+  countPages
 };
 
 export default postService;
