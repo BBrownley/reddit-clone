@@ -5,6 +5,7 @@ export const StyledButton = styled(Button)`
   border: 1px solid #fc74a4;
   width: 150px;
   margin-bottom: -3px;
+  transform: translateY(-0.25rem);
   user-select: none;
   margin: 10px 10px 0 10px;
   margin-left: auto;

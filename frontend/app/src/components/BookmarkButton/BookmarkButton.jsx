@@ -18,12 +18,12 @@ export default function BookmarkButton({ bookmarked, commentId }) {
   };
 
   return (
-    <button>
+    <li className={`${bookmarked ? "active" : ""}`}>
       {bookmarked ? (
         <span onClick={() => handleDeleteBookmark(commentId)}>Unbookmark</span>
       ) : (
         <span onClick={() => handleAddBookmark(commentId)}>Bookmark</span>
       )}
-    </button>
+    </li>
   );
 }

@@ -27,8 +27,8 @@ import {
   CommentCountLg
 } from "../PostList/PostList.elements";
 
-import { FormContainer, FormField, ButtonGroup } from "../shared/Form.elements";
-
+import { FormContainer, FormField } from "../shared/Form.elements";
+import ButtonGroup from "../shared/ButtonGroup.elements";
 import FollowButton from "../FollowButton/FollowButton";
 
 import FontAwesome from "react-fontawesome";
@@ -148,8 +148,8 @@ const Post = ({ post, options, expand, viewMode }) => {
                   />
                 </FormField>
                 <ButtonGroup>
-                  <button onClick={handleEditPost}>Edit post</button>
-                  <button onClick={handleCancelEdit}>Cancel</button>
+                  <li onClick={handleEditPost}>Edit post</li>
+                  <li onClick={handleCancelEdit}>Cancel</li>
                 </ButtonGroup>
               </FormContainer>
             ) : (
@@ -168,17 +168,17 @@ const Post = ({ post, options, expand, viewMode }) => {
                   {user && (
                     <span>
                       {userOwnsPost ? (
-                        <>
+                        <ButtonGroup>
                           {viewMode && editing === false && (
-                            <span onClick={() => setEditing(true)}>Edit</span>
+                            <li onClick={() => setEditing(true)}>Edit</li>
                           )}
 
-                          <span
+                          <li
                             onClick={() => setConfirmDeletion(!confirmDeletion)}
                           >
                             <FontAwesome name="trash" /> Delete
-                          </span>
-                        </>
+                          </li>
+                        </ButtonGroup>
                       ) : (
                         ""
                       )}

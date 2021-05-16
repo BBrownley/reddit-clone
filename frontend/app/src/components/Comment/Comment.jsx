@@ -27,6 +27,8 @@ import {
   CommentVoteButton
 } from "./Comment.elements";
 
+import ButtonGroup from "../shared/ButtonGroup.elements";
+
 export default function Comment(props) {
   const level = props.level || 1;
   const currentCommentId = props.comment.comment_id;
@@ -213,29 +215,28 @@ export default function Comment(props) {
                 downvoted={existingCommentVote?.vote_value === -1 ? 1 : 0}
               />
             </CommentVotes>
-            {replying === false && (
-              <span onClick={() => handleSetReplying()}>
-                <a className="reply">Reply</a>
-              </span>
-            )}
+
             {!removed && currentUser.userId !== null && (
-              <p>
+              <ButtonGroup>
+                {replying === false && (
+                  <li onClick={() => handleSetReplying()}>
+                    <span className="reply">Reply</span>
+                  </li>
+                )}
                 <BookmarkButton
                   bookmarked={userBookmarked}
                   commentId={props.comment.comment_id}
                 />
                 {userOwnsComment && (
                   <>
-                    <button onClick={() => setConfirmDeletion(true)}>
-                      Delete
-                    </button>
+                    <li onClick={() => setConfirmDeletion(true)}>Delete</li>
                     {confirmDeletion && (
                       <DeleteConfirmation
                         confirmDelete={() => handleRemoveComment()}
                         cancel={() => setConfirmDeletion(false)}
                       />
                     )}
-                    <span onClick={() => setEditing(true)}>Edit</span>
+                    <li onClick={() => setEditing(true)}>Edit</li>
                   </>
                 )}
                 {replying === true && (
@@ -275,7 +276,7 @@ export default function Comment(props) {
                     </p>
                   </div>
                 )}
-              </p>
+              </ButtonGroup>
             )}
           </div>
         )}

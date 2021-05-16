@@ -19,6 +19,8 @@ import {
 
 import { Button } from "../shared/Button.elements";
 
+import ButtonGroup from "../shared/ButtonGroup.elements";
+
 export default function MessageView() {
   const [reply, setReply] = useState("");
   const [replyOpen, setReplyOpen] = useState(false);
@@ -55,21 +57,29 @@ export default function MessageView() {
         </Time>
       </div>
       <MessageBody>{location.state.body}</MessageBody>
-      <Actions>
-        <Link to="/inbox">Back</Link>
+      <ButtonGroup>
+        <li>
+          <Link to="/inbox">Back</Link>
+        </li>
         {location.state.sender ? (
-          <a onClick={() => setReplyOpen(true)}>Reply</a>
+          <li>
+            <a onClick={() => setReplyOpen(true)}>Reply</a>
+          </li>
         ) : (
           ""
         )}
-        <span onClick={() => setConfirmDeletion(true)}>Delete</span>
+
+        <li>
+          <span onClick={() => setConfirmDeletion(true)}>Delete</span>
+        </li>
+
         {confirmDeletion && (
           <DeleteConfirmation
             confirmDelete={() => handleDeleteMessage()}
             cancel={() => setConfirmDeletion(false)}
           />
         )}
-      </Actions>
+      </ButtonGroup>
       {replyOpen && (
         <ReplyForm>
           <textarea
