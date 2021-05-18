@@ -48,13 +48,17 @@ export default function Sandbox() {
 
   const options = {
     type: "ALL_POSTS",
-    user: 25
+    user: 71
   };
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageInput, setPageInput] = useState(currentPage);
   const [maxPages, setMaxPages] = useState(null); // Determined by DB query
   const [resultsPerPage, setResultsPerPage] = useState(20);
+  const [paginationOptions, setPaginationOptions] = useState({
+    type: "ALL_POSTS",
+    user: null
+  });
 
   const user = useSelector(state => state.user);
 
@@ -99,14 +103,21 @@ export default function Sandbox() {
     postService.countPages().then(result => {
       setMaxPages(result);
     });
+
+    if (user.userId !== null) {
+      setPaginationOptions(prevState => ({ ...prevState, user: user.userId }));
+    } else {
+      // On user logout
+      setPaginationOptions(prevState => ({ ...prevState, user: null }));
+    }
   }, [user]);
 
   useEffect(() => {
     // When the page changes, fetch the appropriate data
-    if (options.type === "ALL_POSTS") {
-      postService.paginate(options, currentPage);
+    if (paginationOptions.type === "ALL_POSTS") {
+      postService.paginate(paginationOptions, currentPage);
     }
-  }, [currentPage]);
+  }, [currentPage, paginationOptions]);
 
   return (
     <div>

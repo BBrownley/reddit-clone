@@ -201,7 +201,6 @@ postsRouter.put("/:id", async (req, res, next) => {
 
 // Posts for the client when visiting the index page
 postsRouter.get("/all", async (req, res, next) => {
-
   const getPosts = () => {
     const user = req.query.user;
 
@@ -217,7 +216,7 @@ postsRouter.get("/all", async (req, res, next) => {
         `;
       } else {
         // Get posts based on user's subscriptions. Return empty array if they have none
-        console.log("Get posts based on user's subscriptions");
+
         query = `
           SELECT title, content, groups.group_name FROM posts
           JOIN groups ON groups.id = posts.group_id
