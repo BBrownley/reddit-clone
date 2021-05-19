@@ -40,7 +40,7 @@ const Post = ({ post, options, expand, viewMode }) => {
   const userPosts = useSelector(state => state.userPosts);
   const userPostVote = useSelector(state =>
     state.userPostVotes.find(vote => {
-      return vote.post_id === post.postID;
+      return vote.post_id === post.post_id;
     })
   );
 
@@ -49,7 +49,7 @@ const Post = ({ post, options, expand, viewMode }) => {
   const [confirmDeletion, setConfirmDeletion] = useState(false);
   const [editing, setEditing] = useState(false);
   const [editValue, setEditValue] = useState(post.content);
-  const [postContent, setPostContent] = useState(post.content);
+  // const [postContent, setPostContent] = useState(post.content);
 
   const handleVotePost = (postId, clickedValue) => {
     if (user.token === null) {
@@ -76,14 +76,14 @@ const Post = ({ post, options, expand, viewMode }) => {
   };
 
   const handleEditPost = () => {
-    dispatch(editPost(post.postID, editValue));
-    setPostContent(editValue);
+    dispatch(editPost(post.post_id, editValue));
+    // setPostContent(editValue);
     setEditing(false);
   };
 
   const handleCancelEdit = () => {
     setEditing(false);
-    setEditValue(postContent);
+    // setEditValue(postContent);
   };
 
   const handleDeletePost = async postId => {
@@ -94,11 +94,11 @@ const Post = ({ post, options, expand, viewMode }) => {
   };
 
   const userOwnsPost = userPosts.find(userPost => {
-    return userPost.postID === post.postID;
+    return userPost.postID === post.post_id;
   });
 
   return (
-    <Container key={post.postID} expand={expand}>
+    <Container key={post.post_id} expand={expand}>
       <div>
         <div>
           {options !== false && (
@@ -107,7 +107,7 @@ const Post = ({ post, options, expand, viewMode }) => {
                 <FontAwesome
                   name="arrow-circle-up"
                   className="upvote"
-                  onClick={() => handleVotePost(post.postID, 1)}
+                  onClick={() => handleVotePost(post.post_id, 1)}
                 />
               </VoteButton>
               <PostScore>
@@ -120,7 +120,7 @@ const Post = ({ post, options, expand, viewMode }) => {
                 <FontAwesome
                   name="arrow-circle-down"
                   className="downvote"
-                  onClick={() => handleVotePost(post.postID, -1)}
+                  onClick={() => handleVotePost(post.post_id, -1)}
                 />
               </VoteButton>
             </VoteContainer>
@@ -128,13 +128,13 @@ const Post = ({ post, options, expand, viewMode }) => {
 
           <div style={{ flex: 1 }}>
             <PostHeader
-              postLink={`/groups/${post.groupName.toLowerCase()}/${
-                post.postID
+              postLink={`/groups/${post.group_name.toLowerCase()}/${
+                post.post_id
               }`}
               title={post.title}
               postAge={moment(post.created_at).fromNow()}
-              groupLink={`/groups/${post.groupName.toLowerCase()}`}
-              groupName={post.groupName}
+              groupLink={`/groups/${post.group_name.toLowerCase()}`}
+              groupName={post.group_name}
               author={post.username}
               userId={post.user_id}
             />
@@ -153,7 +153,7 @@ const Post = ({ post, options, expand, viewMode }) => {
                 </ButtonGroup>
               </FormContainer>
             ) : (
-              <Content expand={expand}>{postContent}</Content>
+              <Content expand={expand}>{post.content}</Content>
             )}
 
             {options !== false && (
@@ -162,7 +162,7 @@ const Post = ({ post, options, expand, viewMode }) => {
                   {user.token && (
                     <FollowButton
                       followers={post.follows}
-                      postId={post.postID}
+                      postId={post.post_id}
                     />
                   )}
                   {user && (
@@ -184,7 +184,7 @@ const Post = ({ post, options, expand, viewMode }) => {
                       )}
                       {confirmDeletion && (
                         <DeleteConfirmation
-                          confirmDelete={() => handleDeletePost(post.postID)}
+                          confirmDelete={() => handleDeletePost(post.post_id)}
                           cancel={() => setConfirmDeletion(false)}
                         />
                       )}

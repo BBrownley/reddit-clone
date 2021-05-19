@@ -4,13 +4,15 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import moment from "moment";
 
+import Link from "../shared/NavLink.elements";
+
 import FontAwesome from "react-fontawesome";
 
-import PostList from "./PostList/PostList";
+import PostList from "../PostList/PostList";
 
-import postService from "../services/posts";
+import postService from "../../services/posts";
 
-import { setUser } from "../reducers/userReducer";
+import { setUser } from "../../reducers/userReducer";
 
 const Container = styled.div`
   .pagination-button {
@@ -28,38 +30,18 @@ const Container = styled.div`
   }
 `;
 
-export default function Sandbox() {
-  /* 
-    Cases:
-      - All posts, no user logged in (done)
-      - All posts, user logged in (done)
-      - Group posts
-      - Groups
-      - Inbox
-      - User history
-        > Overview
-        > Submitted
-        > Comments
-        > Bookmarked
-  */
-
-  const options = {
-    type: "ALL_POSTS",
-    user: 71
-  };
+export default function HomePage() {
+  const user = useSelector(state => state.user);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageInput, setPageInput] = useState(currentPage);
   const [maxPages, setMaxPages] = useState(null); // Determined by DB query
-  const [resultsPerPage, setResultsPerPage] = useState(20);
   const [paginationOptions, setPaginationOptions] = useState({
     type: "ALL_POSTS",
-    user: null
+    user: user.userId
   });
   const [postsToDisplay, setPostsToDisplay] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const user = useSelector(state => state.user);
 
   const dispatch = useDispatch();
 
@@ -126,27 +108,40 @@ export default function Sandbox() {
   return (
     <div>
       <Container>
+        {maxPages === 0 && (
+          <h2>
+            Subscribe to your favorite <Link to="/groups">groups</Link> to stay
+            up to date with the content you love.
+          </h2>
+        )}
         {!loading && (
           <PostList searchBy="title" searchTerm="" posts={postsToDisplay} />
         )}
-        {currentPage > 1 && (
-          <button
-            className="pagination-button previous"
-            onClick={handlePrevButton}
-          >
-            Previous
-          </button>
-        )}
+        {maxPages !== 0 && (
+          <>
+            {currentPage > 1 && (
+              <button
+                className="pagination-button previous"
+                onClick={handlePrevButton}
+              >
+                Previous
+              </button>
+            )}
 
-        <span>
-          Page{" "}
-          <input type="text" value={pageInput} onChange={handlePageInput} /> of{" "}
-          {maxPages}
-        </span>
-        {currentPage < maxPages && (
-          <button className="pagination-button next" onClick={handleNextButton}>
-            Next
-          </button>
+            <span>
+              Page{" "}
+              <input type="text" value={pageInput} onChange={handlePageInput} />{" "}
+              of {maxPages}
+            </span>
+            {currentPage < maxPages && (
+              <button
+                className="pagination-button next"
+                onClick={handleNextButton}
+              >
+                Next
+              </button>
+            )}
+          </>
         )}
       </Container>
     </div>

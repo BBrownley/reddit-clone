@@ -29,6 +29,7 @@ import SingleGroupView from "./components/SingleGroupView/SingleGroupView";
 import Sandbox from "./components/Sandbox";
 
 import redditto from "./redditto.png";
+import HomePage from "./components/HomePage/HomePage";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -77,10 +78,7 @@ const App = () => {
 
             <Switch>
               <Route exact path="/">
-                <SingleGroupView
-                  all={true}
-                  handleSetGroupExists={setGroupExists}
-                />
+                <HomePage />
               </Route>
 
               <Route exact path="/register" component={RegisterForm} />

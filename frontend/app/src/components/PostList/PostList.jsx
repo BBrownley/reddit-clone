@@ -12,41 +12,43 @@ import postListHelpers from "./helpers";
 
 import { Container } from "./PostList.elements";
 
-const PostList = ({ sortBy, searchBy, searchTerm, posts = undefined }) => {
+const PostList = ({ sortBy, searchBy, searchTerm, posts }) => {
   const match = useRouteMatch("/groups/:group");
 
   const userPostVotes = useSelector(state => state.userPostVotes);
 
   const dispatch = useDispatch();
 
-  let postsToDisplay = useSelector(state => {
-    let posts = [];
+  let postsToDisplay = posts;
 
-    if (!match) {
-      posts = state.posts;
-    } else {
-      posts = state.posts.filter(post => {
-        return post.groupName.toLowerCase() === match.params.group;
-      });
-    }
+  // let postsToDisplay = useSelector(state => {
+  //   let posts = [];
 
-    // Map posts that user voted on to the post list
-    userPostVotes.forEach(vote => {
-      if (posts.filter(post => post.postID === vote.post_id)) {
-        const votedPost = posts.indexOf(
-          posts.find(post => post.postID === vote.post_id)
-        );
+  //   if (!match) {
+  //     posts = state.posts;
+  //   } else {
+  //     posts = state.posts.filter(post => {
+  //       return post.groupName.toLowerCase() === match.params.group;
+  //     });
+  //   }
 
-        posts[votedPost] = { vote: vote.vote_value, ...posts[votedPost] };
-      }
-    });
+  //   // Map posts that user voted on to the post list
+  //   userPostVotes.forEach(vote => {
+  //     if (posts.filter(post => post.postID === vote.post_id)) {
+  //       const votedPost = posts.indexOf(
+  //         posts.find(post => post.postID === vote.post_id)
+  //       );
 
-    return posts
-  });
+  //       posts[votedPost] = { vote: vote.vote_value, ...posts[votedPost] };
+  //     }
+  //   });
 
-  postsToDisplay = postListHelpers.sortPosts(
-    postListHelpers.filterPosts(postsToDisplay)
-  );
+  //   return posts
+  // });
+
+  // postsToDisplay = postListHelpers.sortPosts(
+  //   postListHelpers.filterPosts(postsToDisplay)
+  // );
 
   useEffect(() => {
     dispatch(initializePosts());

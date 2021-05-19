@@ -161,12 +161,11 @@ const paginate = async (options, page) => {
 
     const userId = options.user || null;
 
-    console.log(userId);
-
     const req = await axios.get(
       `${baseUrl}/posts/all?user=${userId}&page=${page}`
     );
-    console.log(req.data);
+
+    return req.data;
   }
 };
 

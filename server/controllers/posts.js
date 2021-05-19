@@ -210,20 +210,61 @@ postsRouter.get("/all", async (req, res, next) => {
       // Just get the most recent posts
       if (user === "null") {
         query = `
-          SELECT * FROM posts
+          SELECT 
+            CASE
+              WHEN ISNULL(SUM(post_votes.vote_value)) THEN 0
+              WHEN SUM(post_votes.vote_value) < 1 THEN 0
+              ELSE SUM(post_votes.vote_value)
+          END AS score,
+            title,
+            posts.created_at AS created_at,
+            posts.id AS post_id,
+            group_name AS group_name,
+            group_id AS group_id,
+            username,
+            users.id AS user_id,
+            content,
+            (SELECT COUNT(*) FROM post_follows WHERE posts.id = post_follows.post_id) AS follows,
+            (SELECT COUNT(*) FROM comments 
+              WHERE posts.id = comments.post_id) AS total_comments
+          FROM posts
+          JOIN users ON users.id = posts.submitter_id
+          JOIN groups ON groups.id = posts.group_id
+          LEFT JOIN post_votes ON post_votes.post_id = posts.id
+          GROUP BY posts.id
           ORDER BY created_at DESC
           LIMIT 20 OFFSET ${(parseInt(req.query.page) - 1) * 20}
         `;
       } else {
-        // Get posts based on user's subscriptions. Return empty array if they have none
+        // Get posts based on user's subscriptions
 
         query = `
-          SELECT title, content, groups.group_name FROM posts
+          SELECT 
+            CASE
+              WHEN ISNULL(SUM(post_votes.vote_value)) THEN 0
+              WHEN SUM(post_votes.vote_value) < 1 THEN 0
+              ELSE SUM(post_votes.vote_value)
+            END AS score,
+            title,
+            posts.created_at AS created_at,
+            posts.id AS post_id,
+            group_name AS group_name,
+            group_id AS group_id,
+            username,
+            users.id AS user_id,
+            content,
+            (SELECT COUNT(*) FROM post_follows WHERE posts.id = post_follows.post_id) AS follows,
+            (SELECT COUNT(*) FROM comments 
+              WHERE posts.id = comments.post_id) AS total_comments
+          FROM posts
+          JOIN users ON users.id = posts.submitter_id
           JOIN groups ON groups.id = posts.group_id
+          LEFT JOIN post_votes ON post_votes.post_id = posts.id
           WHERE group_name IN 
             (SELECT group_name FROM group_subscribers 
             JOIN groups ON group_subscribers.group_id = groups.id 
             WHERE user_id = ?)
+          GROUP BY posts.id
           ORDER BY posts.created_at DESC
           LIMIT 20 OFFSET ${(parseInt(req.query.page) - 1) * 20}
         `;
@@ -231,6 +272,7 @@ postsRouter.get("/all", async (req, res, next) => {
 
       connection.query(query, [user], (err, results) => {
         if (err) {
+          console.log(err);
           reject(new Error("Unable to get posts"));
         } else {
           resolve(results);
