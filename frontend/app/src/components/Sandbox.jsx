@@ -9,6 +9,7 @@ import FontAwesome from "react-fontawesome";
 import PostList from "./PostList/PostList";
 
 import postService from "../services/posts";
+import groupService from "../services/groups";
 
 import { setUser } from "../reducers/userReducer";
 
@@ -33,7 +34,7 @@ export default function Sandbox() {
     Cases:
       - All posts, no user logged in (done)
       - All posts, user logged in (done)
-      - Group posts
+      - Group posts (done)
       - Groups
       - Inbox
       - User history
@@ -52,11 +53,10 @@ export default function Sandbox() {
   const [pageInput, setPageInput] = useState(currentPage);
   const [maxPages, setMaxPages] = useState(null); // Determined by DB query
   const [resultsPerPage, setResultsPerPage] = useState(20);
-  const [paginationOptions, setPaginationOptions] = useState({
-    type: "GROUP_POSTS",
-    groupName: "sports"
-  });
-  const [postsToDisplay, setPostsToDisplay] = useState([]);
+  // const [paginationOptions, setPaginationOptions] = useState({
+  //   type: "GROUPS"
+  // });
+  const [groupsToDisplay, setGroupsToDisplay] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const user = useSelector(state => state.user);
@@ -99,7 +99,7 @@ export default function Sandbox() {
   useEffect(() => {
     // Get the max # of pages needed on load
 
-    postService.countPages(paginationOptions).then(result => {
+    groupService.countPages().then(result => {
       setMaxPages(result);
     });
   }, [user]);
@@ -107,18 +107,15 @@ export default function Sandbox() {
   useEffect(() => {
     // When the page changes, fetch the appropriate data
 
-    postService.paginate(paginationOptions, currentPage).then(data => {
-      setPostsToDisplay(data);
+    groupService.paginate(currentPage).then(data => {
+      setGroupsToDisplay(data);
       setLoading(false);
     });
-  }, [currentPage, paginationOptions]);
+  }, [currentPage]);
 
   return (
     <div>
       <Container>
-        {!loading && (
-          <PostList searchBy="title" searchTerm="" posts={postsToDisplay} />
-        )}
         {currentPage > 1 && (
           <button
             className="pagination-button previous"

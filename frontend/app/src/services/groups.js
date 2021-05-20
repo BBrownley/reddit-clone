@@ -1,6 +1,7 @@
 import axios from "axios";
 
 let storedToken = null;
+const baseUrl = process.env.BASE_URL || "http://localhost:5000";
 
 const setToken = token => {
   storedToken = token;
@@ -113,6 +114,18 @@ const getUserSubscriptions = async () => {
   }
 };
 
+const paginate = async page => {
+  const req = await axios.get(`${baseUrl}/groups?page=${page}`);
+  console.log(req.data);
+  return req.data;
+};
+
+const countPages = async () => {
+  const req = await axios.get(`${baseUrl}/groups/count`);
+  console.log(req.data.pages);
+  return req.data.pages;
+};
+
 const groupService = {
   getAll,
   getGroupByName,
@@ -120,7 +133,9 @@ const groupService = {
   setToken,
   subscribeToGroup,
   unsubscribe,
-  getUserSubscriptions
+  getUserSubscriptions,
+  paginate,
+  countPages
 };
 
 export default groupService;

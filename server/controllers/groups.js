@@ -1,10 +1,64 @@
 const groupsRouter = require("express").Router();
+const connection = require("../db/index").connection;
 
 const groupsDB = require("../db/groups");
 
-groupsRouter.get("/", async (req, res) => {
-  let groups = await groupsDB.all();
-  res.json(groups);
+// Get groups for display
+groupsRouter.get("/", async (req, res, next) => {
+  const getGroups = () => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT * FROM groups
+        ORDER BY created_at DESC
+        LIMIT 20 OFFSET ?
+      `;
+
+      connection.query(
+        query,
+        [(parseInt(req.query.page) - 1) * 20],
+        (err, results) => {
+          if (err) {
+            reject(new Error("Unable to get groups"));
+          } else {
+            resolve(results);
+          }
+        }
+      );
+    });
+  };
+
+  try {
+    const groups = await getGroups();
+    res.json(groups);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
+// Count # of pages needed for pagination of groups
+groupsRouter.get("/count", async (req, res, next) => {
+  const countPages = () => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT COUNT(*) AS total FROM groups
+      `;
+
+      connection.query(query, (err, results) => {
+        if (err) {
+          reject(new Error("Unable to count groups"));
+        } else {
+          resolve({ pages: Math.ceil(Object.values(results[0])[0] / 20) });
+        }
+      });
+    });
+  };
+
+  try {
+    const pages = await countPages();
+    res.json(pages);
+  } catch (exception) {
+    next(exception);
+  }
 });
 
 groupsRouter.post("/create", async (req, res, next) => {

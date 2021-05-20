@@ -83,7 +83,7 @@ export default function HomePage() {
   useEffect(() => {
     // Get the max # of pages needed on load
 
-    postService.countPages().then(result => {
+    postService.countPages(paginationOptions).then(result => {
       setMaxPages(result);
     });
 
