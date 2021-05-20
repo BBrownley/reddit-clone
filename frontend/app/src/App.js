@@ -35,7 +35,6 @@ const App = () => {
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(true);
-  const [groupExists, setGroupExists] = useState(true);
 
   const user = useSelector(state => {
     return state.user;
@@ -87,14 +86,9 @@ const App = () => {
               <Route exact path="/inbox/message" component={MessageView} />
               <Route exact path="/sandbox" component={Sandbox} />
 
-              {groupExists && (
-                <Route exact path={["/groups/:group"]}>
-                  <SingleGroupView
-                    all={false}
-                    handleSetGroupExists={setGroupExists}
-                  />
-                </Route>
-              )}
+              <Route exact path={["/groups/:group"]}>
+                <SingleGroupView />
+              </Route>
 
               <Route exact path="/creategroup" component={GroupForm} />
               <Route path="/create" component={PostForm} />

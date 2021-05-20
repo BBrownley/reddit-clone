@@ -14,7 +14,7 @@ import {
   CreatePostButton
 } from "./GroupActions.elements";
 
-const GroupActions = () => {
+const GroupActions = ({ group }) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -22,16 +22,6 @@ const GroupActions = () => {
   const userSubscribedGroups = useSelector(state => state.subscribedGroups);
 
   const groupMatch = useRouteMatch("/groups/:groupName");
-  const currentGroup = useSelector(state => {
-    if (groupMatch) {
-      return state.groups.find(group => {
-        return (
-          group.group_name.toLowerCase() ===
-          groupMatch.params.groupName.toLowerCase()
-        );
-      });
-    }
-  });
 
   const handleCreatePostButton = () => {
     if (loggedUser.userId !== null) {
@@ -47,7 +37,7 @@ const GroupActions = () => {
 
   const handleSubscribe = () => {
     if (loggedUser.userId !== null) {
-      dispatch(subscribeToGroup(currentGroup, loggedUser));
+      dispatch(subscribeToGroup(group, loggedUser));
     } else {
       history.push({
         pathname: "/login",
@@ -60,22 +50,20 @@ const GroupActions = () => {
   };
 
   const handleUnsubscribe = () => {
-    dispatch(unsubscribeFromGroup(currentGroup, loggedUser));
+    dispatch(unsubscribeFromGroup(group, loggedUser));
   };
 
   return (
-    <Container singleGroup={!currentGroup}>
-      <button
-        onClick={handleCreatePostButton}
-        
-        className="create-post-button"
-      >
+    <Container singleGroup={!group}>
+      <button onClick={handleCreatePostButton} className="create-post-button">
         <FontAwesome name="paper-plane"></FontAwesome> Submit a new post
       </button>
 
-      {currentGroup &&
+      {group &&
         loggedUser.token &&
-        (userSubscribedGroups.find(group => group.id === currentGroup.id) ? (
+        (userSubscribedGroups.find(userGroup => {
+          return userGroup.group_id === group.group_id;
+        }) ? (
           <button onClick={handleUnsubscribe}>
             <FontAwesome name="check"></FontAwesome>
             {" SUBSCRIBED"}
@@ -86,10 +74,6 @@ const GroupActions = () => {
             {" Subscribe"}
           </button>
         ))}
-
-      {/* <button>
-        <FontAwesome name="info-circle"></FontAwesome> More Info
-      </button> */}
     </Container>
   );
 };

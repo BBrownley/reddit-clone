@@ -126,7 +126,6 @@ export const addPostToUser = post => {
 export const followPost = postId => {
   return async dispatch => {
     const res = await postService.followPost(postId);
-    console.log(res);
     dispatch({
       type: "FOLLOW_POST",
       postId: res.post_id

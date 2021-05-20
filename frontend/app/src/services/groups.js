@@ -62,7 +62,7 @@ const subscribeToGroup = async group => {
   try {
     const req = await axios.post(
       "http://localhost:5000/groups/subscribe",
-      group,
+      { id: group.group_id },
       config
     );
     return req.data;
@@ -81,7 +81,7 @@ const unsubscribe = async group => {
       "http://localhost:5000/groups/subscription",
       {
         data: {
-          id: group.id
+          id: group.group_id
         },
         headers
       }

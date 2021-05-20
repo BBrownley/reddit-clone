@@ -194,7 +194,6 @@ commentsRouter.put("/:commentId/remove", async (req, res, next) => {
         SET content = "comment removed", deleted = 1
         WHERE id = ? AND commenter_id = ?     
       `;
-      console.log(commentId, userId);
       connection.query(query, [commentId, userId], (err, results) => {
         if (err) {
           reject(new Error("Unable to remove comment"));

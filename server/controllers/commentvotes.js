@@ -128,7 +128,6 @@ commentvotesRouter.delete("/", async (req, res, next) => {
 
       connection.query(query, [userId, commentId], err => {
         if (err) {
-          console.log(err);
           return reject(new Error("Unable to delete comment vote"));
         } else {
           resolve();

@@ -148,7 +148,7 @@ const getSubscriptions = userId => {
     if (userId) {
       connection.query(
         `
-          SELECT group_name, group_subscribers.created_at, groups.id AS id FROM group_subscribers
+          SELECT group_name, group_subscribers.created_at, groups.id AS group_id FROM group_subscribers
           LEFT JOIN groups ON groups.id = group_subscribers.group_id
           WHERE group_subscribers.user_id = ?
         `,

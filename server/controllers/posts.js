@@ -275,7 +275,7 @@ postsRouter.get("/all", async (req, res, next) => {
         [user, (parseInt(req.query.page) - 1) * 20],
         (err, results) => {
           if (err) {
-            console.log(err);
+
             reject(new Error("Unable to get posts"));
           } else {
             resolve(results);
@@ -419,10 +419,8 @@ postsRouter.get("/group/count", async (req, res, next) => {
 
       connection.query(query, [req.query.groupName], (err, results) => {
         if (err) {
-          console.log(err);
           reject(new Error("Unable to count group post pages"));
         } else {
-          console.log({ pages: Math.ceil(Object.values(results[0])[0] / 20) });
           resolve({ pages: Math.ceil(Object.values(results[0])[0] / 20) });
         }
       });
