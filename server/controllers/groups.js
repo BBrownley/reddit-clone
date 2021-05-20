@@ -13,6 +13,8 @@ groupsRouter.get("/", async (req, res, next) => {
         LIMIT 20 OFFSET ?
       `;
 
+      console.log(req.query.page);
+
       connection.query(
         query,
         [(parseInt(req.query.page) - 1) * 20],

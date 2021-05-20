@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+
+import styled from "styled-components";
 
 import FontAwesome from "react-fontawesome";
 
@@ -12,15 +14,54 @@ import GroupCard from "../GroupCard/GroupCard";
 
 import { setRedirectPath } from "../../reducers/redirectReducer";
 
+import groupService from "../../services/groups";
+
+const Pagination = styled.div`
+  .pagination-button {
+    font-size: 1rem;
+    &.previous {
+      margin-right: 1rem;
+    }
+    &.next {
+      margin-left: 1rem;
+    }
+  }
+  input {
+    width: 3rem;
+    text-align: center;
+  }
+`;
+
 const GroupList = () => {
   const [searchBy, setSearchBy] = useState("name");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const groups = useSelector(state => state.groups);
+  const [groupsToDisplay, setGroupsToDisplay] = useState([]);
+  const [maxPages, setMaxPages] = useState(null); // Determined by DB query
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageInput, setPageInput] = useState(currentPage);
+
   const loggedUser = useSelector(state => state.user);
 
   const dispatch = useDispatch();
   const history = useHistory();
+
+  useEffect(() => {
+    // Get the max # of pages needed on load
+
+    groupService.countPages().then(result => {
+      setMaxPages(result);
+    });
+  }, []);
+
+  useEffect(() => {
+    // When the page changes, fetch the appropriate data
+
+    groupService.paginate(currentPage).then(data => {
+      setGroupsToDisplay(data);
+    });
+  }, [currentPage]);
 
   const handleCreateGroupButton = () => {
     if (loggedUser.userId !== null) {
@@ -37,9 +78,39 @@ const GroupList = () => {
     }
   };
 
-  const resetFilters = () => {
-    setSearchBy("name");
-    setSearchTerm("");
+  const handlePageInput = e => {
+    // Allow integers only
+
+    let sanitizedInput = "";
+
+    for (let i = 0; i < e.target.value.length; i++) {
+      const currentCharCode = e.target.value.charAt(i).charCodeAt(0);
+      if (currentCharCode >= 48 && currentCharCode <= 57) {
+        sanitizedInput = sanitizedInput.concat(e.target.value.charAt(i));
+      }
+    }
+
+    // Cannot exceed max pages, must be at least 1
+    if (parseInt(sanitizedInput) > maxPages) {
+      sanitizedInput = maxPages;
+    } else if (sanitizedInput.length === 0) {
+      sanitizedInput = 1;
+    }
+
+    setPageInput(sanitizedInput);
+    setCurrentPage(sanitizedInput);
+  };
+
+  const handlePrevButton = () => {
+    setCurrentPage(prevState => prevState - 1);
+    setPageInput(prevState => prevState - 1);
+    window.scrollTo(0, 0);
+  };
+
+  const handleNextButton = () => {
+    setCurrentPage(prevState => prevState + 1);
+    setPageInput(prevState => prevState + 1);
+    window.scrollTo(0, 0);
   };
 
   const filterGroups = groups => {
@@ -68,40 +139,35 @@ const GroupList = () => {
           <FontAwesome name="users" className="fa-users" />
           Create your own group
         </button>
-        <div>
-          {/* <strong>
-            Search groups by{" "}
-            <select
-              name="searchOption"
-              id="search-option"
-              onChange={e => setSearchBy(e.target.value)}
-              value={searchBy}
-            >
-              <option value="name">Name</option>
-              <option value="blurb">Blurb</option>
-            </select>
-            :{" "}
-          </strong>
-          <input
-            onChange={e => setSearchTerm(e.target.value)}
-            value={searchTerm}
-          ></input>
-
-          <button
-            className="button-small no-shadow ml-10"
-            onClick={resetFilters}
-          >
-            Clear search
-          </button> */}
-        </div>
       </GroupListHeader>
       <Container>
-        {groups.length !== 0
-          ? filterGroups(groups).map((group, index) => {
+        {groupsToDisplay.length !== 0
+          ? filterGroups(groupsToDisplay).map((group, index) => {
               return <GroupCard group={group} key={index} />;
             })
           : ""}
       </Container>
+      <Pagination>
+        {currentPage > 1 && (
+          <button
+            className="pagination-button previous"
+            onClick={handlePrevButton}
+          >
+            Previous
+          </button>
+        )}
+
+        <span>
+          Page{" "}
+          <input type="text" value={pageInput} onChange={handlePageInput} /> of{" "}
+          {maxPages}
+        </span>
+        {currentPage < maxPages && (
+          <button className="pagination-button next" onClick={handleNextButton}>
+            Next
+          </button>
+        )}
+      </Pagination>
     </Wrapper>
   );
 };
