@@ -53,15 +53,13 @@ export default function Sandbox() {
   const [maxPages, setMaxPages] = useState(null); // Determined by DB query
   const [resultsPerPage, setResultsPerPage] = useState(20);
   const [paginationOptions, setPaginationOptions] = useState({
-    type: "ALL_POSTS",
-    user: null
+    type: "GROUP_POSTS",
+    groupName: "sports"
   });
   const [postsToDisplay, setPostsToDisplay] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const user = useSelector(state => state.user);
-
-  const dispatch = useDispatch();
 
   const handlePageInput = e => {
     // Allow integers only
@@ -101,26 +99,18 @@ export default function Sandbox() {
   useEffect(() => {
     // Get the max # of pages needed on load
 
-    postService.countPages().then(result => {
+    postService.countPages(paginationOptions).then(result => {
       setMaxPages(result);
     });
-
-    if (user.userId !== null) {
-      setPaginationOptions(prevState => ({ ...prevState, user: user.userId }));
-    } else {
-      // On user logout
-      setPaginationOptions(prevState => ({ ...prevState, user: null }));
-    }
   }, [user]);
 
   useEffect(() => {
     // When the page changes, fetch the appropriate data
-    if (paginationOptions.type === "ALL_POSTS") {
-      postService.paginate(paginationOptions, currentPage).then(data => {
-        setPostsToDisplay(data);
-        setLoading(false);
-      });
-    }
+
+    postService.paginate(paginationOptions, currentPage).then(data => {
+      setPostsToDisplay(data);
+      setLoading(false);
+    });
   }, [currentPage, paginationOptions]);
 
   return (

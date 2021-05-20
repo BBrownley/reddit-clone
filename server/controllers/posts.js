@@ -266,18 +266,22 @@ postsRouter.get("/all", async (req, res, next) => {
             WHERE user_id = ?)
           GROUP BY posts.id
           ORDER BY posts.created_at DESC
-          LIMIT 20 OFFSET ${(parseInt(req.query.page) - 1) * 20}
+          LIMIT 20 OFFSET ?
         `;
       }
 
-      connection.query(query, [user], (err, results) => {
-        if (err) {
-          console.log(err);
-          reject(new Error("Unable to get posts"));
-        } else {
-          resolve(results);
+      connection.query(
+        query,
+        [user, (parseInt(req.query.page) - 1) * 20],
+        (err, results) => {
+          if (err) {
+            console.log(err);
+            reject(new Error("Unable to get posts"));
+          } else {
+            resolve(results);
+          }
         }
-      });
+      );
     });
   };
 
@@ -346,6 +350,88 @@ postsRouter.get("/all/count/user", async (req, res, next) => {
   try {
     const pages = await countPages();
     res.json(pages);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
+// Gets all the posts belonging to a group
+postsRouter.get("/group", async (req, res, next) => {
+  const getGroupPosts = () => {
+    return new Promise((resolve, reject) => {
+      const query = `
+      SELECT 
+        CASE
+          WHEN ISNULL(SUM(post_votes.vote_value)) THEN 0
+          WHEN SUM(post_votes.vote_value) < 1 THEN 0
+          ELSE SUM(post_votes.vote_value)
+        END AS score,
+        title,
+        posts.created_at AS created_at,
+        posts.id AS post_id,
+        group_name AS group_name,
+        group_id AS group_id,
+        username,
+        users.id AS user_id,
+        content,
+        (SELECT COUNT(*) FROM post_follows WHERE posts.id = post_follows.post_id) AS follows,
+        (SELECT COUNT(*) FROM comments 
+          WHERE posts.id = comments.post_id) AS total_comments
+      FROM posts
+      JOIN users ON users.id = posts.submitter_id
+      JOIN groups ON groups.id = posts.group_id
+      LEFT JOIN post_votes ON post_votes.post_id = posts.id
+      WHERE group_name = ?
+      GROUP BY posts.id
+      ORDER BY posts.created_at DESC
+      LIMIT 20 OFFSET ?
+      `;
+
+      connection.query(
+        query,
+        [req.query.groupName, (parseInt(req.query.page) - 1) * 20],
+        (err, results) => {
+          if (err) {
+            reject(new Error("Unable to get group posts"));
+          } else resolve(results);
+        }
+      );
+    });
+  };
+
+  try {
+    const posts = await getGroupPosts();
+    res.json(posts);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
+// Counts # of posts belonging to a group
+postsRouter.get("/group/count", async (req, res, next) => {
+  const countPages = () => {
+    return new Promise((resolve, reject) => {
+      const query = `
+      SELECT COUNT(*) FROM posts
+      JOIN groups ON groups.id = posts.group_id
+      WHERE group_name = ?
+    `;
+
+      connection.query(query, [req.query.groupName], (err, results) => {
+        if (err) {
+          console.log(err);
+          reject(new Error("Unable to count group post pages"));
+        } else {
+          console.log({ pages: Math.ceil(Object.values(results[0])[0] / 20) });
+          resolve({ pages: Math.ceil(Object.values(results[0])[0] / 20) });
+        }
+      });
+    });
+  };
+
+  try {
+    const data = await countPages();
+    res.json(data);
   } catch (exception) {
     next(exception);
   }

@@ -14,8 +14,6 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
 
 const reducer = combineReducers({
-  posts: postsReducer,
-  groups: groupsReducer,
   user: userReducer,
   userPosts: userPostsReducer,
   userPostVotes: userPostVotesReducer,

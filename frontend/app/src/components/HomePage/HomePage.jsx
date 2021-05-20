@@ -111,7 +111,7 @@ export default function HomePage() {
         {maxPages === 0 && (
           <h2>
             Subscribe to your favorite <Link to="/groups">groups</Link> to stay
-            up to date with the content you love.
+            up to date with the content you love ❤️
           </h2>
         )}
         {!loading && (

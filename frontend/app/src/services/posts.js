@@ -167,9 +167,16 @@ const paginate = async (options, page) => {
 
     return req.data;
   }
+
+  if (options.type === "GROUP_POSTS") {
+    const req = await axios.get(
+      `${baseUrl}/posts/group?groupName=${options.groupName}&page=${page}`
+    );
+    return req.data;
+  }
 };
 
-const countPages = async () => {
+const countPages = async options => {
   const config = {
     headers: {
       Authorization: storedToken
@@ -178,10 +185,16 @@ const countPages = async () => {
 
   let req;
 
-  if (storedToken === null) {
-    req = await axios.get(`${baseUrl}/posts/all/count`);
-  } else {
-    req = await axios.get(`${baseUrl}/posts/all/count/user`, config);
+  if (options.type === "ALL_POSTS") {
+    if (storedToken === null) {
+      req = await axios.get(`${baseUrl}/posts/all/count`);
+    } else {
+      req = await axios.get(`${baseUrl}/posts/all/count/user`, config);
+    }
+  } else if (options.type === "GROUP_POSTS") {
+    req = await axios.get(
+      `${baseUrl}/posts/group/count?groupName=${options.groupName}`
+    );
   }
 
   return req.data.pages;
