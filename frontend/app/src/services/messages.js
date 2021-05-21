@@ -80,7 +80,6 @@ const paginate = async (options, page) => {
     `${baseUrl}/messages/paginate?filter=${options.type}&page=${page}`,
     config
   );
-  console.log(req.data);
   return req.data;
 };
 

@@ -35,7 +35,7 @@ export default function Sandbox() {
       - All posts, user logged in (done)
       - Group posts (done)
       - Groups (done)
-      - Inbox
+      - Inbox (done)
         > Unread
         > All
         > Server
