@@ -8,7 +8,7 @@ import FontAwesome from "react-fontawesome";
 
 import PostList from "./PostList/PostList";
 
-import messageService from "../services/messages";
+import userHistoryService from "../services/userHistory";
 
 import { setUser } from "../reducers/userReducer";
 
@@ -47,14 +47,54 @@ export default function Sandbox() {
         > Bookmarked
   */
 
+  /*
+    User history pagination
+
+    GET /userhistory?filter=${filter}&userId=${userId}
+
+    filter
+      - OVERVIEW
+      - SUBMITTED
+      - COMMENTS
+      - BOOKMARKED
+
+    Comment = {
+      post_name
+      group_name
+      comment.created_at
+      comment.content
+    }
+
+    Post = {
+      post title
+      post.created_at
+      group name
+      username
+      body
+    }
+
+    Overview = { 
+      group_name (comment/post)
+      created_at (comment/post)
+      post name
+      comment content
+      post title
+      post username
+      post body
+    }
+
+
+  */
+
   const [currentPage, setCurrentPage] = useState(1);
   const [pageInput, setPageInput] = useState(currentPage);
   const [maxPages, setMaxPages] = useState(null); // Determined by DB query
   const [resultsPerPage, setResultsPerPage] = useState(20);
   const [paginationOptions, setPaginationOptions] = useState({
-    type: "UNREAD"
+    type: "OVERVIEW",
+    userId: 25
   });
-  const [messagesToDisplay, setMessagesToDisplay] = useState([]);
+  const [historyToDisplay, setHistoryToDisplay] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const user = useSelector(state => state.user);
@@ -96,7 +136,7 @@ export default function Sandbox() {
 
   useEffect(() => {
     // Get the max # of pages needed on load
-    messageService.countPages(paginationOptions).then(result => {
+    userHistoryService.countPages(paginationOptions).then(result => {
       setMaxPages(result);
     });
   }, [user]);
@@ -104,8 +144,8 @@ export default function Sandbox() {
   useEffect(() => {
     // When the page changes, fetch the appropriate data
 
-    messageService.paginate(paginationOptions, currentPage).then(data => {
-      setMessagesToDisplay(data);
+    userHistoryService.paginate(paginationOptions, currentPage).then(data => {
+      setHistoryToDisplay(data);
       setLoading(false);
     });
   }, [currentPage]);

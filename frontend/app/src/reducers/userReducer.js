@@ -6,6 +6,7 @@ import commentsService from "../services/comments";
 import messageService from "../services/messages";
 import commentVotesService from "../services/commentVotes";
 import bookmarkService from "../services/bookmarks";
+import userHistoryService from "../services/userHistory";
 
 import { setNotification } from "../reducers/notificationReducer";
 import { timedToast } from "../reducers/toastReducer";
@@ -70,6 +71,7 @@ export const login = (credentials, hasToken) => {
       messageService.setToken(data.token);
       commentVotesService.setToken(data.token);
       bookmarkService.setToken(data.token);
+      userHistoryService.setToken(data.token);
 
       dispatch({
         type: "LOGIN",
@@ -89,6 +91,7 @@ export const logout = () => {
     messageService.setToken(null);
     commentVotesService.setToken(null);
     bookmarkService.setToken(null);
+    userHistoryService.setToken(null);
 
     dispatch({
       type: "LOGOUT"
@@ -106,6 +109,7 @@ export const setUser = userInfo => {
     messageService.setToken(userInfo.token);
     commentVotesService.setToken(userInfo.token);
     bookmarkService.setToken(userInfo.token);
+    userHistoryService.setToken(userInfo.token);
 
     dispatch({
       type: "SET_USER",

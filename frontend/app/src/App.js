@@ -51,7 +51,6 @@ const App = () => {
 
       dispatch(initializePosts());
       dispatch(initializeUserPosts());
-      dispatch(initializeGroups());
       dispatch(initializeFollows());
 
       setLoading(false);

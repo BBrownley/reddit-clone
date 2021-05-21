@@ -24,6 +24,7 @@ const messageRouter = require("./controllers/messages");
 const commentvotesRouter = require("./controllers/commentvotes");
 const bookmarksRouter = require("./controllers/bookmarks");
 const postVotesRouter = require("./controllers/postvotes");
+const userHistoryRouter = require("./controllers/userHistory");
 
 app.use(tokenExtractor);
 
@@ -35,6 +36,7 @@ app.use("/messages", messageRouter);
 app.use("/commentvotes", commentvotesRouter);
 app.use("/bookmarks", bookmarksRouter);
 app.use("/postvotes", postVotesRouter);
+app.use("/userhistory", userHistoryRouter);
 
 app.get("/", async (req, res) => {
   let posts = await postsDB.all();
