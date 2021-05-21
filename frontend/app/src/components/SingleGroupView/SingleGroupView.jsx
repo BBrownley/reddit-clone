@@ -119,7 +119,7 @@ export default function SingleGroupView() {
         if (!loading) {
           return (
             <>
-              <GroupInfo group={group} />
+              {!!group && <GroupInfo group={group} />}
               <GroupHeader>
                 <GroupActions group={group} />
                 <div></div>

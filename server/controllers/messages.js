@@ -163,4 +163,133 @@ messageRouter.delete("/", async (req, res, next) => {
   }
 });
 
+// Pagination for user messages
+messageRouter.get("/paginate", async (req, res, next) => {
+  const userId = req.userId;
+
+  // "UNREAD", "ALL", "SERVER", "DIRECTS"
+  const filter = req.query.filter;
+  const currentPage = req.query.page;
+  const offset = parseInt(currentPage - 1) * 20;
+
+  const getMessages = () => {
+    return new Promise((resolve, reject) => {
+      let query;
+
+      switch (filter) {
+        case "UNREAD":
+          query = `
+            SELECT * FROM messages 
+            WHERE recipient_id = ? AND has_read = 0
+            ORDER BY created_at DESC
+            LIMIT 20 OFFSET ?
+          `;
+          break;
+        case "ALL":
+          query = `
+            SELECT * FROM messages 
+            WHERE recipient_id = ?
+            ORDER BY created_at DESC
+            LIMIT 20 OFFSET ?
+          `;
+          break;
+        case "SERVER":
+          query = `
+            SELECT * FROM messages 
+            WHERE recipient_id = ? AND sender_id IS NULL
+            ORDER BY created_at DESC
+            LIMIT 20 OFFSET ?
+          `;
+          break;
+        case "DIRECTS":
+          query = `
+            SELECT * FROM messages 
+            WHERE recipient_id = ? AND sender_id IS NOT NULL
+            ORDER BY created_at DESC
+            LIMIT 20 OFFSET ?
+          `;
+          break;
+        default:
+          reject(new Error("Invalid filter for messages"));
+      }
+
+      connection.query(query, [userId, offset], (err, results) => {
+        if (err) {
+          reject(new Error("Unable to get messages"));
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  };
+
+  try {
+    const messages = await getMessages();
+    res.json(messages);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
+// Count max # of pages for message pagination
+messageRouter.get("/count", async (req, res, next) => {
+  const userId = req.userId;
+
+  // "UNREAD", "ALL", "SERVER", "DIRECTS"
+  const filter = req.query.filter;
+
+  const countPages = () => {
+    return new Promise((resolve, reject) => {
+      let query;
+
+      switch (filter) {
+        case "UNREAD":
+          query = `
+            SELECT COUNT(*) AS total FROM messages 
+            WHERE recipient_id = ? AND has_read = 0
+          `;
+          break;
+        case "ALL":
+          query = `
+            SELECT COUNT(*) AS total FROM messages 
+            WHERE recipient_id = ?
+          `;
+          break;
+        case "SERVER":
+          query = `
+            SELECT COUNT(*) AS total FROM messages 
+            WHERE recipient_id = ? AND sender_id IS NULL
+          `;
+          break;
+        case "DIRECTS":
+          query = `
+            SELECT COUNT(*) AS total FROM messages 
+            WHERE recipient_id = ? AND sender_id IS NOT NULL
+          `;
+          break;
+        default:
+          reject(new Error("Invalid filter for messages"));
+      }
+
+      connection.query(query, [userId], (err, results) => {
+        if (err) {
+          reject(
+            new Error("Unable to count required pages for message pagination")
+          );
+        } else {
+          resolve({ pages: Math.ceil(Object.values(results[0])[0] / 20) });
+        }
+      });
+    });
+  };
+
+  try {
+    const data = await countPages();
+    console.log(data);
+    res.json(data);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
 module.exports = messageRouter;

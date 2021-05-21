@@ -8,8 +8,7 @@ import FontAwesome from "react-fontawesome";
 
 import PostList from "./PostList/PostList";
 
-import postService from "../services/posts";
-import groupService from "../services/groups";
+import messageService from "../services/messages";
 
 import { setUser } from "../reducers/userReducer";
 
@@ -35,8 +34,12 @@ export default function Sandbox() {
       - All posts, no user logged in (done)
       - All posts, user logged in (done)
       - Group posts (done)
-      - Groups
+      - Groups (done)
       - Inbox
+        > Unread
+        > All
+        > Server
+        > Directs
       - User history
         > Overview
         > Submitted
@@ -44,19 +47,14 @@ export default function Sandbox() {
         > Bookmarked
   */
 
-  const options = {
-    type: "ALL_POSTS",
-    user: 71
-  };
-
   const [currentPage, setCurrentPage] = useState(1);
   const [pageInput, setPageInput] = useState(currentPage);
   const [maxPages, setMaxPages] = useState(null); // Determined by DB query
   const [resultsPerPage, setResultsPerPage] = useState(20);
-  // const [paginationOptions, setPaginationOptions] = useState({
-  //   type: "GROUPS"
-  // });
-  const [groupsToDisplay, setGroupsToDisplay] = useState([]);
+  const [paginationOptions, setPaginationOptions] = useState({
+    type: "UNREAD"
+  });
+  const [messagesToDisplay, setMessagesToDisplay] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const user = useSelector(state => state.user);
@@ -98,8 +96,7 @@ export default function Sandbox() {
 
   useEffect(() => {
     // Get the max # of pages needed on load
-
-    groupService.countPages().then(result => {
+    messageService.countPages(paginationOptions).then(result => {
       setMaxPages(result);
     });
   }, [user]);
@@ -107,8 +104,8 @@ export default function Sandbox() {
   useEffect(() => {
     // When the page changes, fetch the appropriate data
 
-    groupService.paginate(currentPage).then(data => {
-      setGroupsToDisplay(data);
+    messageService.paginate(paginationOptions, currentPage).then(data => {
+      setMessagesToDisplay(data);
       setLoading(false);
     });
   }, [currentPage]);

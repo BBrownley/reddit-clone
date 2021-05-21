@@ -74,35 +74,34 @@ const App = () => {
           <Wrapper>
             <Toast message={toast} />
             <Navigation />
+            {!loading && (
+              <Switch>
+                <Route exact path="/">
+                  <HomePage />
+                </Route>
 
-            <Switch>
-              <Route exact path="/">
-                <HomePage />
-              </Route>
+                <Route exact path="/register" component={RegisterForm} />
+                <Route exact path="/login" component={LoginForm} />
+                <Route exact path="/users/:userId" component={UserView} />
+                <Route exact path="/inbox/message" component={MessageView} />
+                <Route exact path="/sandbox" component={Sandbox} />
 
-              <Route exact path="/register" component={RegisterForm} />
-              <Route exact path="/login" component={LoginForm} />
-              <Route exact path="/users/:userId" component={UserView} />
-              <Route exact path="/inbox/message" component={MessageView} />
-              <Route exact path="/sandbox" component={Sandbox} />
+                <Route exact path={["/groups/:group"]}>
+                  <SingleGroupView />
+                </Route>
 
-              <Route exact path={["/groups/:group"]}>
-                <SingleGroupView />
-              </Route>
+                <Route exact path="/creategroup" component={GroupForm} />
+                <Route path="/create" component={PostForm} />
 
-              <Route exact path="/creategroup" component={GroupForm} />
-              <Route path="/create" component={PostForm} />
-
-              {!loading && (
                 <Route path="/groups/:group/:id" component={PostView} />
-              )}
 
-              <Route exact path="/groups" component={GroupList} />
-              <Route exact path="/inbox" component={InboxView} />
-              <Route exact path="/messages/compose" component={MessageForm} />
+                <Route exact path="/groups" component={GroupList} />
+                <Route exact path="/inbox" component={InboxView} />
+                <Route exact path="/messages/compose" component={MessageForm} />
 
-              <Route component={NotFound} />
-            </Switch>
+                <Route component={NotFound} />
+              </Switch>
+            )}
           </Wrapper>
         </div>
       </Body>

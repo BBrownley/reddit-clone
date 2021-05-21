@@ -1,6 +1,7 @@
 import axios from "axios";
 
 let storedToken = null;
+const baseUrl = process.env.BASE_URL || "http://localhost:5000";
 
 const config = {
   headers: {
@@ -9,6 +10,7 @@ const config = {
 };
 
 const setToken = token => {
+  console.log(token);
   storedToken = token;
 };
 
@@ -68,13 +70,42 @@ const deleteMessage = async id => {
   });
 };
 
+const paginate = async (options, page) => {
+  const config = {
+    headers: {
+      Authorization: storedToken
+    }
+  };
+  const req = await axios.get(
+    `${baseUrl}/messages/paginate?filter=${options.type}&page=${page}`,
+    config
+  );
+  console.log(req.data);
+  return req.data;
+};
+
+const countPages = async options => {
+  const config = {
+    headers: {
+      Authorization: storedToken
+    }
+  };
+  const req = await axios.get(
+    `${baseUrl}/messages/count?filter=${options.type}`,
+    config
+  );
+  return req.data.pages;
+};
+
 const messageService = {
   setToken,
   getAll,
   send,
   sendAll,
   setRead,
-  deleteMessage
+  deleteMessage,
+  paginate,
+  countPages
 };
 
 export default messageService;

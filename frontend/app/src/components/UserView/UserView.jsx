@@ -52,7 +52,7 @@ export default function UserView() {
   const [matchesLoggedUser, setMatchesLoggedUser] = useState(false);
 
   useEffect(() => {
-    // TODO: Implement caching
+
     const fetchUser = async () => {
       const userData = await userService.getUserById(match.params.id);
       setUser(userData);
