@@ -48,7 +48,7 @@ const Post = ({ post, options, expand, viewMode }) => {
 
   const [confirmDeletion, setConfirmDeletion] = useState(false);
   const [editing, setEditing] = useState(false);
-  const [editValue, setEditValue] = useState(post.content);
+  const [editValue, setEditValue] = useState(post.post_body);
   // const [postContent, setPostContent] = useState(post.content);
 
   const handleVotePost = (postId, clickedValue) => {
@@ -153,7 +153,7 @@ const Post = ({ post, options, expand, viewMode }) => {
                 </ButtonGroup>
               </FormContainer>
             ) : (
-              <Content expand={expand}>{post.content}</Content>
+              <Content expand={expand}>{post.post_body}</Content>
             )}
 
             {options !== false && (

@@ -10,7 +10,7 @@ commentsRouter.get("/post/:postId", async (req, res, next) => {
         commenter_id,
         comments.created_at AS created_at,
         parent_id,
-        content,
+        comment_body,
         post_id,
         users.id AS user_id,
         users.username AS username,
@@ -76,7 +76,7 @@ commentsRouter.get("/:commentId/children", async (req, res, next) => {
           commenter_id,
           comments.created_at AS created_at,
           parent_id,
-          content,
+          comment_body,
           post_id,
           users.id AS user_id,
           users.username AS username,
@@ -119,7 +119,7 @@ commentsRouter.post("/", async (req, res, next) => {
         {
           commenter_id: userId,
           parent_id: req.body.parentId,
-          content: req.body.comment,
+          comment_body: req.body.comment,
           post_id: req.body.postId,
           deleted: 0
         },
@@ -160,7 +160,7 @@ commentsRouter.put(`/:commentId`, async (req, res, next) => {
     return new Promise((resolve, reject) => {
       const query = `
         UPDATE comments
-        SET content = ?
+        SET comment_body = ?
         WHERE id = ?
       `;
 
@@ -191,7 +191,7 @@ commentsRouter.put("/:commentId/remove", async (req, res, next) => {
     return new Promise((resolve, reject) => {
       const query = `
         UPDATE comments
-        SET content = "comment removed", deleted = 1
+        SET comment_body = "comment removed", deleted = 1
         WHERE id = ? AND commenter_id = ?     
       `;
       connection.query(query, [commentId, userId], (err, results) => {

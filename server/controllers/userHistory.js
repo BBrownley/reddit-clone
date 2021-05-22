@@ -27,10 +27,10 @@ userHistoryRouter.get("/paginate", async (req, res, next) => {
             SELECT
               groups.group_name AS group_name,
               comments.created_at AS created_at,
-              posts.title AS post_title,
-              comments.content AS content,
+              posts.title AS title,
+              comments.comment_body AS comment_body,
               null AS username,
-              null AS body
+              null AS post_body
             FROM comments
             JOIN posts ON comments.post_id = posts.id
             JOIN groups ON posts.group_id = groups.id
@@ -42,10 +42,10 @@ userHistoryRouter.get("/paginate", async (req, res, next) => {
             SELECT 
               groups.group_name AS group_name,
               posts.created_at AS created_at,
-              posts.title AS post_title,
-              null AS content,
+              posts.title AS title,
+              null AS comment_body,
               users.username AS username,
-              posts.content AS body
+              posts.post_body AS post_body
             FROM posts
             JOIN groups ON posts.group_id = groups.id
             JOIN users ON posts.submitter_id = users.id
@@ -59,11 +59,12 @@ userHistoryRouter.get("/paginate", async (req, res, next) => {
         case "SUBMITTED":
           query = `
             SELECT 
-              title AS post_title,
-              posts.created_at AS created_at,
               groups.group_name AS group_name,
+              posts.created_at AS created_at,
+              title,
+              post_body,
               username,
-              content
+              null AS comment_body
             FROM posts
             JOIN groups ON groups.id = posts.group_id
             JOIN users ON users.id = posts.submitter_id
@@ -78,15 +79,18 @@ userHistoryRouter.get("/paginate", async (req, res, next) => {
         case "COMMENTS":
           query = `
             SELECT 
-              posts.title AS post_title, 
+              posts.title AS title, 
               groups.group_name AS group_name,
               comments.created_at AS created_at,
-              comments.content AS content
+              comment_body,
+              null AS username,
+              null AS post_body
             FROM comments
             JOIN posts ON posts.id = comments.post_id
             JOIN groups ON posts.group_id = groups.id
             WHERE commenter_id = ?
             AND commenter_id = ?
+            AND deleted != 1
             ORDER BY created_at DESC
 
             LIMIT 20 OFFSET ?
@@ -96,10 +100,12 @@ userHistoryRouter.get("/paginate", async (req, res, next) => {
         case "BOOKMARKED":
           query = `
             SELECT 
-              posts.title AS post_title,
+              posts.title AS title,
               groups.group_name AS group_name,
               bookmarks.created_at AS created_at,
-              comments.content AS content
+              comment_body,
+              null AS username,
+              null AS post_body
             FROM bookmarks
             JOIN comments ON bookmarks.comment_id = comments.id
             JOIN posts ON comments.post_id = posts.id

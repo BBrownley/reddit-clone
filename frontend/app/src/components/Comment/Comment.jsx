@@ -49,10 +49,10 @@ export default function Comment(props) {
 
   const [replying, setReplying] = useState(false);
   const [editing, setEditing] = useState(false);
-  const [editValue, setEditValue] = useState(props.comment.content);
+  const [editValue, setEditValue] = useState(props.comment.comment_body);
   const [children, setChildren] = useState([]);
   const [newComment, setNewComment] = useState("");
-  const [content, setContent] = useState(props.comment.content);
+  const [commentBody, setCommentBody] = useState(props.comment.comment_body);
   const [confirmDeletion, setConfirmDeletion] = useState(false);
   const [removed, setRemoved] = useState(
     parseInt(props.comment.deleted) === 1 ? true : false
@@ -95,7 +95,7 @@ export default function Comment(props) {
     const message = {
       sender_id: null,
       recipient_id: repliedUser,
-      content: newComment,
+      comment_body: newComment,
       has_read: 0,
       subject: `User ${currentUser.username} has replied to a comment`
     };
@@ -144,7 +144,7 @@ export default function Comment(props) {
     }
 
     setEditing(false);
-    setContent(editValue);
+    setCommentBody(editValue);
     commentsService.editComment(props.comment.comment_id, editValue);
   };
 
@@ -199,7 +199,7 @@ export default function Comment(props) {
         <Link to={`/users/${props.comment.user_id}`}>
           {props.comment.username}
         </Link>
-        <span className="comment">{removed ? "Comment removed" : content}</span>
+        <span className="comment">{removed ? "Comment removed" : commentBody}</span>
         {!removed && (
           <div className="comment-options">
             <CommentVotes>
@@ -269,7 +269,7 @@ export default function Comment(props) {
                     <p
                       onClick={() => {
                         setEditing(false);
-                        setEditValue(content);
+                        setEditValue(commentBody);
                       }}
                     >
                       Cancel

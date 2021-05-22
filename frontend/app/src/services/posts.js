@@ -19,19 +19,19 @@ const getAll = async () => {
   return req.data;
 };
 
-const getPostsByUID = async userId => {
-  const req = await axios.get(
-    `http://localhost:5000/posts/users/${userId}`,
-    config
-  );
-  const data = req.data.map(post => {
-    return {
-      ...post,
-      type: "post"
-    };
-  });
-  return data;
-};
+// const getPostsByUID = async userId => {
+//   const req = await axios.get(
+//     `http://localhost:5000/posts/users/${userId}`,
+//     config
+//   );
+//   const data = req.data.map(post => {
+//     return {
+//       ...post,
+//       type: "post"
+//     };
+//   });
+//   return data;
+// };
 
 const getUserPosts = async userId => {
   const req = await axios.get(
@@ -208,7 +208,6 @@ const postService = {
   vote,
   removePost,
   getUserPosts,
-  getPostsByUID,
   followPost,
   unfollowPost,
   getPostFollows,

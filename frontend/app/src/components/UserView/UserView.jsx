@@ -6,6 +6,7 @@ import userService from "../../services/users";
 import postService from "../../services/posts";
 import commentService from "../../services/comments";
 import bookmarkService from "../../services/bookmarks";
+import userHistoryService from "../../services/userHistory";
 
 import NotFound from "../NotFound/NotFound";
 
@@ -38,53 +39,62 @@ const CommentItem = styled.div`
   border-bottom: 1px solid #dddddd;
 `;
 
+const Pagination = styled.div`
+  .pagination-button {
+    font-size: 1rem;
+    &.previous {
+      margin-right: 1rem;
+    }
+    &.next {
+      margin-left: 1rem;
+    }
+  }
+  input {
+    width: 3rem;
+    text-align: center;
+  }
+`;
+
 export default function UserView() {
   const match = useRouteMatch("/users/:id");
   const history = useHistory();
 
   const [user, setUser] = useState({});
-  const [usersPosts, setUsersPosts] = useState([]);
-  const [usersComments, setUsersComments] = useState([]);
-  const [userBookmarks, setUserBookmarks] = useState([]);
-  const [historyFilter, setHistoryFilter] = useState("overview");
 
   const loggedUserId = useSelector(state => state.user.userId);
   const [matchesLoggedUser, setMatchesLoggedUser] = useState(false);
 
+  const [paginationOptions, setPaginationOptions] = useState({
+    type: "OVERVIEW",
+    userId: match.params.id
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageInput, setPageInput] = useState(currentPage);
+  const [maxPages, setMaxPages] = useState(null); // Determined by DB query
+
+  const [historyToDisplay, setHistoryToDisplay] = useState([]);
+
   useEffect(() => {
+    // Get the max # of pages needed on load, type change
+    userHistoryService.countPages(paginationOptions).then(result => {
+      setMaxPages(result);
+    });
+    setCurrentPage(1);
+    setPageInput(1);
+  }, [paginationOptions.type]);
 
-    const fetchUser = async () => {
-      const userData = await userService.getUserById(match.params.id);
-      setUser(userData);
-    };
+  useEffect(() => {
+    // When the page/type changes, fetch the appropriate data
 
-    const fetchUserPosts = async () => {
-      const usersPosts = await postService.getPostsByUID(match.params.id);
-      setUsersPosts(usersPosts);
-      return usersPosts;
-    };
+    userHistoryService.paginate(paginationOptions, currentPage).then(data => {
+      setHistoryToDisplay(data);
+    });
+  }, [currentPage, paginationOptions.type]);
 
-    const fetchUserComments = async () => {
-      const usersComments = await commentService.getCommentsByUserId(
-        match.params.id
-      );
-      setUsersComments(usersComments);
-      return usersComments;
-    };
-
-    const fetchUserBookmarks = async () => {
-      const userBookmarks = await bookmarkService.getAllBookmarks(
-        match.params.id
-      );
-
-      setUserBookmarks(userBookmarks);
-      return usersComments;
-    };
-
-    fetchUser();
-    fetchUserPosts();
-    fetchUserComments();
-    fetchUserBookmarks();
+  useEffect(() => {
+    userService.getUserById(match.params.id).then(data => {
+      setUser(data);
+    });
 
     setMatchesLoggedUser(loggedUserId === Number(match.params.id));
   }, [match.params.id, loggedUserId]);
@@ -96,6 +106,41 @@ export default function UserView() {
         recipient_id: user.id
       }
     });
+  };
+
+  const handlePageInput = e => {
+    // Allow integers only
+
+    let sanitizedInput = "";
+
+    for (let i = 0; i < e.target.value.length; i++) {
+      const currentCharCode = e.target.value.charAt(i).charCodeAt(0);
+      if (currentCharCode >= 48 && currentCharCode <= 57) {
+        sanitizedInput = sanitizedInput.concat(e.target.value.charAt(i));
+      }
+    }
+
+    // Cannot exceed max pages, must be at least 1
+    if (parseInt(sanitizedInput) > maxPages) {
+      sanitizedInput = maxPages;
+    } else if (sanitizedInput.length === 0) {
+      sanitizedInput = 1;
+    }
+
+    setPageInput(sanitizedInput);
+    setCurrentPage(sanitizedInput);
+  };
+
+  const handlePrevButton = () => {
+    setCurrentPage(prevState => prevState - 1);
+    setPageInput(prevState => prevState - 1);
+    window.scrollTo(0, 0);
+  };
+
+  const handleNextButton = () => {
+    setCurrentPage(prevState => prevState + 1);
+    setPageInput(prevState => prevState + 1);
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -120,27 +165,49 @@ export default function UserView() {
           </ProfileInfo>
           <ButtonGroup>
             <li
-              className={historyFilter === "overview" ? "active" : ""}
-              onClick={() => setHistoryFilter("overview")}
+              className={paginationOptions.type === "OVERVIEW" ? "active" : ""}
+              onClick={() =>
+                setPaginationOptions(prevState => ({
+                  ...prevState,
+                  type: "OVERVIEW"
+                }))
+              }
             >
               Overview
             </li>
             <li
-              className={historyFilter === "submitted" ? "active" : ""}
-              onClick={() => setHistoryFilter("submitted")}
+              className={paginationOptions.type === "SUBMITTED" ? "active" : ""}
+              onClick={() =>
+                setPaginationOptions(prevState => ({
+                  ...prevState,
+                  type: "SUBMITTED"
+                }))
+              }
             >
               Submitted
             </li>
             <li
-              className={historyFilter === "comments" ? "active" : ""}
-              onClick={() => setHistoryFilter("comments")}
+              className={paginationOptions.type === "COMMENTS" ? "active" : ""}
+              onClick={() =>
+                setPaginationOptions(prevState => ({
+                  ...prevState,
+                  type: "COMMENTS"
+                }))
+              }
             >
               Comments
             </li>
             {matchesLoggedUser && (
               <li
-                className={historyFilter === "bookmarked" ? "active" : ""}
-                onClick={() => setHistoryFilter("bookmarked")}
+                className={
+                  paginationOptions.type === "BOOKMARKED" ? "active" : ""
+                }
+                onClick={() =>
+                  setPaginationOptions(prevState => ({
+                    ...prevState,
+                    type: "BOOKMARKED"
+                  }))
+                }
               >
                 Bookmarked
               </li>
@@ -150,46 +217,8 @@ export default function UserView() {
             <br />
             <div>
               {(() => {
-                const allHistory = [
-                  ...usersComments,
-                  ...usersPosts,
-                  ...userBookmarks
-                ].sort((historyItemA, historyItemB) => {
-                  const timestampA = moment(historyItemA.created_at);
-                  const timestampB = moment(historyItemB.created_at);
-
-                  return timestampA.isAfter(timestampB) ? -1 : 1;
-                });
-
-                let toBeDisplayed;
-
-                switch (historyFilter) {
-                  case "overview":
-                    toBeDisplayed = allHistory.filter(
-                      item => item.type !== "bookmark"
-                    );
-                    break;
-                  case "submitted":
-                    toBeDisplayed = allHistory.filter(
-                      item => item.type === "post"
-                    );
-                    break;
-                  case "comments":
-                    toBeDisplayed = allHistory.filter(
-                      item => item.type === "comment"
-                    );
-                    break;
-                  case "bookmarked":
-                    toBeDisplayed = allHistory.filter(
-                      item => item.type === "bookmark"
-                    );
-                    break;
-                  default:
-                    return {};
-                }
-
-                return toBeDisplayed.map((item, index) => {
-                  if (item.type === "post") {
+                return historyToDisplay.map((item, index) => {
+                  if (item.comment_body === null) {
                     return <Post post={item} options={false} key={index} />;
                   } else {
                     return (
@@ -200,7 +229,7 @@ export default function UserView() {
                               item.post_id
                             }`}
                           >
-                            {item.post_title}
+                            {item.title}
                           </NavLink>{" "}
                           in{" "}
                           <NavLink
@@ -214,7 +243,7 @@ export default function UserView() {
                             : "Commented"}{" "}
                           {moment(item.created_at).fromNow()})
                         </p>
-                        <p>{item.content}</p>
+                        <p>{item.comment_body}</p>
                       </CommentItem>
                     );
                   }
@@ -222,6 +251,30 @@ export default function UserView() {
               })()}
             </div>
           </UserHistory>
+          <Pagination>
+            {currentPage > 1 && (
+              <button
+                className="pagination-button previous"
+                onClick={handlePrevButton}
+              >
+                Previous
+              </button>
+            )}
+
+            <span>
+              Page{" "}
+              <input type="text" value={pageInput} onChange={handlePageInput} />{" "}
+              of {maxPages}
+            </span>
+            {currentPage < maxPages && (
+              <button
+                className="pagination-button next"
+                onClick={handleNextButton}
+              >
+                Next
+              </button>
+            )}
+          </Pagination>
         </Container>
       )}
     </div>

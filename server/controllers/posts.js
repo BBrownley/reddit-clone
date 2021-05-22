@@ -128,14 +128,14 @@ postsRouter.delete("/:id", async (req, res, next) => {
   }
 });
 
-postsRouter.get("/users/:userId", async (req, res, next) => {
-  try {
-    const userPosts = await postsDB.getPostsByUID(req.params.userId);
-    res.json(userPosts);
-  } catch (exception) {
-    next(exception);
-  }
-});
+// postsRouter.get("/users/:userId", async (req, res, next) => {
+//   try {
+//     const userPosts = await postsDB.getPostsByUID(req.params.userId);
+//     res.json(userPosts);
+//   } catch (exception) {
+//     next(exception);
+//   }
+// });
 
 postsRouter.post("/follow", async (req, res, next) => {
   const followPost = (postId, userId) => {
@@ -173,7 +173,7 @@ postsRouter.put("/:id", async (req, res, next) => {
     return new Promise((resolve, reject) => {
       const query = `
         UPDATE posts
-        SET content = ?
+        SET post_body = ?
         WHERE id = ? AND submitter_id = ?
       `;
 
@@ -223,7 +223,7 @@ postsRouter.get("/all", async (req, res, next) => {
             group_id AS group_id,
             username,
             users.id AS user_id,
-            content,
+            post_body,
             (SELECT COUNT(*) FROM post_follows WHERE posts.id = post_follows.post_id) AS follows,
             (SELECT COUNT(*) FROM comments 
               WHERE posts.id = comments.post_id) AS total_comments
@@ -252,7 +252,7 @@ postsRouter.get("/all", async (req, res, next) => {
             group_id AS group_id,
             username,
             users.id AS user_id,
-            content,
+            post_body,
             (SELECT COUNT(*) FROM post_follows WHERE posts.id = post_follows.post_id) AS follows,
             (SELECT COUNT(*) FROM comments 
               WHERE posts.id = comments.post_id) AS total_comments
@@ -326,7 +326,7 @@ postsRouter.get("/all/count/user", async (req, res, next) => {
       const query = `
           SELECT COUNT(*) FROM
           (
-            SELECT title, content, groups.group_name FROM posts
+            SELECT title, post_body, groups.group_name FROM posts
             JOIN groups ON groups.id = posts.group_id
             WHERE group_name IN 
             (
