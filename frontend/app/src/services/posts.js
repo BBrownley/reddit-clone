@@ -201,6 +201,11 @@ const countPages = async options => {
   return req.data.pages;
 };
 
+const getPostById = async postId => {
+  const req = await axios.get(`${baseUrl}/posts/${postId}`);
+  return req.data;
+};
+
 const postService = {
   getAll,
   createPost,
@@ -213,7 +218,8 @@ const postService = {
   getPostFollows,
   editPost,
   paginate,
-  countPages
+  countPages,
+  getPostById
 };
 
 export default postService;

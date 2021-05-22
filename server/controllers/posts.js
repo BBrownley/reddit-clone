@@ -215,7 +215,7 @@ postsRouter.get("/all", async (req, res, next) => {
               WHEN ISNULL(SUM(post_votes.vote_value)) THEN 0
               WHEN SUM(post_votes.vote_value) < 1 THEN 0
               ELSE SUM(post_votes.vote_value)
-          END AS score,
+            END AS score,
             title,
             posts.created_at AS created_at,
             posts.id AS post_id,
@@ -275,7 +275,6 @@ postsRouter.get("/all", async (req, res, next) => {
         [user, (parseInt(req.query.page) - 1) * 20],
         (err, results) => {
           if (err) {
-
             reject(new Error("Unable to get posts"));
           } else {
             resolve(results);
@@ -430,6 +429,52 @@ postsRouter.get("/group/count", async (req, res, next) => {
   try {
     const data = await countPages();
     res.json(data);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
+// Get post by id
+postsRouter.get("/:postId", async (req, res, next) => {
+  const getPost = () => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT
+          posts.id AS post_id,
+          post_body,
+          CASE
+            WHEN ISNULL(SUM(post_votes.vote_value)) THEN 0
+            WHEN SUM(post_votes.vote_value) < 1 THEN 0
+            ELSE SUM(post_votes.vote_value)
+          END AS score,
+          (
+            SELECT COUNT(*) FROM comments 
+            WHERE posts.id = comments.post_id
+          ) AS total_comments,
+          group_name,
+          posts.created_at AS created_at,
+          title,
+          users.username AS username,
+          users.id AS user_id
+        FROM posts
+        JOIN users ON users.id = posts.submitter_id
+        JOIN groups ON groups.id = posts.group_id
+        LEFT JOIN post_votes ON post_votes.post_id = posts.id
+        WHERE posts.id = ?
+      `;
+      connection.query(query, [req.params.postId], (err, results) => {
+        if (err) {
+          reject(new Error("Unable to get post"));
+        } else {
+          resolve(results[0]);
+        }
+      });
+    });
+  };
+
+  try {
+    const post = await getPost();
+    res.json(post);
   } catch (exception) {
     next(exception);
   }

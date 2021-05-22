@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import NotFound from "../NotFound/NotFound";
 
@@ -11,17 +11,13 @@ import { initializeBookmarks } from "../../reducers/userBookmarksReducer";
 import Comments from "../Comments/Comments";
 
 import Post from "../Post/Post";
+import postService from "../../services/posts";
 
 const PostView = () => {
-  const posts = useSelector(state => {
-    return state.posts;
-  });
   const user = useSelector(state => state.user);
 
   const match = useRouteMatch("/groups/:group/:id");
-  const post = match
-    ? posts.find(post => post.postID.toString() === match.params.id.toString())
-    : null;
+  const [post, setPost] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -31,6 +27,10 @@ const PostView = () => {
       await dispatch(initializeCommentVotes());
     };
     if (user.token !== null) init();
+
+    postService.getPostById(match.params.id).then(data => {
+      setPost(data);
+    });
   }, [dispatch]);
 
   return (
@@ -40,7 +40,7 @@ const PostView = () => {
         <div>
           <Post post={post} key={post.postID} expand={true} viewMode={true} />
           <Comments
-            postId={post.postID}
+            postId={post.post_id}
             authorId={post.user_id}
             postTitle={post.title}
           />
