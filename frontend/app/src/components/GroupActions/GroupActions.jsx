@@ -25,7 +25,7 @@ const GroupActions = ({ group }) => {
 
   const handleCreatePostButton = () => {
     if (loggedUser.userId !== null) {
-      history.push("/create");
+      history.push(`/create?group=${group.group_name}`);
     } else {
       dispatch(setRedirectPath("/create"));
       history.push({

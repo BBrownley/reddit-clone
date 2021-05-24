@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 
+import groupService from "../../services/groups";
+
 import Select from "react-select";
 
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { createPost } from "../../reducers/postsReducer";
 import { initializeVotes as initializePostVotes } from "../../reducers/userPostVotesReducer";
 import { initializePosts } from "../../reducers/postsReducer";
@@ -16,6 +18,8 @@ import FormWarning from "../FormWarning/FormWarning";
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 import StyledLink from "../shared/NavLink.elements";
 
+import queryString from "query-string";
+
 const PostForm = () => {
   const [title, setTitle] = useState("");
   const [groupQuery, setGroupQuery] = useState("");
@@ -24,15 +28,19 @@ const PostForm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const groups = useSelector(state => state.groups).map(group => {
-    return {
-      value: group.group_name.toLowerCase(),
-      label: group.group_name.toLowerCase(),
-      id: group.id
-    };
-  });
-
   const currentUser = useSelector(state => state.user);
+  const { search } = useLocation();
+
+  const currentGroup = queryString.parse(search).group;
+
+  // Verify this group exists
+  useEffect(() => {
+    groupService.verifyGroupByName(currentGroup).then(result => {
+      if (!result) {
+        console.log("This group does not exist");
+      }
+    })
+  }, []);
 
   // Clear notification on component unmount/view change
   useEffect(() => {
@@ -78,8 +86,8 @@ const PostForm = () => {
         {currentUser.userId === null && (
           <>
             <h2>
-              You must be logged in to create a post. Log in{" "}
-              <StyledLink to="/login">here</StyledLink> or{" "}
+              You must be logged in to create a post.{" "}
+              <StyledLink to="/login">Log in</StyledLink> or{" "}
               <StyledLink to="/">go to the home page</StyledLink>.
             </h2>
           </>
@@ -102,11 +110,7 @@ const PostForm = () => {
             </FormField>
             <FormField>
               <label htmlFor="group">Group: </label>
-              <Select
-                value={groupQuery}
-                onChange={handleSetGroupQuery}
-                options={groups}
-              />
+              <Select value={groupQuery} onChange={handleSetGroupQuery} />
             </FormField>
           </form>
           <div>

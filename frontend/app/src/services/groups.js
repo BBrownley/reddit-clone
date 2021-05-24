@@ -126,6 +126,13 @@ const countPages = async () => {
   return req.data.pages;
 };
 
+const verifyGroupByName = async groupName => {
+  const req = await axios.get(
+    `${baseUrl}/groups/verifyName?groupName=${groupName}`
+  );
+  return Boolean(req.data.myCheck);
+};
+
 const groupService = {
   getAll,
   getGroupByName,
@@ -135,7 +142,8 @@ const groupService = {
   unsubscribe,
   getUserSubscriptions,
   paginate,
-  countPages
+  countPages,
+  verifyGroupByName
 };
 
 export default groupService;
