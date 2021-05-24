@@ -109,22 +109,17 @@ groupsRouter.param("groupName", async (req, res, next, groupName) => {
   next();
 });
 
-// groupsRouter.get("/:groupName", async (req, res, next) => {
-//   res.json(req.group);
-//   next();
-// });
-
 groupsRouter.get("/verifyName", async (req, res, next) => {
   const verifyGroupByName = () => {
     return new Promise((resolve, reject) => {
       const query = `
-        SELECT EXISTS(SELECT * FROM groups WHERE group_name = ?) AS myCheck
+        SELECT * FROM groups WHERE group_name = ?
       `;
       connection.query(query, [req.query.groupName], (err, results) => {
-        if (err) {
+        if (err || results.length === 0) {
           reject(new Error("Unable to verify group"));
         } else {
-          resolve(results[0]);
+          resolve(results[0].id);
         }
       });
     });
@@ -136,6 +131,11 @@ groupsRouter.get("/verifyName", async (req, res, next) => {
   } catch (exception) {
     next(exception);
   }
+});
+
+groupsRouter.get("/:groupName", async (req, res, next) => {
+  res.json(req.group);
+  next();
 });
 
 module.exports = groupsRouter;

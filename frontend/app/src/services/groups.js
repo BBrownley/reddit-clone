@@ -127,10 +127,14 @@ const countPages = async () => {
 };
 
 const verifyGroupByName = async groupName => {
-  const req = await axios.get(
-    `${baseUrl}/groups/verifyName?groupName=${groupName}`
-  );
-  return Boolean(req.data.myCheck);
+  try {
+    const req = await axios.get(
+      `${baseUrl}/groups/verifyName?groupName=${groupName}`
+    );
+    return req.data;
+  } catch (exception) {
+    return false;
+  }
 };
 
 const groupService = {

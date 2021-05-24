@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import groupService from "../../services/groups";
+import postService from "../../services/posts";
 
 import Select from "react-select";
 
@@ -22,7 +23,6 @@ import queryString from "query-string";
 
 const PostForm = () => {
   const [title, setTitle] = useState("");
-  const [groupQuery, setGroupQuery] = useState("");
   const [content, setContent] = useState("");
 
   const dispatch = useDispatch();
@@ -32,14 +32,19 @@ const PostForm = () => {
   const { search } = useLocation();
 
   const currentGroup = queryString.parse(search).group;
+  const [groupName, setGroupName] = useState(null);
+  const [groupId, setGroupId] = useState(null);
 
   // Verify this group exists
   useEffect(() => {
     groupService.verifyGroupByName(currentGroup).then(result => {
       if (!result) {
         console.log("This group does not exist");
+      } else {
+        setGroupName(currentGroup);
+        setGroupId(result);
       }
-    })
+    });
   }, []);
 
   // Clear notification on component unmount/view change
@@ -51,26 +56,24 @@ const PostForm = () => {
     setTitle(e.target.value);
   };
 
-  const handleSetGroupQuery = option => {
-    setGroupQuery(option);
-  };
-
   const handleSetContent = e => {
     setContent(e.target.value);
   };
 
   const addPost = async e => {
     e.preventDefault();
-    const data = { title, groupID: groupQuery.id, content };
+    const data = { title, group_id: groupId, content };
 
-    const newPost = await dispatch(createPost(data));
+    const newPost = await postService.createPost(data);
+
+    console.log(newPost);
 
     if (newPost) {
-      dispatch(addVote(newPost.postID, 1));
+      // dispatch(addVote(newPost.post_id, 1));
       dispatch(initializePostVotes());
       dispatch(initializePosts());
       dispatch(addPostToUser(newPost));
-      history.push(`/groups/${groupQuery.label}/${newPost.postID}`);
+      history.push(`/groups/${groupName}/${newPost.post_id}`);
 
       // Update localStorage to reflect them adding a new post
       let user = JSON.parse(localStorage.getItem("loggedUser"));
@@ -83,6 +86,12 @@ const PostForm = () => {
   return (
     <>
       <div>
+        {groupName === null && (
+          <p>
+            The group "{currentGroup}" does not exist.{" "}
+            <StyledLink to="/groups">Browse our existing groups</StyledLink>.
+          </p>
+        )}
         {currentUser.userId === null && (
           <>
             <h2>
@@ -93,9 +102,11 @@ const PostForm = () => {
           </>
         )}
       </div>
-      {currentUser.userId && (
+      {currentUser.userId && !!groupName && (
         <FormContainer>
-          <FormHeader>Create a new post</FormHeader>
+          <FormHeader>
+            Create a new post for <strong>{groupName}</strong>
+          </FormHeader>
           <form onSubmit={addPost} id="post-form">
             <FormField>
               <label htmlFor="title">Title: </label>
@@ -108,10 +119,10 @@ const PostForm = () => {
                 onChange={handleSetTitle}
               ></input>
             </FormField>
-            <FormField>
+            {/* <FormField>
               <label htmlFor="group">Group: </label>
               <Select value={groupQuery} onChange={handleSetGroupQuery} />
-            </FormField>
+            </FormField> */}
           </form>
           <div>
             <FormField>

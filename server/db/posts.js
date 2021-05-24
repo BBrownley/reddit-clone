@@ -42,13 +42,13 @@ const create = (data, userId) => {
     // Ensure title and group are filled in, content can be empty
 
     const title = data.title.trim();
-    const groupID = data.groupID;
+    const group_id = data.group_id;
 
     if (!title) {
       return reject(new Error("Post must contain a title"));
     }
 
-    if (!groupID) {
+    if (!group_id) {
       return reject(new Error("Post must be assigned to a group"));
     }
 
@@ -56,12 +56,13 @@ const create = (data, userId) => {
       `INSERT INTO posts SET ? `,
       {
         submitter_id: userId,
-        group_id: data.groupID,
+        group_id: data.group_id,
         title: data.title,
-        content: data.content
+        post_body: data.content
       },
       (err, results) => {
         if (err) {
+          console.log(err);
           return reject(new Error("An unexpected error has occured"));
         } else {
           // Retrieve created object
@@ -69,11 +70,11 @@ const create = (data, userId) => {
             ` SELECT 
                 title, 
                 posts.created_at AS created_at, 
-                posts.id AS postID,
+                posts.id AS post_id,
                 group_name,
-                group_id AS groupID,
+                group_id,
                 username,
-                content FROM posts
+                post_body FROM posts
               JOIN users ON users.id = posts.submitter_id
               JOIN groups ON groups.id = posts.group_id
               WHERE posts.id = ?`,
