@@ -14,8 +14,6 @@ export const initializeVotes = () => {
 
 export const addVote = (id, vote_value) => {
   return async dispatch => {
-    await postService.vote(id, vote_value);
-
     dispatch({
       type: "ADD_VOTE",
       data: {
@@ -28,7 +26,6 @@ export const addVote = (id, vote_value) => {
 
 export const removeVote = id => {
   return async dispatch => {
-    userPostVotesService.removePostVote(id);
     dispatch({
       type: "REMOVE_VOTE",
       data: {
@@ -40,7 +37,6 @@ export const removeVote = id => {
 
 export const switchVote = (postId, newValue) => {
   return async dispatch => {
-    userPostVotesService.changePostVote(postId, newValue);
     dispatch({
       type: "SWITCH_VOTE",
       data: {

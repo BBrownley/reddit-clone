@@ -207,6 +207,11 @@ const getPostById = async postId => {
   return req.data;
 };
 
+const getPostScore = async postId => {
+  const req = await axios.get(`${baseUrl}/postvotes/score/${postId}`);
+  return req.data;
+};
+
 const postService = {
   getAll,
   createPost,
@@ -220,7 +225,8 @@ const postService = {
   editPost,
   paginate,
   countPages,
-  getPostById
+  getPostById,
+  getPostScore
 };
 
 export default postService;

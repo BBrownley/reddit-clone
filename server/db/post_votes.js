@@ -1,25 +1,24 @@
 const connection = require("./index").connection;
 
-const q = `
-  SELECT post_id, SUM(vote_value) AS score FROM post_votes
-  WHERE post_id = ?
-  GROUP BY post_id
-`;
+// const q = `
+//   SELECT post_id, SUM(vote_value) AS score FROM post_votes
+//   WHERE post_id = ?
+//   GROUP BY post_id
+// `;
 
-const getPostScore = postID => {
-  return new Promise((resolve, reject) => {
-    connection.query(q, [postID], (err, results) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(results);
-    });
-  });
-};
+// const getPostScore = postID => {
+//   return new Promise((resolve, reject) => {
+//     connection.query(q, [postID], (err, results) => {
+//       if (err) {
+//         return reject(err);
+//       }
+//       resolve(results);
+//     });
+//   });
+// };
 
 const getUserPostVotes = userId => {
   return new Promise((resolve, reject) => {
-
     connection.query(
       `
       SELECT post_id, vote_value FROM post_votes
@@ -38,6 +37,5 @@ const getUserPostVotes = userId => {
 };
 
 module.exports = {
-  getPostScore,
   getUserPostVotes
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,6 +15,9 @@ import {
   removePost,
   editPost
 } from "../../reducers/postsReducer";
+
+import postService from "../../services/posts";
+import userPostVotesService from "../../services/userPostVotes";
 
 import {
   Post as Container,
@@ -43,6 +46,7 @@ const Post = ({ post, options, expand, viewMode }) => {
       return vote.post_id === post.post_id;
     })
   );
+  const [postScore, setPostScore] = useState(post.score);
 
   const history = useHistory();
 
@@ -51,7 +55,7 @@ const Post = ({ post, options, expand, viewMode }) => {
   const [editValue, setEditValue] = useState(post.post_body);
   // const [postContent, setPostContent] = useState(post.content);
 
-  const handleVotePost = (postId, clickedValue) => {
+  const handleVotePost = async (postId, clickedValue) => {
     if (user.token === null) {
       return history.push({
         pathname: "/login",
@@ -67,12 +71,18 @@ const Post = ({ post, options, expand, viewMode }) => {
 
       if (userPostVote.vote_value !== clickedValue) {
         dispatch(switchVote(postId, clickedValue));
+        await userPostVotesService.changePostVote(postId, clickedValue);
       } else {
         dispatch(removeVote(postId));
+        await userPostVotesService.removePostVote(postId);
       }
     } else {
       dispatch(addVote(postId, clickedValue));
+      await postService.vote(postId, clickedValue);
     }
+
+    const newScore = await postService.getPostScore(postId);
+    setPostScore(newScore);
   };
 
   const handleEditPost = () => {
@@ -110,11 +120,7 @@ const Post = ({ post, options, expand, viewMode }) => {
                   onClick={() => handleVotePost(post.post_id, 1)}
                 />
               </VoteButton>
-              <PostScore>
-                {userPostVote
-                  ? Math.max(post.score + userPostVote.vote_value, 0)
-                  : Math.max(post.score, 0)}
-              </PostScore>
+              <PostScore>{Math.max(postScore, 0)}</PostScore>
 
               <VoteButton downvoted={userPostVote?.vote_value === -1 ? 1 : 0}>
                 <FontAwesome

@@ -56,4 +56,34 @@ postVotesRouter.delete("/:id", async (req, res, next) => {
   }
 });
 
+postVotesRouter.get("/score/:id", async (req, res, next) => {
+  const getPostScore = () => {
+    console.log(req.params.id);
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT 
+          COALESCE(SUM(post_votes.vote_value),0) AS score
+        FROM post_votes
+        WHERE post_id = ?
+        GROUP BY post_id
+      `;
+      connection.query(query, [req.params.id], (err, results) => {
+        if (err) {
+          reject(new Error("Unable to get post score"));
+        } else {
+          console.log(results[0]?.score || 0);
+          resolve(results[0]?.score || 0);
+        }
+      });
+    });
+  };
+
+  try {
+    const score = await getPostScore();
+    res.json(score);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
 module.exports = postVotesRouter;
