@@ -6,6 +6,7 @@ import moment from "moment";
 
 import commentsService from "../../services/comments";
 import messageService from "../../services/messages";
+import commentVotesService from "../../services/commentVotes";
 
 import {
   removeVote,
@@ -62,7 +63,7 @@ export default function Comment(props) {
   );
   const [replyFormWarning, setReplyFormWarning] = useState(null);
 
-  const match = useRouteMatch("/groups/:groupName/:groupId");
+  const match = useRouteMatch("/groups/:groupName/:postId");
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -119,16 +120,19 @@ export default function Comment(props) {
         (existingCommentVote.vote_value === -1 && action === "downvote")
       ) {
         dispatch(removeVote(currentCommentId));
+        await commentVotesService.removeVote(currentCommentId);
       } else {
         const newVoteValue = action === "upvote" ? 1 : -1;
-
         dispatch(changeVote(currentCommentId, newVoteValue));
+        await commentVotesService.changeVote(currentCommentId, newVoteValue);
       }
     } else {
       if (action === "upvote") {
-        dispatch(vote(currentCommentId, 1));
+        dispatch(vote(currentCommentId, 1, parseInt(match.params.postId)));
+        await commentVotesService.vote(currentCommentId, 1);
       } else {
-        dispatch(vote(currentCommentId, -1));
+        dispatch(vote(currentCommentId, -1, parseInt(match.params.postId)));
+        await commentVotesService.vote(currentCommentId, -1);
       }
     }
     const updatedScore = await commentsService.getCommentScoreById(
@@ -161,7 +165,7 @@ export default function Comment(props) {
     props.handleSubmitComment(
       currentUser,
       newComment,
-      match.params.groupId,
+      match.params.postId,
       props.comment.comment_id,
       true,
       children,
@@ -199,7 +203,9 @@ export default function Comment(props) {
         <Link to={`/users/${props.comment.user_id}`}>
           {props.comment.username}
         </Link>
-        <span className="comment">{removed ? "Comment removed" : commentBody}</span>
+        <span className="comment">
+          {removed ? "Comment removed" : commentBody}
+        </span>
         {!removed && (
           <div className="comment-options">
             <CommentVotes>

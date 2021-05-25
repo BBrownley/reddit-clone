@@ -36,16 +36,17 @@ const vote = async (commentId, value) => {
   return req.data;
 };
 
-const removeVote = commentId => {
+const removeVote = async commentId => {
   const headers = {
     Authorization: storedToken
   };
-  axios.delete("http://localhost:5000/commentvotes", {
+  const req = await axios.delete("http://localhost:5000/commentvotes", {
     data: {
       commentId
     },
     headers
   });
+  return req;
 };
 
 const changeVote = async (commentId, newValue) => {
@@ -58,7 +59,7 @@ const changeVote = async (commentId, newValue) => {
   const body = {
     commentId,
     newValue
-  }
+  };
   const req = await axios.put(
     `http://localhost:5000/commentvotes`,
     body,
@@ -66,7 +67,7 @@ const changeVote = async (commentId, newValue) => {
   );
 
   return req.data;
-}
+};
 
 const commentVotesService = {
   setToken,

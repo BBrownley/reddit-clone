@@ -12,9 +12,13 @@ export const initializeVotes = () => {
   };
 };
 
-export const vote = (commentId, value) => {
-  return async dispatch => {
-    const newVote = await commentVotesService.vote(commentId, value);
+export const vote = (commentId, value, postId) => {
+  return dispatch => {
+    const newVote = {
+      comment_id: commentId,
+      vote_value: value,
+      post_id: postId
+    };
     dispatch({
       type: "COMMENT_VOTE",
       newVote
@@ -23,8 +27,7 @@ export const vote = (commentId, value) => {
 };
 
 export const removeVote = commentId => {
-  return async dispatch => {
-    commentVotesService.removeVote(commentId);
+  return dispatch => {
     dispatch({
       type: "REMOVE_COMMENT_VOTE",
       commentId
@@ -32,12 +35,13 @@ export const removeVote = commentId => {
   };
 };
 
-export const changeVote = (commentId, newValue) => {
+export const changeVote = (commentId, newValue, postId) => {
   return async dispatch => {
-    const updatedVote = await commentVotesService.changeVote(
-      commentId,
-      newValue
-    );
+    const updatedVote = {
+      comment_id: commentId,
+      vote_value: newValue,
+      post_id: postId
+    };
     dispatch({
       type: "UPDATE_COMMENT_VOTE",
       updatedVote
@@ -49,9 +53,9 @@ export const clearVotes = () => {
   return async dispatch => {
     dispatch({
       type: "CLEAR_COMMENT_VOTES"
-    })
-  }
-}
+    });
+  };
+};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {

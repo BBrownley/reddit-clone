@@ -27,6 +27,7 @@ postVotesRouter.put("/:id", async (req, res, next) => {
 
   try {
     await changePostVote(req.params.id, req.userId, req.body.updatedValue);
+    res.sendStatus(200);
   } catch (exception) {
     next(exception);
   }
@@ -58,7 +59,6 @@ postVotesRouter.delete("/:id", async (req, res, next) => {
 
 postVotesRouter.get("/score/:id", async (req, res, next) => {
   const getPostScore = () => {
-    console.log(req.params.id);
     return new Promise((resolve, reject) => {
       const query = `
         SELECT 
@@ -71,7 +71,6 @@ postVotesRouter.get("/score/:id", async (req, res, next) => {
         if (err) {
           reject(new Error("Unable to get post score"));
         } else {
-          console.log(results[0]?.score || 0);
           resolve(results[0]?.score || 0);
         }
       });
