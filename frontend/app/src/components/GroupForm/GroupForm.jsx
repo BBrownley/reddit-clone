@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
@@ -7,24 +7,48 @@ import { createGroup } from "../../reducers/groupsReducer";
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
 import StyledLink from "../shared/NavLink.elements";
 
+import groupService from "../../services/groups";
+
 const GroupForm = () => {
   const [groupName, setGroupName] = useState("");
   const [blurb, setBlurb] = useState("");
+  const [formWarning, setFormWarning] = useState(null);
   const user = useSelector(state => state.user);
 
   const dispatch = useDispatch();
 
   const history = useHistory();
 
+  useEffect(() => {
+    // Clear warning on new input
+    setFormWarning(null);
+  }, [groupName]);
+
+  const validateGroupName = () => {
+    // Group names must be alphanumerical and have a length of at least 1
+    const alphanumeric = /^[a-zA-Z0-9]*$/;
+    return alphanumeric.test(groupName.trim()) && groupName.trim().length > 0;
+  };
+
   const handleCreateGroup = async e => {
     e.preventDefault();
-    const formData = { groupName, blurb };
 
-    const response = await dispatch(createGroup(formData));
-
-    if (response) {
-      history.push(`/groups/${response.group_name}`);
+    if (!validateGroupName()) {
+      setFormWarning(
+        "Group names must be alphanumerical without spaces, and have a length of at least 1"
+      );
+      return;
     }
+
+    const formData = { groupName: groupName.trim(), blurb: blurb.trim() };
+
+    const res = await groupService.create(formData);
+
+    if (res.error) {
+      return setFormWarning(res.error);
+    }
+
+    history.push(`/groups/${res.group_name}`);
   };
 
   const handleSetGroupName = e => {
@@ -65,7 +89,7 @@ const GroupForm = () => {
           </form>
 
           <FormField>
-            <label htmlFor="blurb">Blurb/description: </label>
+            <label htmlFor="blurb">Blurb/description (optional): </label>
             <div>
               <textarea
                 name="blurb"
@@ -77,6 +101,8 @@ const GroupForm = () => {
               ></textarea>
             </div>
           </FormField>
+
+          <h3 className="warning">{formWarning}</h3>
 
           <button type="submit" form="group-form">
             Create Group
