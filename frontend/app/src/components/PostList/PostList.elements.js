@@ -8,6 +8,7 @@ export const Post = styled.div`
   padding-left: 5px;
   line-height: 1.5;
   display: flex;
+  
   width: 100%;
   padding-bottom: 1rem;
   margin-bottom: 1rem;
@@ -19,6 +20,7 @@ export const Post = styled.div`
     > div {
       display: flex;
       width: 100%;
+      align-items: flex-start;
     }
   }
   .comment-icon {

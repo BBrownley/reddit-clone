@@ -1,11 +1,8 @@
 import styled from "styled-components";
 
 export const FormContainer = styled.div`
-  /* background-color: #ccc; */
   display: block;
   max-width: 800px;
-  margin: 0 auto;
-  padding: 1rem;
 
   & button {
     width: 100%;

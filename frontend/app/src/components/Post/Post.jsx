@@ -53,7 +53,7 @@ const Post = ({ post, options, expand, viewMode }) => {
   const [confirmDeletion, setConfirmDeletion] = useState(false);
   const [editing, setEditing] = useState(false);
   const [editValue, setEditValue] = useState(post.post_body);
-  // const [postContent, setPostContent] = useState(post.content);
+  const [postContent, setPostContent] = useState(post.post_body);
 
   const handleVotePost = async (postId, clickedValue) => {
     if (user.token === null) {
@@ -87,13 +87,13 @@ const Post = ({ post, options, expand, viewMode }) => {
 
   const handleEditPost = () => {
     dispatch(editPost(post.post_id, editValue));
-    // setPostContent(editValue);
+    setPostContent(editValue);
     setEditing(false);
   };
 
   const handleCancelEdit = () => {
     setEditing(false);
-    // setEditValue(postContent);
+    setEditValue(postContent);
   };
 
   const handleDeletePost = async postId => {
@@ -154,12 +154,14 @@ const Post = ({ post, options, expand, viewMode }) => {
                   />
                 </FormField>
                 <ButtonGroup>
-                  <li onClick={handleEditPost}>Edit post</li>
+                  <li onClick={handleEditPost} className="active">
+                    Edit post
+                  </li>
                   <li onClick={handleCancelEdit}>Cancel</li>
                 </ButtonGroup>
               </FormContainer>
             ) : (
-              <Content expand={expand}>{post.post_body}</Content>
+              <Content expand={expand}>{postContent}</Content>
             )}
 
             {options !== false && (
