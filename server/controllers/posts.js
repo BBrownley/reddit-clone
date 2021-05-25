@@ -372,7 +372,7 @@ postsRouter.get("/group", async (req, res, next) => {
         group_id AS group_id,
         username,
         users.id AS user_id,
-        content,
+        post_body,
         (SELECT COUNT(*) FROM post_follows WHERE posts.id = post_follows.post_id) AS follows,
         (SELECT COUNT(*) FROM comments 
           WHERE posts.id = comments.post_id) AS total_comments
@@ -391,6 +391,7 @@ postsRouter.get("/group", async (req, res, next) => {
         [req.query.groupName, (parseInt(req.query.page) - 1) * 20],
         (err, results) => {
           if (err) {
+            console.log(err);
             reject(new Error("Unable to get group posts"));
           } else resolve(results);
         }

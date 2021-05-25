@@ -169,6 +169,7 @@ const paginate = async (options, page) => {
   }
 
   if (options.type === "GROUP_POSTS") {
+    console.log("yo");
     const req = await axios.get(
       `${baseUrl}/posts/group?groupName=${options.groupName}&page=${page}`
     );
