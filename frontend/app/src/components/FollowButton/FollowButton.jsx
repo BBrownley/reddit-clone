@@ -21,12 +21,12 @@ export default function FollowButton({ followers, postId }) {
 
   const follow = async () => {
     dispatch(followPost(postId));
-    dispatch(initializeFollows());
+    // dispatch(initializeFollows());
   };
 
   const unfollow = async () => {
     dispatch(unfollowPost(postId));
-    dispatch(initializeFollows());
+    // dispatch(initializeFollows());
   };
 
   return (

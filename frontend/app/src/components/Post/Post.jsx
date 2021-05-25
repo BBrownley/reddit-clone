@@ -104,7 +104,7 @@ const Post = ({ post, options, expand, viewMode }) => {
   };
 
   const userOwnsPost = userPosts.find(userPost => {
-    return userPost.postID === post.post_id;
+    return userPost === post.post_id;
   });
 
   return (

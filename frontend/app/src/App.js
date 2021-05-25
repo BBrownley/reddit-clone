@@ -47,11 +47,13 @@ const App = () => {
       const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
       if (loggedUser) {
         dispatch(setUser(loggedUser));
+        dispatch(initializePosts());
+        dispatch(initializeFollows());
+        dispatch(initializePostVotes());
+        dispatch(initializeSubscriptions());
+        console.log(loggedUser);
+        dispatch(initializeUserPosts(loggedUser.userId));
       }
-
-      dispatch(initializePosts());
-      dispatch(initializeUserPosts());
-      dispatch(initializeFollows());
 
       setLoading(false);
     };
@@ -59,11 +61,11 @@ const App = () => {
     initialize();
   }, []);
 
-  useEffect(() => {
-    dispatch(initializePostVotes());
-    dispatch(initializeSubscriptions());
-    dispatch(initializeUserPosts(user.userId));
-  }, [user]);
+  // useEffect(() => {
+  //   dispatch(initializePostVotes());
+  //   dispatch(initializeSubscriptions());
+  //   dispatch(initializeUserPosts(user.userId));
+  // }, [user]);
 
   return (
     <Router>

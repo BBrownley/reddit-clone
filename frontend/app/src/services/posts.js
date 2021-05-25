@@ -38,6 +38,7 @@ const getUserPosts = async userId => {
     `http://localhost:5000/posts/users/${userId}`,
     config
   );
+  console.log(req.data);
   return req.data;
 };
 

@@ -8,6 +8,8 @@ import { initializeVotes as initializePostVotes } from "../../reducers/userPostV
 import { initializeSubscriptions } from "../../reducers/groupSubscribesReducer";
 import { clearRedirectPath } from "../../reducers/redirectReducer";
 import { removeNotification } from "../../reducers/notificationReducer";
+import { initializeUserPosts } from "../../reducers/userPostsReducer";
+import { setUser, initializeFollows } from "../../reducers/userReducer";
 
 import FormWarning from "../FormWarning/FormWarning";
 
@@ -45,8 +47,10 @@ const LoginForm = props => {
     const loginSuccess = await dispatch(login(credentials));
 
     if (loginSuccess) {
+      dispatch(initializeFollows());
       dispatch(initializePostVotes());
       dispatch(initializeSubscriptions());
+      dispatch(initializeUserPosts(loginSuccess.userId));
       localStorage.setItem("loggedUser", JSON.stringify(loginSuccess));
       if (redirectPath) {
         history.push(redirectPath);

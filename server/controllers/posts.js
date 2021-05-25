@@ -128,14 +128,14 @@ postsRouter.delete("/:id", async (req, res, next) => {
   }
 });
 
-// postsRouter.get("/users/:userId", async (req, res, next) => {
-//   try {
-//     const userPosts = await postsDB.getPostsByUID(req.params.userId);
-//     res.json(userPosts);
-//   } catch (exception) {
-//     next(exception);
-//   }
-// });
+postsRouter.get("/users/:userId", async (req, res, next) => {
+  try {
+    const userPosts = await postsDB.getPostsByUID(req.params.userId);
+    res.json(userPosts);
+  } catch (exception) {
+    next(exception);
+  }
+});
 
 postsRouter.post("/follow", async (req, res, next) => {
   const followPost = (postId, userId) => {
@@ -456,7 +456,8 @@ postsRouter.get("/:postId", async (req, res, next) => {
           posts.created_at AS created_at,
           title,
           users.username AS username,
-          users.id AS user_id
+          users.id AS user_id,
+          (SELECT COUNT(*) FROM post_follows WHERE posts.id = post_follows.post_id) AS follows
         FROM posts
         JOIN users ON users.id = posts.submitter_id
         JOIN groups ON groups.id = posts.group_id
