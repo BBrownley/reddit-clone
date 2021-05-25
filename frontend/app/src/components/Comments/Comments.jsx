@@ -5,6 +5,11 @@ import { useHistory, Link } from "react-router-dom";
 import { setRedirectPath } from "../../reducers/redirectReducer";
 import { initializeBookmarks } from "../../reducers/userBookmarksReducer";
 
+import { Container } from "./Comments.elements";
+import { FormContainer, FormField } from "../shared/Form.elements";
+import ButtonGroup from "../shared/ButtonGroup.elements";
+import FollowButton from "../FollowButton/FollowButton";
+
 import commentsService from "../../services/comments";
 
 import Comment from "../Comment/Comment";
@@ -16,8 +21,8 @@ export default function Comments({ postId, authorId, postTitle }) {
   const history = useHistory();
 
   const [comments, setComments] = useState([]);
-  const [formOpen, setFormOpen] = useState(false);
   const [newComment, setNewComment] = useState("");
+  const [newCommentFormError, setNewCommentFormError] = useState(null);
 
   useEffect(() => {
     // Fetch root comments, its respective component will render its children recursively
@@ -29,6 +34,10 @@ export default function Comments({ postId, authorId, postTitle }) {
     fetchComments();
   }, []);
 
+  useEffect(() => {
+    setNewCommentFormError(null);
+  }, [newComment]);
+
   const handleSubmitComment = async (
     user,
     content,
@@ -39,7 +48,7 @@ export default function Comments({ postId, authorId, postTitle }) {
     setChildren = null
   ) => {
     if (content.trim().length === 0) {
-      return console.log("Comment cannot be empty");
+      return setNewCommentFormError("Comment cannot be empty");
     }
 
     const newCommentObj = await commentsService.add(
@@ -53,7 +62,6 @@ export default function Comments({ postId, authorId, postTitle }) {
     } else {
       // Not replying to a comment, begin a new thread
       setComments([...comments, newCommentObj]);
-      setFormOpen(false);
       setNewComment("");
       sendNotifications(user, content);
     }
@@ -79,7 +87,7 @@ export default function Comments({ postId, authorId, postTitle }) {
   };
 
   return (
-    <div>
+    <Container>
       {(() => {
         if (!currentUser) {
           return (
@@ -88,39 +96,27 @@ export default function Comments({ postId, authorId, postTitle }) {
               comment
             </>
           );
-        } else if (formOpen) {
-          return (
-            <>
-              <input
-                value={newComment}
-                onChange={e => setNewComment(e.target.value)}
-              />
-              <button
-                onClick={() =>
-                  handleSubmitComment(currentUser, newComment, postId)
-                }
-              >
-                Submit
-              </button>
-              <p onClick={() => setFormOpen(false)}>Cancel</p>
-            </>
-          );
         } else {
           return (
-            <button
-              onClick={() => {
-                if (currentUser.token === null) {
-                  dispatch(setRedirectPath(window.location.pathname));
-                  history.push({
-                    pathname: "/login",
-                    state: { headerMessage: "Log in to comment on this post" }
-                  });
-                }
-                setFormOpen(true);
-              }}
-            >
-              Add a comment
-            </button>
+            <FormContainer className="new-thread">
+              <FormField>
+                <textarea
+                  value={newComment}
+                  onChange={e => setNewComment(e.target.value)}
+                />
+              </FormField>
+              <h3 className="warning">{newCommentFormError}</h3>
+              <ButtonGroup>
+                <li
+                  className="active"
+                  onClick={() =>
+                    handleSubmitComment(currentUser, newComment, postId)
+                  }
+                >
+                  Add comment
+                </li>
+              </ButtonGroup>
+            </FormContainer>
           );
         }
       })()}
@@ -144,6 +140,6 @@ export default function Comments({ postId, authorId, postTitle }) {
             })}
         </>
       )}
-    </div>
+    </Container>
   );
 }

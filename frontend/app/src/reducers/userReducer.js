@@ -129,20 +129,20 @@ export const addPostToUser = post => {
 
 export const followPost = postId => {
   return async dispatch => {
-    const res = await postService.followPost(postId);
+    await postService.followPost(postId);
     dispatch({
       type: "FOLLOW_POST",
-      postId: res.post_id
+      postId
     });
   };
 };
 
 export const unfollowPost = postId => {
   return async dispatch => {
-    const res = await postService.unfollowPost(postId);
+    await postService.unfollowPost(postId);
     dispatch({
       type: "UNFOLLOW_POST",
-      postId: res.postId
+      postId
     });
   };
 };
