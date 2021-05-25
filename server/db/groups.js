@@ -113,6 +113,7 @@ const subscribe = (groupId, userId) => {
         },
         (err, results) => {
           if (err) {
+            console.log(err);
             return reject(new Error("Unable to subscribe to group"));
           } else {
             return resolve(results[0]);
