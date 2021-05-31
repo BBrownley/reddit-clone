@@ -37,7 +37,7 @@ const UserHistory = styled.div`
 const CommentItem = styled.div`
   border-bottom: 1px solid #dddddd;
   margin-bottom: 1rem;
-  padding: 0 .625rem 1rem .25rem;
+  padding: 0 0.625rem 1rem 0.25rem;
 `;
 
 const Pagination = styled.div`
@@ -218,6 +218,7 @@ export default function UserView() {
               {(() => {
                 return historyToDisplay.map((item, index) => {
                   if (item.comment_body === null) {
+                    console.log(item);
                     return <Post post={item} options={false} key={index} />;
                   } else {
                     return (

@@ -28,6 +28,8 @@ userHistoryRouter.get("/paginate", async (req, res, next) => {
               groups.group_name AS group_name,
               comments.created_at AS created_at,
               posts.title AS title,
+              posts.id AS post_id,
+              submitter_id,
               comments.comment_body AS comment_body,
               null AS username,
               null AS post_body
@@ -43,6 +45,8 @@ userHistoryRouter.get("/paginate", async (req, res, next) => {
               groups.group_name AS group_name,
               posts.created_at AS created_at,
               posts.title AS title,
+              posts.id AS post_title,
+              submitter_id,
               null AS comment_body,
               users.username AS username,
               posts.post_body AS post_body
@@ -61,7 +65,9 @@ userHistoryRouter.get("/paginate", async (req, res, next) => {
             SELECT 
               groups.group_name AS group_name,
               posts.created_at AS created_at,
+              posts.id AS post_id,
               title,
+              submitter_id,
               post_body,
               username,
               null AS comment_body
@@ -80,6 +86,7 @@ userHistoryRouter.get("/paginate", async (req, res, next) => {
           query = `
             SELECT 
               posts.title AS title, 
+              posts.id AS post_id,
               groups.group_name AS group_name,
               comments.created_at AS created_at,
               comment_body,
@@ -101,6 +108,7 @@ userHistoryRouter.get("/paginate", async (req, res, next) => {
           query = `
             SELECT 
               posts.title AS title,
+              posts.id AS post_id,
               groups.group_name AS group_name,
               bookmarks.created_at AS created_at,
               comment_body,

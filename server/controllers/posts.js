@@ -222,7 +222,7 @@ postsRouter.get("/all", async (req, res, next) => {
             group_name AS group_name,
             group_id AS group_id,
             username,
-            users.id AS user_id,
+            submitter_id,
             post_body,
             (SELECT COUNT(*) FROM post_follows WHERE posts.id = post_follows.post_id) AS follows,
             (SELECT COUNT(*) FROM comments 
@@ -251,7 +251,7 @@ postsRouter.get("/all", async (req, res, next) => {
             group_name AS group_name,
             group_id AS group_id,
             username,
-            users.id AS user_id,
+            submitter_id,
             post_body,
             (SELECT COUNT(*) FROM post_follows WHERE posts.id = post_follows.post_id) AS follows,
             (SELECT COUNT(*) FROM comments 
@@ -371,7 +371,7 @@ postsRouter.get("/group", async (req, res, next) => {
           group_name AS group_name,
           group_id AS group_id,
           username,
-          users.id AS user_id,
+          submitter_id,
           post_body,
           (SELECT COUNT(*) FROM post_follows WHERE posts.id = post_follows.post_id) AS follows,
           (SELECT COUNT(*) FROM comments 
@@ -456,7 +456,7 @@ postsRouter.get("/:postId", async (req, res, next) => {
           posts.created_at AS created_at,
           title,
           users.username AS username,
-          users.id AS user_id,
+          submitter_id,
           (SELECT COUNT(*) FROM post_follows WHERE posts.id = post_follows.post_id) AS follows
         FROM posts
         JOIN users ON users.id = posts.submitter_id

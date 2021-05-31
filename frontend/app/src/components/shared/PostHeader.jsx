@@ -12,7 +12,7 @@ const PostHeader = ({
   groupLink,
   groupName,
   author,
-  userId
+  submitter_id
 }) => {
   const width = useScreenWidth();
 
@@ -30,7 +30,7 @@ const PostHeader = ({
       {author && (
         <>
           by{" "}
-          <NavLink to={`/users/${userId}`}>
+          <NavLink to={`/users/${submitter_id}`}>
             <strong>{author}</strong>
           </NavLink>
         </>

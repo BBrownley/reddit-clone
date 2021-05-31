@@ -142,7 +142,7 @@ const Post = ({ post, options, expand, viewMode }) => {
               groupLink={`/groups/${post.group_name.toLowerCase()}`}
               groupName={post.group_name}
               author={post.username}
-              userId={post.user_id}
+              submitter_id={post.submitter_id}
             />
 
             {editing ? (
