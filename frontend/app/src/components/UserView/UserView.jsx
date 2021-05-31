@@ -35,8 +35,9 @@ const UserHistory = styled.div`
 `;
 
 const CommentItem = styled.div`
-  padding: 10px 10px 10px 5px;
   border-bottom: 1px solid #dddddd;
+  margin-bottom: 1rem;
+  padding: 0 .625rem 1rem .25rem;
 `;
 
 const Pagination = styled.div`
@@ -150,8 +151,6 @@ export default function UserView() {
         <Container>
           <ProfileInfo>
             <h2>{user.username}</h2>
-            <p>Posts: 0</p>
-            <p>Comments: 0</p>
             <p>Account created {moment(user.created_at).fromNow()}</p>
             {(() => {
               if (loggedUserId !== null && matchesLoggedUser === false) {
