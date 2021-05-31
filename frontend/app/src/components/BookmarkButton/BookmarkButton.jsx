@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import FontAwesome from "react-fontawesome";
 
 import {
   addBookmark,
@@ -20,7 +21,9 @@ export default function BookmarkButton({ bookmarked, commentId }) {
   return (
     <li className={`${bookmarked ? "active" : ""}`}>
       {bookmarked ? (
-        <span onClick={() => handleDeleteBookmark(commentId)}>Unbookmark</span>
+        <span onClick={() => handleDeleteBookmark(commentId)}>
+          <FontAwesome name="heart" className="fa-bookmark" /> Bookmarked
+        </span>
       ) : (
         <span onClick={() => handleAddBookmark(commentId)}>Bookmark</span>
       )}
