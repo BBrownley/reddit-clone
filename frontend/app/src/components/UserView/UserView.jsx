@@ -251,30 +251,44 @@ export default function UserView() {
               })()}
             </div>
           </UserHistory>
-          <Pagination>
-            {currentPage > 1 && (
-              <button
-                className="pagination-button previous"
-                onClick={handlePrevButton}
-              >
-                Previous
-              </button>
+          {historyToDisplay.length === 0 &&
+            paginationOptions.type !== "BOOKMARKED" && (
+              <h3>No relevant history found for this user</h3>
             )}
+            {historyToDisplay.length === 0 &&
+            paginationOptions.type === "BOOKMARKED" && (
+              <h3>Bookmark comments you like and view them all here!</h3>
+            )}
+          {historyToDisplay.length !== 0 && (
+            <Pagination>
+              {currentPage > 1 && (
+                <button
+                  className="pagination-button previous"
+                  onClick={handlePrevButton}
+                >
+                  Previous
+                </button>
+              )}
 
-            <span>
-              Page{" "}
-              <input type="text" value={pageInput} onChange={handlePageInput} />{" "}
-              of {maxPages}
-            </span>
-            {currentPage < maxPages && (
-              <button
-                className="pagination-button next"
-                onClick={handleNextButton}
-              >
-                Next
-              </button>
-            )}
-          </Pagination>
+              <span>
+                Page{" "}
+                <input
+                  type="text"
+                  value={pageInput}
+                  onChange={handlePageInput}
+                />{" "}
+                of {maxPages}
+              </span>
+              {currentPage < maxPages && (
+                <button
+                  className="pagination-button next"
+                  onClick={handleNextButton}
+                >
+                  Next
+                </button>
+              )}
+            </Pagination>
+          )}
         </Container>
       )}
     </div>

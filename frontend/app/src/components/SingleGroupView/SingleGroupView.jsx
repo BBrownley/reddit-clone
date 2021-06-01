@@ -130,34 +130,39 @@ export default function SingleGroupView() {
                 searchTerm={searchTerm}
                 posts={postsToDisplay}
               />
-              <Pagination>
-                {currentPage > 1 && (
-                  <button
-                    className="pagination-button previous"
-                    onClick={handlePrevButton}
-                  >
-                    Previous
-                  </button>
-                )}
+              {postsToDisplay.length === 0 &&
+                <h3>This group doesn't have any posts. Submit one!</h3>
+              }
+              {postsToDisplay.length !== 0 && (
+                <Pagination>
+                  {currentPage > 1 && (
+                    <button
+                      className="pagination-button previous"
+                      onClick={handlePrevButton}
+                    >
+                      Previous
+                    </button>
+                  )}
 
-                <span>
-                  Page{" "}
-                  <input
-                    type="text"
-                    value={pageInput}
-                    onChange={handlePageInput}
-                  />{" "}
-                  of {maxPages}
-                </span>
-                {currentPage < maxPages && (
-                  <button
-                    className="pagination-button next"
-                    onClick={handleNextButton}
-                  >
-                    Next
-                  </button>
-                )}
-              </Pagination>
+                  <span>
+                    Page{" "}
+                    <input
+                      type="text"
+                      value={pageInput}
+                      onChange={handlePageInput}
+                    />{" "}
+                    of {maxPages}
+                  </span>
+                  {currentPage < maxPages && (
+                    <button
+                      className="pagination-button next"
+                      onClick={handleNextButton}
+                    >
+                      Next
+                    </button>
+                  )}
+                </Pagination>
+              )}
             </>
           );
         } else if (badRequest) {

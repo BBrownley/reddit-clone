@@ -147,27 +147,35 @@ const GroupList = () => {
             })
           : ""}
       </Container>
-      <Pagination>
-        {currentPage > 1 && (
-          <button
-            className="pagination-button previous"
-            onClick={handlePrevButton}
-          >
-            Previous
-          </button>
-        )}
+      {groupsToDisplay.length === 0 && (
+        <h3>Be the first one to create a group!</h3>
+      )}
+      {groupsToDisplay.length !== 0 && (
+        <Pagination>
+          {currentPage > 1 && (
+            <button
+              className="pagination-button previous"
+              onClick={handlePrevButton}
+            >
+              Previous
+            </button>
+          )}
 
-        <span>
-          Page{" "}
-          <input type="text" value={pageInput} onChange={handlePageInput} /> of{" "}
-          {maxPages}
-        </span>
-        {currentPage < maxPages && (
-          <button className="pagination-button next" onClick={handleNextButton}>
-            Next
-          </button>
-        )}
-      </Pagination>
+          <span>
+            Page{" "}
+            <input type="text" value={pageInput} onChange={handlePageInput} />{" "}
+            of {maxPages}
+          </span>
+          {currentPage < maxPages && (
+            <button
+              className="pagination-button next"
+              onClick={handleNextButton}
+            >
+              Next
+            </button>
+          )}
+        </Pagination>
+      )}
     </Wrapper>
   );
 };
