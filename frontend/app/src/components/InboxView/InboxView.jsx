@@ -205,30 +205,36 @@ export default function InboxView() {
               <p>{message.content}</p>
             </Message>
           ))}
-          <Pagination>
-            {currentPage > 1 && (
-              <button
-                className="pagination-button previous"
-                onClick={handlePrevButton}
-              >
-                Previous
-              </button>
-            )}
+          {messagesToDisplay.length !== 0 && (
+            <Pagination>
+              {currentPage > 1 && (
+                <button
+                  className="pagination-button previous"
+                  onClick={handlePrevButton}
+                >
+                  Previous
+                </button>
+              )}
 
-            <span>
-              Page{" "}
-              <input type="text" value={pageInput} onChange={handlePageInput} />{" "}
-              of {maxPages}
-            </span>
-            {currentPage < maxPages && (
-              <button
-                className="pagination-button next"
-                onClick={handleNextButton}
-              >
-                Next
-              </button>
-            )}
-          </Pagination>
+              <span>
+                Page{" "}
+                <input
+                  type="text"
+                  value={pageInput}
+                  onChange={handlePageInput}
+                />{" "}
+                of {maxPages}
+              </span>
+              {currentPage < maxPages && (
+                <button
+                  className="pagination-button next"
+                  onClick={handleNextButton}
+                >
+                  Next
+                </button>
+              )}
+            </Pagination>
+          )}
         </>
       )}
     </div>

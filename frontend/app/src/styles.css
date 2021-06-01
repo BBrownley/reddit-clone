@@ -119,6 +119,10 @@ input {
   margin-top: 1rem;
 }
 
+.disp-blk {
+  display: block;
+}
+
 /* For breaking into a new row inside a flex container */
 .break {
   flex-basis: 100%;

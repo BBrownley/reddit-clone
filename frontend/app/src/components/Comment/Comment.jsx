@@ -211,7 +211,7 @@ export default function Comment(props) {
         ></img>
       </div> */}
       <MainContent>
-        <Link to={`/users/${props.comment.user_id}`}>
+        <Link to={`/users/${props.comment.user_id}`} className="disp-blk">
           {props.comment.username}
         </Link>
         <span className="comment">
