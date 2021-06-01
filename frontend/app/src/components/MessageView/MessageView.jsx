@@ -47,6 +47,8 @@ export default function MessageView() {
     history.push("/inbox");
   };
 
+  console.log(location.state);
+
   return (
     <Message>
       <h2>{location.state.subject}</h2>
@@ -58,7 +60,6 @@ export default function MessageView() {
       </div>
       <MessageBody>{location.state.body}</MessageBody>
       <ButtonGroup>
-        
         <li>
           <Link to="/inbox">Back</Link>
         </li>

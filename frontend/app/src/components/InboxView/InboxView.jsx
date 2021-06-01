@@ -64,6 +64,7 @@ export default function InboxView() {
   }, [currentPage, paginationOptions.type]);
 
   const openMessage = message => {
+    console.log(message);
     history.push({
       pathname: "/inbox/message",
       state: {

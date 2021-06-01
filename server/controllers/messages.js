@@ -179,7 +179,8 @@ messageRouter.get("/paginate", async (req, res, next) => {
       switch (filter) {
         case "UNREAD":
           query = `
-            SELECT * FROM messages 
+            SELECT messages.*, username AS sender_username FROM messages
+            JOIN users ON users.id = messages.sender_id 
             WHERE recipient_id = ? AND has_read = 0
             ORDER BY created_at DESC
             LIMIT 20 OFFSET ?
@@ -187,7 +188,8 @@ messageRouter.get("/paginate", async (req, res, next) => {
           break;
         case "ALL":
           query = `
-            SELECT * FROM messages 
+            SELECT messages.*, username AS sender_username FROM messages
+            JOIN users ON users.id = messages.sender_id
             WHERE recipient_id = ?
             ORDER BY created_at DESC
             LIMIT 20 OFFSET ?
@@ -203,7 +205,8 @@ messageRouter.get("/paginate", async (req, res, next) => {
           break;
         case "DIRECTS":
           query = `
-            SELECT * FROM messages 
+            SELECT messages.*, username AS sender_username FROM messages
+            JOIN users ON users.id = messages.sender_id 
             WHERE recipient_id = ? AND sender_id IS NOT NULL
             ORDER BY created_at DESC
             LIMIT 20 OFFSET ?

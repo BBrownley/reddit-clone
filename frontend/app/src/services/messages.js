@@ -10,7 +10,6 @@ const config = {
 };
 
 const setToken = token => {
-  console.log(token);
   storedToken = token;
 };
 
