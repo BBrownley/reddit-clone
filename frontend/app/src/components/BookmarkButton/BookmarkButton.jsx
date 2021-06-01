@@ -7,6 +7,8 @@ import {
   deleteBookmark
 } from "../../reducers/userBookmarksReducer";
 
+import { Container } from "../BookmarkButton/BookMarkButton.elements";
+
 export default function BookmarkButton({ bookmarked, commentId }) {
   const dispatch = useDispatch();
 
@@ -19,7 +21,7 @@ export default function BookmarkButton({ bookmarked, commentId }) {
   };
 
   return (
-    <li className={`${bookmarked ? "active" : ""}`}>
+    <Container className={`${bookmarked ? "active" : ""}`}>
       {bookmarked ? (
         <span onClick={() => handleDeleteBookmark(commentId)}>
           <FontAwesome name="heart" className="fa-bookmark" /> Bookmarked
@@ -27,6 +29,6 @@ export default function BookmarkButton({ bookmarked, commentId }) {
       ) : (
         <span onClick={() => handleAddBookmark(commentId)}>Bookmark</span>
       )}
-    </li>
+    </Container>
   );
 }

@@ -23,8 +23,8 @@ import {
   MainContent,
   CommentVotes,
   CommentAge,
-  ReplyForm,
-  ReplyInput,
+  ReplyForm as CommentForm,
+  ReplyInput as CommentFormInput,
   CommentVoteButton
 } from "./Comment.elements";
 
@@ -61,7 +61,7 @@ export default function Comment(props) {
   const [commentScore, setCommentScore] = useState(
     props.comment.comment_score || 0
   );
-  const [replyFormWarning, setReplyFormWarning] = useState(null);
+  const [commentFormWarning, setCommentFormWarning] = useState(null);
 
   const match = useRouteMatch("/groups/:groupName/:postId");
 
@@ -78,9 +78,20 @@ export default function Comment(props) {
     fetchChildren();
   }, [existingCommentVote, props.comment.comment_id]);
 
+  // Clear reply/edit form warning
   useEffect(() => {
-    setReplyFormWarning(null);
-  }, [newComment]);
+    setCommentFormWarning(null);
+  }, [newComment, editValue, replying, editing]);
+
+  // Make it so both the reply form and edit form cannot be opened at the same time
+
+  useEffect(() => {
+    if (replying) setEditing(false);
+  }, [replying]);
+
+  useEffect(() => {
+    if (editing) setReplying(false);
+  }, [editing]);
 
   /*
     Whenever a user replies to a comment, notify the user who was replied to
@@ -144,7 +155,7 @@ export default function Comment(props) {
 
   const handleEditComment = () => {
     if (editValue.trim().length === 0) {
-      return console.log("Updated comment cannot be empty");
+      return setCommentFormWarning("Updated comment cannot be empty");
     }
 
     setEditing(false);
@@ -159,7 +170,7 @@ export default function Comment(props) {
 
   const handleReplyComment = () => {
     if (newComment.trim().length === 0) {
-      return setReplyFormWarning("Cannot be empty");
+      return setCommentFormWarning("Cannot be empty");
     }
 
     props.handleSubmitComment(
@@ -208,85 +219,94 @@ export default function Comment(props) {
         </span>
         {!removed && (
           <div className="comment-options">
-            <CommentVotes>
-              <CommentVoteButton
-                name="thumbs-up"
-                onClick={() => handleVoteComment("upvote")}
-                upvoted={existingCommentVote?.vote_value === 1 ? 1 : 0}
-              />
-              <span>{commentScore}</span>
-              <CommentVoteButton
-                name="thumbs-down"
-                onClick={() => handleVoteComment("downvote")}
-                downvoted={existingCommentVote?.vote_value === -1 ? 1 : 0}
-              />
-            </CommentVotes>
+            <div>
+              <CommentVotes>
+                <CommentVoteButton
+                  name="thumbs-up"
+                  onClick={() => handleVoteComment("upvote")}
+                  upvoted={existingCommentVote?.vote_value === 1 ? 1 : 0}
+                />
+                <span className="comment-score">{commentScore}</span>
+                <CommentVoteButton
+                  name="thumbs-down"
+                  onClick={() => handleVoteComment("downvote")}
+                  downvoted={existingCommentVote?.vote_value === -1 ? 1 : 0}
+                />
+              </CommentVotes>
+            </div>
 
             {!removed && currentUser.userId !== null && (
-              <ButtonGroup>
-                {replying === false && (
-                  <li onClick={() => handleSetReplying()}>
-                    <span className="reply">Reply</span>
-                  </li>
-                )}
-                <BookmarkButton
-                  bookmarked={userBookmarked}
-                  commentId={props.comment.comment_id}
-                />
-                {userOwnsComment && (
-                  <>
-                    <div className="pos-rel">
-                      <li onClick={() => setConfirmDeletion(true)}>Delete</li>
-                      {confirmDeletion && (
-                        <DeleteConfirmation
-                          confirmDelete={() => handleRemoveComment()}
-                          cancel={() => setConfirmDeletion(false)}
-                        />
-                      )}
-                    </div>
-                    <li onClick={() => setEditing(true)}>Edit</li>
-                  </>
-                )}
-                {replying === true && (
-                  <ReplyForm>
-                    <ReplyInput
-                      type="text"
-                      value={newComment}
-                      onChange={e => setNewComment(e.target.value)}
-                    />
-                    <div className="form-bottom">
-                      <div>
-                        <button onClick={() => handleReplyComment()}>
-                          Send
-                        </button>
-                        <a onClick={() => setReplying(false)}>Cancel</a>
-                      </div>
-                      <span className="warning">{replyFormWarning}</span>
-                    </div>
-                  </ReplyForm>
-                )}
-                {editing === true && (
+              <>
+                <ButtonGroup className="button-group">
                   <div>
-                    <input
-                      value={editValue}
-                      onChange={e => setEditValue(e.target.value)}
-                    />
-                    <button onClick={() => handleEditComment()}>
-                      Edit comment
-                    </button>
-                    <p
-                      onClick={() => {
-                        setEditing(false);
-                        setEditValue(commentBody);
-                      }}
-                    >
-                      Cancel
-                    </p>
+                    {replying === false && (
+                      <li onClick={() => handleSetReplying()}>
+                        <span className="reply">Reply</span>
+                      </li>
+                    )}
                   </div>
-                )}
-              </ButtonGroup>
+                  <div>
+                    <BookmarkButton
+                      bookmarked={userBookmarked}
+                      commentId={props.comment.comment_id}
+                    />
+                  </div>
+                  {userOwnsComment && (
+                    <>
+                      <div className="pos-rel">
+                        <li onClick={() => setConfirmDeletion(true)}>Delete</li>
+                        {confirmDeletion && (
+                          <DeleteConfirmation
+                            confirmDelete={() => handleRemoveComment()}
+                            cancel={() => setConfirmDeletion(false)}
+                          />
+                        )}
+                      </div>
+                      <div>
+                        <li onClick={() => setEditing(true)}>Edit</li>
+                      </div>
+                    </>
+                  )}
+                </ButtonGroup>
+
+                <div className="break"></div>
+              </>
             )}
           </div>
+        )}
+        {replying === true && (
+          <CommentForm>
+            <CommentFormInput
+              type="text"
+              value={newComment}
+              onChange={e => setNewComment(e.target.value)}
+            />
+            <div className="form-bottom">
+              <div>
+                <button onClick={() => handleReplyComment()}>Send</button>
+                <button onClick={() => setReplying(false)}>Cancel</button>
+              </div>
+              <span className="warning">{commentFormWarning}</span>
+            </div>
+          </CommentForm>
+        )}
+        {editing === true && (
+          <CommentForm>
+            <CommentFormInput
+              type="text"
+              value={editValue}
+              onChange={e => setEditValue(e.target.value)}
+            />
+            <div className="form-bottom">
+              <div>
+                <button onClick={() => handleEditComment()}>
+                  Edit comment
+                </button>
+                <button onClick={() => setEditing(false)}>Cancel</button>
+              </div>
+              <span className="warning">{commentFormWarning}</span>
+            </div>
+          </CommentForm>
         )}
       </MainContent>
 

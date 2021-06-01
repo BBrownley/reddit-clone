@@ -127,7 +127,7 @@ export default function Comments({ postId, authorId, postTitle }) {
           <h2>Comments:</h2>
           {comments
             .sort((a, b) => {
-              return a.parent_id > b.parent_id ? 1 : -1;
+              return a.parent_id > b.parent_id ? -1 : 1;
             })
             .map(comment => {
               return (

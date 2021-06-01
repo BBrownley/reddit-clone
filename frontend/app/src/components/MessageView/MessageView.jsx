@@ -58,6 +58,7 @@ export default function MessageView() {
       </div>
       <MessageBody>{location.state.body}</MessageBody>
       <ButtonGroup>
+        
         <li>
           <Link to="/inbox">Back</Link>
         </li>

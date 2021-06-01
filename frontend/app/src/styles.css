@@ -114,3 +114,13 @@ input {
 .pos-rel {
   position: relative;
 }
+
+.mt-1rem {
+  margin-top: 1rem;
+}
+
+/* For breaking into a new row inside a flex container */
+.break {
+  flex-basis: 100%;
+  height: 0;
+}
