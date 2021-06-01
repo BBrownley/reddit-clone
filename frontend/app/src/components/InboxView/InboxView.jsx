@@ -175,7 +175,7 @@ export default function InboxView() {
               Direct Messages
             </li>
           </ButtonGroup>
-          {messagesToDisplay.length === 0 && <h3>Inbox empty</h3>}
+          {messagesToDisplay.length === 0 && <h3>There's nothing here.</h3>}
           {messagesToDisplay.map((message, index) => (
             <Message
               className={

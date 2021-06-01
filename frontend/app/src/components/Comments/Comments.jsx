@@ -15,7 +15,7 @@ import commentsService from "../../services/comments";
 import Comment from "../Comment/Comment";
 import messageService from "../../services/messages";
 
-export default function Comments({ postId, authorId, postTitle }) {
+export default function Comments({ postId, submitterId, postTitle }) {
   const dispatch = useDispatch();
   const currentUser = useSelector(state => state.user);
   const history = useHistory();
@@ -71,13 +71,19 @@ export default function Comments({ postId, authorId, postTitle }) {
   const sendNotifications = (commentingUser, newComment) => {
     const message = {
       sender_id: null,
-      recipient_id: authorId,
+      recipient_id: submitterId,
       content: newComment,
       has_read: 0,
       subject: `User ${commentingUser.username} has responded to a post: ${postTitle}`
     };
-    messageService.send(message);
+
+    // Send a message to everyone following the post
     messageService.sendAll(message, postId);
+
+    // Prevent sending a message to user if they're commenting on their own post
+    if (commentingUser.userId === submitterId) return;
+
+    messageService.send(message);
   };
 
   const handleLoginRedirect = () => {

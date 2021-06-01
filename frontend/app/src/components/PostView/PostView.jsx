@@ -33,6 +33,8 @@ const PostView = () => {
     });
   }, [dispatch]);
 
+  console.log(post);
+
   return (
     <>
       {!post && <NotFound />}
@@ -41,7 +43,7 @@ const PostView = () => {
           <Post post={post} key={post.postID} expand={true} viewMode={true} />
           <Comments
             postId={post.post_id}
-            authorId={post.user_id}
+            submitterId={post.submitter_id}
             postTitle={post.title}
           />
         </div>

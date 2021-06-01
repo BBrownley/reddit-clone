@@ -47,6 +47,7 @@ messageRouter.post("/", async (req, res, next) => {
         },
         (err, results) => {
           if (err) {
+            console.log(err);
             reject(new Error("Unable to send message"));
           } else {
             resolve("Message sent");
@@ -107,6 +108,7 @@ messageRouter.post("/followers/:postId", async (req, res, next) => {
   };
   try {
     await notifyFollowers(req.body.message);
+    res.sendStatus(200);
   } catch (exception) {
     next(exception);
   }
@@ -180,7 +182,7 @@ messageRouter.get("/paginate", async (req, res, next) => {
         case "UNREAD":
           query = `
             SELECT messages.*, username AS sender_username FROM messages
-            JOIN users ON users.id = messages.sender_id 
+            LEFT JOIN users ON users.id = messages.sender_id 
             WHERE recipient_id = ? AND has_read = 0
             ORDER BY created_at DESC
             LIMIT 20 OFFSET ?
@@ -189,7 +191,7 @@ messageRouter.get("/paginate", async (req, res, next) => {
         case "ALL":
           query = `
             SELECT messages.*, username AS sender_username FROM messages
-            JOIN users ON users.id = messages.sender_id
+            LEFT JOIN users ON users.id = messages.sender_id
             WHERE recipient_id = ?
             ORDER BY created_at DESC
             LIMIT 20 OFFSET ?

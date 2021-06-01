@@ -107,7 +107,7 @@ export default function Comment(props) {
     const message = {
       sender_id: null,
       recipient_id: repliedUser,
-      comment_body: newComment,
+      content: newComment,
       has_read: 0,
       subject: `User ${currentUser.username} has replied to a comment`
     };
