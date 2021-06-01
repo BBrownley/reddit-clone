@@ -235,13 +235,15 @@ export default function Comment(props) {
                 />
                 {userOwnsComment && (
                   <>
-                    <li onClick={() => setConfirmDeletion(true)}>Delete</li>
-                    {confirmDeletion && (
-                      <DeleteConfirmation
-                        confirmDelete={() => handleRemoveComment()}
-                        cancel={() => setConfirmDeletion(false)}
-                      />
-                    )}
+                    <div className="pos-rel">
+                      <li onClick={() => setConfirmDeletion(true)}>Delete</li>
+                      {confirmDeletion && (
+                        <DeleteConfirmation
+                          confirmDelete={() => handleRemoveComment()}
+                          cancel={() => setConfirmDeletion(false)}
+                        />
+                      )}
+                    </div>
                     <li onClick={() => setEditing(true)}>Edit</li>
                   </>
                 )}

@@ -110,3 +110,7 @@ input {
 .warning {
   color: red;
 }
+
+.pos-rel {
+  position: relative;
+}

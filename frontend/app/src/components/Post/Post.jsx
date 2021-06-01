@@ -181,20 +181,26 @@ const Post = ({ post, options, expand, viewMode }) => {
                             <li onClick={() => setEditing(true)}>Edit</li>
                           )}
 
-                          <li
-                            onClick={() => setConfirmDeletion(!confirmDeletion)}
-                          >
-                            <FontAwesome name="trash" /> Delete
-                          </li>
+                          <div className="pos-rel">
+                            <li
+                              onClick={() =>
+                                setConfirmDeletion(!confirmDeletion)
+                              }
+                            >
+                              <FontAwesome name="trash" /> Delete
+                            </li>
+                            {confirmDeletion && (
+                              <DeleteConfirmation
+                                confirmDelete={() =>
+                                  handleDeletePost(post.post_id)
+                                }
+                                cancel={() => setConfirmDeletion(false)}
+                              />
+                            )}
+                          </div>
                         </ButtonGroup>
                       ) : (
                         ""
-                      )}
-                      {confirmDeletion && (
-                        <DeleteConfirmation
-                          confirmDelete={() => handleDeletePost(post.post_id)}
-                          cancel={() => setConfirmDeletion(false)}
-                        />
                       )}
                     </span>
                   )}

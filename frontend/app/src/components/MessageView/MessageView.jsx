@@ -69,16 +69,18 @@ export default function MessageView() {
           ""
         )}
 
-        <li>
-          <span onClick={() => setConfirmDeletion(true)}>Delete</span>
-        </li>
+        <div className="pos-rel">
+          <li>
+            <span onClick={() => setConfirmDeletion(true)}>Delete</span>
+          </li>
 
-        {confirmDeletion && (
-          <DeleteConfirmation
-            confirmDelete={() => handleDeleteMessage()}
-            cancel={() => setConfirmDeletion(false)}
-          />
-        )}
+          {confirmDeletion && (
+            <DeleteConfirmation
+              confirmDelete={() => handleDeleteMessage()}
+              cancel={() => setConfirmDeletion(false)}
+            />
+          )}
+        </div>
       </ButtonGroup>
       {replyOpen && (
         <ReplyForm>
