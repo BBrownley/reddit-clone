@@ -8,11 +8,15 @@ export const GroupActions = styled.div`
   margin-top: 1rem;
   justify-content: space-between;
   & > * {
-    flex: 1;
+    padding: .625rem 2rem;
     margin-right: 2rem;
   }
   & > *:last-child {
     margin-right: 0;
+  }
+  
+  .create-post-button {
+    padding: .625rem 2rem;
   }
 
   @media (max-width: 1000px) {

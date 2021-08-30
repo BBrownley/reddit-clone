@@ -27,7 +27,7 @@ export const GroupListHeader = styled.div`
     margin-right: 1rem;
   }
   .create-group-button {
-    width: 50%;
+    padding: .625rem 2rem;
   }
   @media (max-width: 800px) {
     .create-group-button {

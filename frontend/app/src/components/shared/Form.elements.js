@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const FormContainer = styled.div`
   display: block;
   max-width: 800px;
+  margin: 5rem auto 0 auto;
 
   & button {
     width: 100%;
