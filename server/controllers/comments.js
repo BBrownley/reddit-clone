@@ -149,7 +149,7 @@ commentsRouter.post("/", async (req, res, next) => {
     }
 
     const newComment = await postComment(req.username, req.userId);
-    res.json(newComment);
+    return res.json(newComment);
   } catch (exception) {
     next(exception);
   }

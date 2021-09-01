@@ -41,11 +41,20 @@ const send = async message => {
 
 // Sends a notification to all followers of the post including the author
 const sendAll = async (message, postId) => {
-  await axios.post(
-    `http://localhost:5000/messages/followers/${postId}`,
-    { message },
-    config
-  );
+  const config = {
+    headers: {
+      Authorization: storedToken
+    }
+  };
+  try {
+    await axios.post(
+      `http://localhost:5000/messages/followers/${postId}`,
+      { message },
+      config
+    );
+  } catch (exception) {
+    console.log(exception);
+  }
 };
 
 const setRead = async id => {

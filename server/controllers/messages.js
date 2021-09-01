@@ -77,13 +77,15 @@ messageRouter.post("/followers/:postId", async (req, res, next) => {
         if (err) {
           reject(new Error("Unable to send message"));
         } else {
-          const userIds = results.reduce((acc, curr) => {
-            return [...acc, curr.user_id];
-          }, []);
-          // Send messages to followers
+          const userIds = results
+            .reduce((acc, curr) => {
+              return [...acc, curr.user_id];
+            }, [])
+            .filter(id => id !== req.userId);
+          // Send messages to followers, excluding self
 
           const query = `
-            INSERT INTO messages SET ?
+            INSERT INTO messages (sender_id, recipient_id, content, has_read, subject) VALUES ?
           `;
 
           const messageValues = userIds.map(uid => {
@@ -92,23 +94,36 @@ messageRouter.post("/followers/:postId", async (req, res, next) => {
               recipient_id: uid,
               content: message.content,
               has_read: 0,
-              subject: null
+              subject: "A user has responded to a followed post"
             };
           });
 
-          connection.query(query, [...messageValues], (err, results) => {
-            if (err) {
-              reject(new Error(err.message));
+          connection.query(
+            query,
+            [
+              messageValues.map(msg => [
+                msg.sender_id,
+                msg.recipient_id,
+                msg.content,
+                msg.has_read,
+                msg.subject
+              ])
+            ],
+            (err, results) => {
+              if (err) {
+                reject(new Error(err.message));
+              } else {
+                resolve("done");
+              }
             }
-            resolve("done");
-          });
+          );
         }
       });
     });
   };
   try {
-    await notifyFollowers(req.body.message);
-    res.sendStatus(200);
+    const message = await notifyFollowers(req.body.message);
+    res.json({ message });
   } catch (exception) {
     next(exception);
   }
