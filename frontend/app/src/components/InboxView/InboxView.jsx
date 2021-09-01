@@ -179,7 +179,7 @@ export default function InboxView() {
           {messagesToDisplay.map((message, index) => (
             <Message
               className={
-                parseInt(message.has_read) === 1 ? ".message-read" : ""
+                [parseInt(message.has_read) === 1 ? ".message-read" : "", "message"]
               }
               onClick={() => openMessage(message)}
               key={index}

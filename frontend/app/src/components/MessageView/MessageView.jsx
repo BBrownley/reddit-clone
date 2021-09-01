@@ -58,7 +58,7 @@ export default function MessageView() {
           {moment(location.state.time).format("MMMM Do YYYY, h:mm:ss a")}
         </Time>
       </div>
-      <MessageBody>{location.state.body}</MessageBody>
+      <MessageBody className="message-body">{location.state.body}</MessageBody>
       <ButtonGroup>
         <li>
           <Link to="/inbox">Back</Link>
