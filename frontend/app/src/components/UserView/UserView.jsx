@@ -155,7 +155,7 @@ export default function UserView() {
             {(() => {
               if (loggedUserId !== null && matchesLoggedUser === false) {
                 return (
-                  <button onClick={handleSendMessageButton}>
+                  <button onClick={handleSendMessageButton} id="send-message">
                     Send message
                   </button>
                 );
@@ -255,7 +255,7 @@ export default function UserView() {
             paginationOptions.type !== "BOOKMARKED" && (
               <h3>No relevant history found for this user</h3>
             )}
-            {historyToDisplay.length === 0 &&
+          {historyToDisplay.length === 0 &&
             paginationOptions.type === "BOOKMARKED" && (
               <h3>Bookmark comments you like and view them all here!</h3>
             )}
