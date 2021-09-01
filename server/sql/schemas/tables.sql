@@ -22,7 +22,7 @@ CREATE TABLE posts(
   content VARCHAR(65535),
   created_at TIMESTAMP DEFAULT NOW(),
   FOREIGN KEY(submitter_id) REFERENCES users(id),
-  FOREIGN KEY(group_id) REFERENCES groups(id)
+  FOREIGN KEY(group_id) REFERENCES groups(id) ON DELETE CASCADE
 );
 
 CREATE TABLE comments(
@@ -57,7 +57,7 @@ CREATE TABLE post_follows(
   post_id INT NOT NULL,
   created_at TIMESTAMP DEFAULT NOW(),
   FOREIGN KEY(user_id) REFERENCES users(id),
-  FOREIGN KEY(post_id) REFERENCES posts(id),
+  FOREIGN KEY(post_id) REFERENCES posts(id) ON DELETE CASCADE,
   PRIMARY KEY(user_id, post_id)
 );
 
@@ -65,7 +65,7 @@ CREATE TABLE group_subscribers(
   group_id INT NOT NULL,
   user_id INT NOT NULL,
   created_at TIMESTAMP DEFAULT NOW(),
-  FOREIGN KEY(group_id) REFERENCES groups(id),
+  FOREIGN KEY(group_id) REFERENCES groups(id) ON DELETE CASCADE,
   FOREIGN KEY(user_id) REFERENCES users(id),
   PRIMARY KEY(group_id, user_id)
 );

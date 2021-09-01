@@ -116,6 +116,7 @@ const deletePost = (userId, postId) => {
     const query = `DELETE FROM posts WHERE posts.id = ? AND submitter_id = ?`;
     connection.query(query, [postId, userId], (err, results) => {
       if (err) {
+        console.log(err);
         return reject(new Error("An unexpected error has occured"));
       }
 
