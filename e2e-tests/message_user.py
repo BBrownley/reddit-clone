@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import uuid
 
 driver = webdriver.Chrome(executable_path="C:\\Users\\brend\\Downloads\\chromedriver_win32\\chromedriver")
 driver.implicitly_wait(10)
@@ -19,7 +20,7 @@ acc_2 = {
     "id": 71
 }
 
-message = "message automated by selenium"
+message = f"uuid sent by selenium: {uuid.uuid1()}"
 
 
 def login(driver, user):

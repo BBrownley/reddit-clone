@@ -13,10 +13,18 @@ export const initializeUserPosts = userId => {
   };
 };
 
+export const clearUserPosts = () => {
+  return async dispatch => {
+    dispatch({type: "CLEAR_USER_POSTS"})
+  }
+}
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "INITIALIZE_USER_POSTS":
       return action.posts;
+    case "CLEAR_USER_POSTS":
+      return initialState;
     default:
       return state;
   }

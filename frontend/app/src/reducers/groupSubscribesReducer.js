@@ -32,6 +32,12 @@ export const unsubscribeFromGroup = (group, userId) => {
   };
 };
 
+export const clearSubscriptions = () => {
+  return async dispatch => {
+    dispatch({type: "CLEAR_SUBSCRIPTIONS"})
+  }
+}
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "INITIALIZE_SUBSCRIPTIONS":
@@ -40,6 +46,8 @@ const reducer = (state = initialState, action) => {
       return [...state, action.group];
     case "UNSUBSCRIBE":
       return state.filter(group => group.id !== action.group.id);
+    case "CLEAR_SUBSCRIPTIONS":
+      return initialState;
     default:
       return state;
   }

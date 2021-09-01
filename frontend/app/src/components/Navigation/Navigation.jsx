@@ -5,6 +5,8 @@ import { useHistory } from "react-router-dom";
 import { logout } from "../../reducers/userReducer";
 import { clearVotes as clearPostVotes } from "../../reducers/userPostVotesReducer";
 import { clearVotes as clearCommentVotes } from "../../reducers/commentVotesReducer";
+import { clearUserPosts } from "../../reducers/userPostsReducer";
+import { clearSubscriptions } from "../../reducers/groupSubscribesReducer";
 
 import UserCard from "../UserCard/UserCard";
 
@@ -32,8 +34,10 @@ export default function Navigation() {
   const handleLogout = () => {
     localStorage.removeItem("loggedUser");
     dispatch(logout());
+    dispatch(clearUserPosts());
     dispatch(clearPostVotes());
     dispatch(clearCommentVotes());
+    dispatch(clearSubscriptions());
 
     const userOnlyRoutes = [
       "/create",
