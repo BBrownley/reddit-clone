@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const PORT = 5000; // Make it use .env variable later
+const PORT = process.env.PORT || 5000;
 
 require("dotenv").config();
 
@@ -37,11 +37,6 @@ app.use("/commentvotes", commentvotesRouter);
 app.use("/bookmarks", bookmarksRouter);
 app.use("/postvotes", postVotesRouter);
 app.use("/userhistory", userHistoryRouter);
-
-app.get("/", async (req, res) => {
-  let posts = await postsDB.all();
-  res.json(posts);
-});
 
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);

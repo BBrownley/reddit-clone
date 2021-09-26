@@ -15,7 +15,7 @@ const config = {
 };
 
 const getAll = async () => {
-  const req = await axios.get("http://localhost:5000/", config);
+  const req = await axios.get("http://localhost:5000/posts", config);
   return req.data;
 };
 
