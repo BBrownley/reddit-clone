@@ -1,7 +1,7 @@
 import axios from "axios";
+import baseUrl from "./utils/baseUrl";
 
 let storedToken = null;
-const baseUrl = process.env.BASE_URL || "http://localhost:5000";
 
 const config = {
   headers: {
@@ -20,7 +20,7 @@ const getAll = async () => {
     }
   };
 
-  const req = await axios.get("http://localhost:5000/messages", config);
+  const req = await axios.get(`${baseUrl}/messages`, config);
   return req.data;
 };
 
@@ -32,7 +32,7 @@ const send = async message => {
   };
 
   const req = await axios.post(
-    "http://localhost:5000/messages",
+    `${baseUrl}/messages`,
     message,
     config
   );
@@ -48,7 +48,7 @@ const sendAll = async (message, postId) => {
   };
   try {
     await axios.post(
-      `http://localhost:5000/messages/followers/${postId}`,
+      `${baseUrl}/messages/followers/${postId}`,
       { message },
       config
     );
@@ -63,14 +63,14 @@ const setRead = async id => {
       Authorization: storedToken
     }
   };
-  axios.put(`http://localhost:5000/messages`, { id }, config);
+  axios.put(`${baseUrl}/messages`, { id }, config);
 };
 
 const deleteMessage = async id => {
   const headers = {
     Authorization: storedToken
   };
-  axios.delete(`http://localhost:5000/messages`, {
+  axios.delete(`${baseUrl}/messages`, {
     data: {
       id
     },

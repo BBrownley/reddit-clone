@@ -1,7 +1,7 @@
 import axios from "axios";
+import baseUrl from "./utils/baseUrl";
 
 let storedToken = null;
-const baseUrl = process.env.BASE_URL || "http://localhost:5000";
 
 const setToken = token => {
   storedToken = token;
@@ -15,29 +15,12 @@ const config = {
 };
 
 const getAll = async () => {
-  const req = await axios.get("http://localhost:5000/posts", config);
+  const req = await axios.get(`${baseUrl}/posts`, config);
   return req.data;
 };
 
-// const getPostsByUID = async userId => {
-//   const req = await axios.get(
-//     `http://localhost:5000/posts/users/${userId}`,
-//     config
-//   );
-//   const data = req.data.map(post => {
-//     return {
-//       ...post,
-//       type: "post"
-//     };
-//   });
-//   return data;
-// };
-
 const getUserPosts = async userId => {
-  const req = await axios.get(
-    `http://localhost:5000/posts/users/${userId}`,
-    config
-  );
+  const req = await axios.get(`${baseUrl}/posts/users/${userId}`, config);
   console.log(req.data);
   return req.data;
 };
@@ -50,7 +33,7 @@ const createPost = async post => {
   };
 
   try {
-    const req = await axios.post("http://localhost:5000/posts", post, config);
+    const req = await axios.post(`${baseUrl}/posts`, post, config);
 
     return req.data;
   } catch (error) {
@@ -68,7 +51,7 @@ const vote = async (postID, value) => {
     value
   };
   const data = await axios.post(
-    `http://localhost:5000/posts/${postID}/vote`,
+    `${baseUrl}/posts/${postID}/vote`,
     body,
     config
   );
@@ -86,7 +69,7 @@ const removePost = async postId => {
   };
 
   try {
-    await axios.delete(`http://localhost:5000/posts/${postId}`, config);
+    await axios.delete(`${baseUrl}/posts/${postId}`, config);
     return;
   } catch (error) {
     return { error: error.response.data.error };
@@ -101,11 +84,7 @@ const followPost = async postId => {
   };
 
   try {
-    const req = await axios.post(
-      "http://localhost:5000/posts/follow",
-      { postId },
-      config
-    );
+    const req = await axios.post(`${baseUrl}/posts/follow`, { postId }, config);
     return req.data;
   } catch (error) {
     return { error: error.response.data.error };
@@ -121,7 +100,7 @@ const unfollowPost = async postId => {
 
   try {
     const req = await axios.delete(
-      `http://localhost:5000/posts/unfollow/${postId}`,
+      `${baseUrl}/posts/unfollow/${postId}`,
       config
     );
     return req.data;
@@ -137,7 +116,7 @@ const getPostFollows = async () => {
     }
   };
   try {
-    const req = await axios.get(`http://localhost:5000/posts/follows/`, config);
+    const req = await axios.get(`${baseUrl}/posts/follows/`, config);
     return req.data;
   } catch (error) {
     return { error: error.response.data.error };
@@ -153,7 +132,7 @@ const editPost = async (id, newValue) => {
     }
   };
 
-  axios.put(`http://localhost:5000/posts/${id}`, { newValue }, config);
+  axios.put(`${baseUrl}/posts/${id}`, { newValue }, config);
 };
 
 const paginate = async (options, page) => {
@@ -170,11 +149,10 @@ const paginate = async (options, page) => {
   }
 
   if (options.type === "GROUP_POSTS") {
-    console.log("yo");
     const req = await axios.get(
       `${baseUrl}/posts/group?groupName=${options.groupName}&page=${page}`
     );
-    console.log(req.data);
+
     return req.data;
   }
 };

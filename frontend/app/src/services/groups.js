@@ -1,7 +1,7 @@
 import axios from "axios";
+import baseUrl from "./utils/baseUrl";
 
 let storedToken = null;
-const baseUrl = process.env.BASE_URL || "http://localhost:5000";
 
 const setToken = token => {
   storedToken = token;
@@ -15,14 +15,14 @@ const config = {
 };
 
 const getAll = async () => {
-  const req = await axios.get("http://localhost:5000/groups", config);
+  const req = await axios.get(`${baseUrl}/groups`, config);
   return req.data;
 };
 
 const getGroupByName = async groupName => {
   try {
     const req = await axios.get(
-      `http://localhost:5000/groups/${groupName}`,
+      `${baseUrl}/groups/${groupName}`,
       config
     );
     return req.data;
@@ -40,7 +40,7 @@ const create = async groupData => {
 
   try {
     const req = await axios.post(
-      `http://localhost:5000/groups/create`,
+      `${baseUrl}/groups/create`,
       groupData,
       config
     );
@@ -62,7 +62,7 @@ const subscribeToGroup = async group => {
 
   try {
     const req = await axios.post(
-      "http://localhost:5000/groups/subscribe",
+      `${baseUrl}/groups/subscribe`,
       { id: group.id },
       config
     );
@@ -79,7 +79,7 @@ const unsubscribe = async group => {
 
   try {
     const req = await axios.delete(
-      "http://localhost:5000/groups/subscription",
+      `${baseUrl}/groups/subscription`,
       {
         data: {
           id: group.group_id
@@ -104,7 +104,7 @@ const getUserSubscriptions = async () => {
 
   try {
     const req = await axios.get(
-      "http://localhost:5000/groups/subscriptions",
+      `${baseUrl}/groups/subscriptions`,
       config
     );
 
@@ -116,13 +116,11 @@ const getUserSubscriptions = async () => {
 
 const paginate = async page => {
   const req = await axios.get(`${baseUrl}/groups?page=${page}`);
-  console.log(req.data);
   return req.data;
 };
 
 const countPages = async () => {
   const req = await axios.get(`${baseUrl}/groups/count`);
-  console.log(req.data.pages);
   return req.data.pages;
 };
 

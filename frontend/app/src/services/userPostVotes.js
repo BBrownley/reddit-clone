@@ -1,4 +1,5 @@
 import axios from "axios";
+import baseUrl from "./utils/baseUrl";
 
 let storedToken = null;
 
@@ -13,7 +14,7 @@ const getUserPostVotes = async () => {
     }
   };
 
-  const req = await axios.get(`http://localhost:5000/posts/votes`, config);
+  const req = await axios.get(`${baseUrl}/posts/votes`, config);
 
   return req.data;
 };
@@ -24,7 +25,7 @@ const removePostVote = async id => {
       Authorization: storedToken
     }
   };
-  await axios.delete(`http://localhost:5000/postvotes/${id}`, config);
+  await axios.delete(`${baseUrl}/postvotes/${id}`, config);
 };
 
 const changePostVote = async (id, updatedValue) => {
@@ -34,7 +35,7 @@ const changePostVote = async (id, updatedValue) => {
     }
   };
 
-  axios.put(`http://localhost:5000/postvotes/${id}`, { updatedValue }, config);
+  axios.put(`${baseUrl}/postvotes/${id}`, { updatedValue }, config);
 };
 
 const userPostVotesService = {

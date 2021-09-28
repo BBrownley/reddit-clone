@@ -1,4 +1,5 @@
 import axios from "axios";
+import baseUrl from "./utils/baseUrl";
 
 const config = {
   headers: {
@@ -9,7 +10,7 @@ const config = {
 
 const register = async data => {
   try {
-    const req = await axios.post("http://localhost:5000/users", data, config);
+    const req = await axios.post(`${baseUrl}/users`, data, config);
     return req.data;
   } catch (error) {
     return { error: error.response.data.error };
@@ -18,11 +19,7 @@ const register = async data => {
 
 const login = async data => {
   try {
-    const req = await axios.post(
-      "http://localhost:5000/users/login",
-      data,
-      config
-    );
+    const req = await axios.post(`${baseUrl}/users/login`, data, config);
 
     return req.data;
   } catch (error) {
@@ -32,7 +29,7 @@ const login = async data => {
 
 const getUserById = async userId => {
   try {
-    const req = await axios.get(`http://localhost:5000/users/id/${userId}`);
+    const req = await axios.get(`${baseUrl}/users/id/${userId}`);
     return req.data;
   } catch (error) {
     return { error: error.response.data.error };
@@ -41,9 +38,7 @@ const getUserById = async userId => {
 
 const getUserByUsername = async username => {
   try {
-    const req = await axios.get(
-      `http://localhost:5000/users/username/${username}`
-    );
+    const req = await axios.get(`${baseUrl}/users/username/${username}`);
     return req.data;
   } catch (error) {
     return { error: error.response.data.error };

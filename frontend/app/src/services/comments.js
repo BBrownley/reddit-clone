@@ -1,4 +1,5 @@
 import axios from "axios";
+import baseUrl from "./utils/baseUrl";
 
 let storedToken = null;
 
@@ -7,12 +8,12 @@ const setToken = token => {
 };
 
 const getCommentsByPostId = async postId => {
-  const req = await axios.get(`http://localhost:5000/comments/post/${postId}`);
+  const req = await axios.get(`${baseUrl}/comments/post/${postId}`);
   return req.data;
 };
 
 const getCommentsByUserId = async userId => {
-  const req = await axios.get(`http://localhost:5000/comments/users/${userId}`);
+  const req = await axios.get(`${baseUrl}/comments/users/${userId}`);
   const data = req.data.map(comment => {
     return {
       ...comment,
@@ -23,13 +24,13 @@ const getCommentsByUserId = async userId => {
 };
 
 const getRootCommentsByPostId = async postId => {
-  const req = await axios.get(`http://localhost:5000/comments/post/${postId}`);
+  const req = await axios.get(`${baseUrl}/comments/post/${postId}`);
   return req.data.filter(comment => comment.parent_id === null);
 };
 
 const getCommentChildren = async commentId => {
   const req = await axios.get(
-    `http://localhost:5000/comments/${commentId}/children`
+    `${baseUrl}/comments/${commentId}/children`
   );
   return req.data;
 };
@@ -43,7 +44,7 @@ const editComment = (id, updatedContent) => {
     }
   };
 
-  axios.put(`http://localhost:5000/comments/${id}`, { updatedContent }, config);
+  axios.put(`${baseUrl}/comments/${id}`, { updatedContent }, config);
 };
 
 const add = async (user, comment, postId, parentId) => {
@@ -62,7 +63,7 @@ const add = async (user, comment, postId, parentId) => {
   };
 
   const req = await axios.post(
-    `http://localhost:5000/comments/`,
+    `${baseUrl}/comments/`,
     newComment,
     config
   );
@@ -78,11 +79,11 @@ const remove = id => {
     }
   };
 
-  axios.put(`http://localhost:5000/comments/${id}/remove`, null, config);
+  axios.put(`${baseUrl}/comments/${id}/remove`, null, config);
 };
 
 const getCommentScoreById = async id => {
-  const req = await axios.get(`http://localhost:5000/comments/${id}/score`);
+  const req = await axios.get(`${baseUrl}/comments/${id}/score`);
   return req.data.score;
 };
 

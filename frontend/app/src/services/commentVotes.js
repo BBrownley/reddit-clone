@@ -1,4 +1,5 @@
 import axios from "axios";
+import baseUrl from "./utils/baseUrl";
 
 let storedToken = null;
 const setToken = token => {
@@ -12,7 +13,7 @@ const getVotes = async () => {
     }
   };
 
-  const req = await axios.get("http://localhost:5000/commentvotes", config);
+  const req = await axios.get(`${baseUrl}/commentvotes`, config);
   return req.data;
 };
 
@@ -25,7 +26,7 @@ const vote = async (commentId, value) => {
   };
 
   const req = await axios.post(
-    `http://localhost:5000/commentvotes`,
+    `${baseUrl}/commentvotes`,
     {
       commentId,
       value
@@ -40,7 +41,7 @@ const removeVote = async commentId => {
   const headers = {
     Authorization: storedToken
   };
-  const req = await axios.delete("http://localhost:5000/commentvotes", {
+  const req = await axios.delete(`${baseUrl}/commentvotes`, {
     data: {
       commentId
     },
@@ -61,7 +62,7 @@ const changeVote = async (commentId, newValue) => {
     newValue
   };
   const req = await axios.put(
-    `http://localhost:5000/commentvotes`,
+    `${baseUrl}/commentvotes`,
     body,
     config
   );
