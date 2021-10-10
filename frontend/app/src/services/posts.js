@@ -21,7 +21,6 @@ const getAll = async () => {
 
 const getUserPosts = async userId => {
   const req = await axios.get(`${baseUrl}/posts/users/${userId}`, config);
-  console.log(req.data);
   return req.data;
 };
 

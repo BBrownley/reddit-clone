@@ -5,12 +5,13 @@ import { useHistory, Link } from "react-router-dom";
 import { setRedirectPath } from "../../reducers/redirectReducer";
 import { initializeBookmarks } from "../../reducers/userBookmarksReducer";
 
-import { Container } from "./Comments.elements";
+import { Container, StyledFormContainer } from "./Comments.elements";
 import { FormContainer, FormField } from "../shared/Form.elements";
 import ButtonGroup from "../shared/ButtonGroup.elements";
 import FollowButton from "../FollowButton/FollowButton";
 
 import commentsService from "../../services/comments";
+import postService from "../../services/posts";
 
 import Comment from "../Comment/Comment";
 import messageService from "../../services/messages";
@@ -21,6 +22,7 @@ export default function Comments({ postId, submitterId, postTitle }) {
   const history = useHistory();
 
   const [comments, setComments] = useState([]);
+  const [commentCount, setCommentCount] = useState(null);
   const [newComment, setNewComment] = useState("");
   const [newCommentFormError, setNewCommentFormError] = useState(null);
 
@@ -31,7 +33,13 @@ export default function Comments({ postId, submitterId, postTitle }) {
       setComments(comments);
     };
 
+    const getCommentCount = async () => {
+      const post = await postService.getPostById(postId);
+      setCommentCount(post.total_comments);
+    };
+
     fetchComments();
+    getCommentCount();
   }, []);
 
   useEffect(() => {
@@ -65,6 +73,8 @@ export default function Comments({ postId, submitterId, postTitle }) {
       setNewComment("");
       sendNotifications(user, content);
     }
+
+    setCommentCount(prevState => prevState + 1);
   };
 
   // Will send a notification to the post author and those who are following the post
@@ -104,7 +114,7 @@ export default function Comments({ postId, submitterId, postTitle }) {
           );
         } else {
           return (
-            <FormContainer className="new-thread">
+            <StyledFormContainer className="new-thread">
               <FormField>
                 <textarea
                   value={newComment}
@@ -122,7 +132,7 @@ export default function Comments({ postId, submitterId, postTitle }) {
                   Add comment
                 </li>
               </ButtonGroup>
-            </FormContainer>
+            </StyledFormContainer>
           );
         }
       })()}
@@ -130,7 +140,7 @@ export default function Comments({ postId, submitterId, postTitle }) {
         <h2>Be the first one to comment!</h2>
       ) : (
         <>
-          <h2>Comments:</h2>
+          <h2>Comments ({commentCount}):</h2>
           {comments
             .sort((a, b) => {
               return a.parent_id > b.parent_id ? -1 : 1;

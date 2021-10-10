@@ -55,7 +55,10 @@ const GroupActions = ({ group }) => {
 
   return (
     <Container singleGroup={!group}>
-      <button onClick={handleCreatePostButton} className="create-post-button">
+      <button
+        onClick={handleCreatePostButton}
+        className="create-post-button primary"
+      >
         <FontAwesome name="paper-plane"></FontAwesome> Submit a new post
       </button>
 
@@ -64,12 +67,12 @@ const GroupActions = ({ group }) => {
         (userSubscribedGroups.find(userGroup => {
           return userGroup.group_id === group.group_id;
         }) ? (
-          <button onClick={handleUnsubscribe}>
+          <button onClick={handleUnsubscribe} className="primary">
             <FontAwesome name="check"></FontAwesome>
             {" SUBSCRIBED"}
           </button>
         ) : (
-          <button onClick={handleSubscribe}>
+          <button onClick={handleSubscribe} className="primary">
             <FontAwesome name="bell"></FontAwesome>
             {" Subscribe"}
           </button>

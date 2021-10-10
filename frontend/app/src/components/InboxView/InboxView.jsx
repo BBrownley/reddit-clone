@@ -4,6 +4,8 @@ import { useHistory } from "react-router-dom";
 
 import { setUser } from "../../reducers/userReducer";
 
+import LoadingMessage from "../LoadingMessage/LoadingMessage";
+
 import styled from "styled-components";
 import moment from "moment";
 
@@ -37,6 +39,7 @@ export default function InboxView() {
   const [paginationOptions, setPaginationOptions] = useState({
     type: "UNREAD"
   });
+  const [loading, setLoading] = useState(true);
 
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
@@ -46,12 +49,15 @@ export default function InboxView() {
   useEffect(() => {
     setCurrentPage(1);
     setPageInput(1);
+    setLoading(false);
   }, [paginationOptions.type]);
 
   useEffect(() => {
     // Get the max # of pages needed on load, filter change
+
     messageService.countPages(paginationOptions).then(result => {
       setMaxPages(result);
+      setLoading(false);
     });
   }, [user, paginationOptions.type]);
 
@@ -60,11 +66,11 @@ export default function InboxView() {
 
     messageService.paginate(paginationOptions, currentPage).then(data => {
       setMessagesToDisplay(data);
+      setLoading(false);
     });
   }, [currentPage, paginationOptions.type]);
 
   const openMessage = message => {
-    console.log(message);
     history.push({
       pathname: "/inbox/message",
       state: {
@@ -125,7 +131,8 @@ export default function InboxView() {
           </h2>
         </>
       )}
-      {user.userId && (
+      {user.userId && loading && <LoadingMessage />}
+      {user.userId && !loading && (
         <>
           <h1>Messages</h1>
           <ButtonGroup>
@@ -178,9 +185,10 @@ export default function InboxView() {
           {messagesToDisplay.length === 0 && <h3>There's nothing here.</h3>}
           {messagesToDisplay.map((message, index) => (
             <Message
-              className={
-                [parseInt(message.has_read) === 1 ? ".message-read" : "", "message"]
-              }
+              className={[
+                parseInt(message.has_read) === 1 ? ".message-read" : "",
+                "message"
+              ]}
               onClick={() => openMessage(message)}
               key={index}
             >

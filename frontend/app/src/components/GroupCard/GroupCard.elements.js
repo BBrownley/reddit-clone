@@ -1,4 +1,26 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import { PillButton } from "../shared/PillButton.elements";
+
+export const StyledPillButton = styled(PillButton)`
+  height: 2rem;
+  font-family: inherit;
+  ${props => {
+    switch (props.color) {
+      /* unsubscribed state */
+      case "blue":
+        return css`
+          background: ${props => props.theme.cornflowerBlue};
+        `;
+      /* subscribed state */
+      default:
+        return css`
+          background: white;
+          color: ${props => props.theme.cornflowerBlue};
+          font-weight: bold;
+        `;
+    }
+  }}
+`;
 
 export const Card = styled.div`
   border: 1px solid #eee;

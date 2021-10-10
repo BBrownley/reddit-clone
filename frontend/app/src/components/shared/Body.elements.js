@@ -6,8 +6,13 @@ export const Wrapper = styled.div`
   background-color: white;
   min-height: 100vh;
   padding: 2rem;
+  overflow: hidden;
   @media (max-width: 1000px) {
     padding-top: 6rem;
+  }
+
+  @media (max-width: 600px) {
+    padding: 6rem 0.5rem 2rem 0.5rem;
   }
 `;
 

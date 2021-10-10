@@ -57,7 +57,7 @@ select:hover {
   cursor: pointer;
 }
 
-button {
+button.primary {
   padding: 10px;
   font-size: 1.25rem;
   font-weight: bold;
@@ -74,7 +74,7 @@ button {
   transition: 0.2s background-color ease-out;
 }
 
-button:hover {
+button.primary:hover {
   background-color: #5c95f6;
   cursor: pointer;
 }
@@ -85,7 +85,7 @@ button:disabled {
   color: #ddd;
 }
 
-button:focus {
+button.primary:focus {
   background-color: #5c95f6;
 }
 
@@ -127,4 +127,8 @@ input {
 .break {
   flex-basis: 100%;
   height: 0;
+}
+
+.mt-1 {
+  margin-top: 1rem;
 }

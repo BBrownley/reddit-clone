@@ -9,7 +9,7 @@ import {
 } from "../../reducers/userReducer";
 
 import {
-  StyledButton,
+  StyledPillButton,
   InvisText,
   StyledContainer
 } from "./FollowButton.elements";
@@ -34,7 +34,10 @@ export default function FollowButton({ followers, postId }) {
       {(() => {
         if (userPostFollows !== undefined && userPostFollows.includes(postId)) {
           return (
-            <StyledButton color={"pink-secondary"} onClick={() => unfollow()}>
+            <StyledPillButton
+              color={"pink-secondary"}
+              onClick={() => unfollow()}
+            >
               <InvisText>
                 <FontAwesome name="heart" className="fa-heart" /> Followed
               </InvisText>
@@ -44,11 +47,11 @@ export default function FollowButton({ followers, postId }) {
                 </span>
                 <span>Unfollow</span>
               </StyledContainer>
-            </StyledButton>
+            </StyledPillButton>
           );
         } else {
           return (
-            <StyledButton color={"pink-primary"} onClick={() => follow()}>
+            <StyledPillButton color={"pink-primary"} onClick={() => follow()}>
               <InvisText>{followers} followers</InvisText>
               <StyledContainer>
                 <span>{followers} followers</span>
@@ -56,7 +59,7 @@ export default function FollowButton({ followers, postId }) {
                   <FontAwesome name="heart" className="fa-heart" /> Follow
                 </span>
               </StyledContainer>
-            </StyledButton>
+            </StyledPillButton>
           );
         }
       })()}

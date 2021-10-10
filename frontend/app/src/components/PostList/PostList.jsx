@@ -66,8 +66,8 @@ const PostList = ({ sortBy, searchBy, searchTerm, posts }) => {
               .includes(searchTerm.toLowerCase());
           }
         })
-        .map(post => (
-          <Post post={post} key={post.postID} />
+        .map((post, index) => (
+          <Post post={post} key={index} />
         ))}
     </Container>
   );

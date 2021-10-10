@@ -8,7 +8,7 @@ export const Post = styled.div`
   padding-left: 5px;
   line-height: 1.5;
   display: flex;
-  
+
   width: 100%;
   padding-bottom: 1rem;
   margin-bottom: 1rem;
@@ -165,10 +165,30 @@ export const PostOptions = styled.div`
   font-size: 0.875rem;
   color: #777;
   display: flex;
+
   align-items: center;
   justify-content: space-between;
   div:nth-child(1) {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
+  }
+
+  .post-actions {
+    display: flex;
+    flex-wrap: wrap;
+    font-weight: bold;
+    font-size: 0.875rem;
+    color: ${props => props.theme.cornflowerBlue};
+    margin-left: -0.5rem;
+
+    > * {
+      margin-left: 1rem;
+    }
+
+    &:hover {
+      cursor: pointer;
+      text-decoration: bold;
+    }
   }
 `;

@@ -8,6 +8,7 @@ import commentService from "../../services/comments";
 import bookmarkService from "../../services/bookmarks";
 import userHistoryService from "../../services/userHistory";
 
+import LoadingMessage from "../LoadingMessage/LoadingMessage";
 import NotFound from "../NotFound/NotFound";
 
 import NavLink from "../shared/NavLink.elements.js";
@@ -61,6 +62,7 @@ export default function UserView() {
   const history = useHistory();
 
   const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(true);
 
   const loggedUserId = useSelector(state => state.user.userId);
   const [matchesLoggedUser, setMatchesLoggedUser] = useState(false);
@@ -89,12 +91,14 @@ export default function UserView() {
 
     userHistoryService.paginate(paginationOptions, currentPage).then(data => {
       setHistoryToDisplay(data);
+      setLoading(false);
     });
   }, [currentPage, paginationOptions.type]);
 
   useEffect(() => {
     userService.getUserById(match.params.id).then(data => {
       setUser(data);
+      setLoading(false);
     });
 
     setMatchesLoggedUser(loggedUserId === Number(match.params.id));
@@ -146,8 +150,9 @@ export default function UserView() {
 
   return (
     <div>
-      {!user && <NotFound />}
-      {user && (
+      {loading && <LoadingMessage />}
+      {!user && !loading && <NotFound />}
+      {user && !loading && (
         <Container>
           <ProfileInfo>
             <h2>{user.username}</h2>
@@ -155,7 +160,7 @@ export default function UserView() {
             {(() => {
               if (loggedUserId !== null && matchesLoggedUser === false) {
                 return (
-                  <button onClick={handleSendMessageButton} id="send-message">
+                  <button onClick={handleSendMessageButton} id="send-message" className="primary mt-1">
                     Send message
                   </button>
                 );

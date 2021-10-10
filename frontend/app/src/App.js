@@ -51,7 +51,6 @@ const App = () => {
         dispatch(initializeFollows());
         dispatch(initializePostVotes());
         dispatch(initializeSubscriptions());
-        console.log(loggedUser);
         dispatch(initializeUserPosts(loggedUser.userId));
       }
 
@@ -60,12 +59,6 @@ const App = () => {
 
     initialize();
   }, []);
-
-  // useEffect(() => {
-  //   dispatch(initializePostVotes());
-  //   dispatch(initializeSubscriptions());
-  //   dispatch(initializeUserPosts(user.userId));
-  // }, [user]);
 
   return (
     <Router>

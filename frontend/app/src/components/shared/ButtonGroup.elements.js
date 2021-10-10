@@ -2,12 +2,13 @@ import styled from "styled-components";
 
 const ButtonGroup = styled.ul`
   display: flex;
-  margin-left: -.5rem;
+  flex-wrap: wrap;
+  margin-left: -0.5rem;
   /* justify-content: center; */
   li {
     font-weight: bold;
-    margin: .5rem;
-    padding: .5rem;
+    margin: 0.5rem;
+    padding: 0.5rem;
     border: 1px solid #eee;
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */

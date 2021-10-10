@@ -11,5 +11,6 @@ export const Container = styled.li`
   &.active {
     background-color: ${props => props.theme.cornflowerBlue};
     color: white;
+    padding: 0 0.5rem;
   }
 `;

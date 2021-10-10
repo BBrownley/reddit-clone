@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Container, GroupListHeader, Wrapper } from "./GroupList.elements";
 
 import GroupCard from "../GroupCard/GroupCard";
+import LoadingMessage from "../LoadingMessage/LoadingMessage";
 
 import { setRedirectPath } from "../../reducers/redirectReducer";
 
@@ -38,6 +39,7 @@ const GroupList = () => {
 
   const [groupsToDisplay, setGroupsToDisplay] = useState([]);
   const [maxPages, setMaxPages] = useState(null); // Determined by DB query
+  const [loading, setLoading] = useState(true);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageInput, setPageInput] = useState(currentPage);
@@ -52,14 +54,18 @@ const GroupList = () => {
 
     groupService.countPages().then(result => {
       setMaxPages(result);
+      setLoading(false);
     });
   }, []);
 
   useEffect(() => {
     // When the page changes, fetch the appropriate data
 
+    setLoading(true);
+
     groupService.paginate(currentPage).then(data => {
       setGroupsToDisplay(data);
+      setLoading(false);
     });
   }, [currentPage]);
 
@@ -130,27 +136,32 @@ const GroupList = () => {
 
   return (
     <Wrapper>
-      <GroupListHeader>
-        <button
-          onClick={handleCreateGroupButton}
-          className="create-group-button"
-        >
-          {" "}
-          <FontAwesome name="users" className="fa-users" />
-          Create your own group
-        </button>
-      </GroupListHeader>
-      <Container>
-        {groupsToDisplay.length !== 0
-          ? filterGroups(groupsToDisplay).map((group, index) => {
-              return <GroupCard group={group} key={index} />;
-            })
-          : ""}
-      </Container>
-      {groupsToDisplay.length === 0 && (
+      {loading && <LoadingMessage />}
+      {!loading && (
+        <GroupListHeader>
+          <button
+            onClick={handleCreateGroupButton}
+            className="create-group-button primary"
+          >
+            {" "}
+            <FontAwesome name="users" className="fa-users" />
+            Create your own group
+          </button>
+        </GroupListHeader>
+      )}
+      {!loading && (
+        <Container>
+          {groupsToDisplay.length !== 0
+            ? filterGroups(groupsToDisplay).map((group, index) => {
+                return <GroupCard group={group} key={index} />;
+              })
+            : ""}
+        </Container>
+      )}
+      {groupsToDisplay.length === 0 && !loading && (
         <h3>Be the first one to create a group!</h3>
       )}
-      {groupsToDisplay.length !== 0 && (
+      {groupsToDisplay.length !== 0 && !loading && (
         <Pagination>
           {currentPage > 1 && (
             <button

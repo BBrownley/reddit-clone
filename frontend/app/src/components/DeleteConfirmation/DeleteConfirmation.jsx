@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Button } from "../shared/Button.elements";
+import { PillButton } from "../shared/PillButton.elements";
 
 import { Container } from "./DeleteConfirmation.elements";
 
@@ -9,8 +9,8 @@ export default function DeleteConfirmation({confirmDelete, cancel}) {
     <Container>
       <h3>Are you sure?</h3>
       <div className="modal-buttons">
-        <Button color="white" onClick={cancel}>Cancel</Button>
-        <Button color="blue" onClick={confirmDelete}>Delete</Button>
+        <PillButton color="white" onClick={cancel}>Cancel</PillButton>
+        <PillButton color="blue" onClick={confirmDelete}>Delete</PillButton>
       </div>
     </Container>
   );

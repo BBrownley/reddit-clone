@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import LoadingMessage from "../LoadingMessage/LoadingMessage";
 import NotFound from "../NotFound/NotFound";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -17,27 +18,37 @@ const PostView = () => {
   const user = useSelector(state => state.user);
 
   const match = useRouteMatch("/groups/:group/:id");
+
+  const [loading, setLoading] = useState(true);
   const [post, setPost] = useState(null);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const init = async () => {
+    const initUser = async () => {
       await dispatch(initializeBookmarks(match.params.id));
       await dispatch(initializeCommentVotes());
     };
-    if (user.token !== null) init();
+    if (user.token !== null) initUser();
 
     postService.getPostById(match.params.id).then(data => {
-      setPost(data);
+      // data.group_name, data.post_id must match route params otherwise route is invalid
+
+      if (
+        data.group_name.toLowerCase() === match.params.group.toLowerCase() &&
+        Number(data.post_id) === Number(match.params.id)
+      ) {
+        setPost(data);
+      }
+
+      setLoading(false);
     });
   }, [dispatch]);
 
-  console.log(post);
-
   return (
     <>
-      {!post && <NotFound />}
+      {loading && <LoadingMessage />}
+      {!post && !loading && <NotFound />}
       {post && (
         <div>
           <Post post={post} key={post.postID} expand={true} viewMode={true} />

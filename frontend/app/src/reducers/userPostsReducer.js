@@ -13,16 +13,24 @@ export const initializeUserPosts = userId => {
   };
 };
 
+export const addUserPost = post => {
+  return async dispatch => {
+    dispatch({ type: "ADD_USER_POST", userPostId: post.post_id });
+  };
+};
+
 export const clearUserPosts = () => {
   return async dispatch => {
-    dispatch({type: "CLEAR_USER_POSTS"})
-  }
-}
+    dispatch({ type: "CLEAR_USER_POSTS" });
+  };
+};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "INITIALIZE_USER_POSTS":
       return action.posts;
+    case "ADD_USER_POST":
+      return [...state, action.userPostId];
     case "CLEAR_USER_POSTS":
       return initialState;
     default:

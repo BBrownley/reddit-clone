@@ -3,9 +3,18 @@ import { useSelector, useDispatch } from "react-redux";
 
 import groupService from "../../services/groups";
 
-import { CardWrapper, Card, GroupBlurb } from "./GroupCard.elements";
+import {
+  CardWrapper,
+  Card,
+  GroupBlurb,
+  StyledPillButton
+} from "./GroupCard.elements";
 import NavLink from "../shared/NavLink.elements";
-import { Button, InvisText, Container } from "../shared/Button.elements";
+import {
+  PillButton,
+  InvisText,
+  Container
+} from "../shared/PillButton.elements";
 
 import {
   subscribeToGroup,
@@ -55,23 +64,27 @@ export default function GroupCard({ group }) {
             userSubscribedGroups.find(group => group.group_name === group_name)
           ) {
             return (
-              <Button size={"fill"} onClick={handleUnsubscribe}>
+              <StyledPillButton size={"fill"} onClick={handleUnsubscribe}>
                 <InvisText>Subscribed</InvisText>
                 <Container>
                   <span>Subscribed</span>
                   <span>Unsubscribe</span>
                 </Container>
-              </Button>
+              </StyledPillButton>
             );
           } else {
             return (
-              <Button color={"blue"} size={"fill"} onClick={handleSubscribe}>
+              <StyledPillButton
+                color={"blue"}
+                size={"fill"}
+                onClick={handleSubscribe}
+              >
                 <InvisText>{groupSubs} subscribers</InvisText>
                 <Container>
                   <span>{groupSubs} subscribers</span>
                   <span>Subscribe</span>
                 </Container>
-              </Button>
+              </StyledPillButton>
             );
           }
         })()}

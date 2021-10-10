@@ -22,51 +22,59 @@ export const Container = styled.div`
 
 export const MainContent = styled.div`
   padding-top: 5px;
-  /* padding-left: 50px; */
   padding-right: 1rem;
   line-height: 1.75;
-
   display: inline-block;
-
   left: 0;
   width: 100%;
   a {
     color: blue;
     margin-right: 10px;
   }
+  .comment-user {
+    color: ${props => props.theme.cornflowerBlue};
+    font-weight: bold;
+  }
   .comment {
-    display: inline-block;
+    display: block;
     min-height: 50px;
   }
-  .comment-options {
+  .comment-actions {
     display: flex;
-    align-items: flex-start;
-    margin-top: -0.5rem;
-    margin-right: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    color: ${props => props.theme.cornflowerBlue};
     > div:first-of-type {
       margin-right: 1rem;
     }
-    .button-group {
-      margin-top: -0.5rem;
+    li {
+      margin-left: 1rem;
+
+      font-weight: bold;
+      font-size: 0.875rem;
+      &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
     }
+    .reply-del-edit {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+
+  @media (max-width: 450px) {
+    /* margin-top: 1.5rem; */
   }
 `;
 
 export const CommentVotes = styled.span`
-  /* background-color: cyan; */
-  /* margin-left: -5px;
-  margin-right: 5px;
-  margin-top: 1rem;
-  span {
-    margin-left: .1875rem;
-  } */
-
   display: flex;
-  flex-direction: column;
   align-items: center;
 
   .comment-score {
-    margin: 0.5rem 0;
+    margin: 0 0.5rem;
+    color: black;
   }
 `;
 
@@ -88,11 +96,15 @@ export const CommentVoteButton = styled(FontAwesome)`
 
 export const CommentAge = styled.div`
   text-align: right;
-  /* background-color: green; */
   display: inline-block;
   position: absolute;
   right: 10px;
   top: 10px;
+
+  @media (max-width: 400px) {
+    font-size: 0.75rem;
+    top: 0.5rem;
+  }
 `;
 
 export const ReplyForm = styled.div`

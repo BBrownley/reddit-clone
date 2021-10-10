@@ -122,7 +122,7 @@ export const addPostToUser = post => {
   return async dispatch => {
     dispatch({
       type: "ADD_POST",
-      postId: post.postID
+      postId: post.post_id
     });
   };
 };

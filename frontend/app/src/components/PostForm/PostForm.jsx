@@ -3,16 +3,13 @@ import React, { useState, useEffect } from "react";
 import groupService from "../../services/groups";
 import postService from "../../services/posts";
 
-import Select from "react-select";
-
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
-import { createPost } from "../../reducers/postsReducer";
 import { initializeVotes as initializePostVotes } from "../../reducers/userPostVotesReducer";
 import { initializePosts } from "../../reducers/postsReducer";
 import { removeNotification } from "../../reducers/notificationReducer";
-import { addPostToUser } from "../../reducers/userReducer";
-import { addVote } from "../../reducers/userPostVotesReducer";
+import { addUserPost } from "../../reducers/userPostsReducer";
+import { timedToast } from "../../reducers/toastReducer";
 
 import FormWarning from "../FormWarning/FormWarning";
 
@@ -66,20 +63,18 @@ const PostForm = () => {
 
     const newPost = await postService.createPost(data);
 
-    console.log(newPost);
-
     if (newPost) {
-      // dispatch(addVote(newPost.post_id, 1));
       dispatch(initializePostVotes());
       dispatch(initializePosts());
-      dispatch(addPostToUser(newPost));
+      dispatch(addUserPost(newPost));
       history.push(`/groups/${groupName}/${newPost.post_id}`);
 
       // Update localStorage to reflect them adding a new post
       let user = JSON.parse(localStorage.getItem("loggedUser"));
 
-      user = { ...user, userPosts: [...user.userPosts, newPost.postID] };
+      user = { ...user, userPosts: [...user.userPosts, newPost.post_id] };
       localStorage.setItem("loggedUser", JSON.stringify(user));
+      dispatch(timedToast("Post created"));
     }
   };
 

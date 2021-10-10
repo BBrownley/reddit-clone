@@ -5,7 +5,7 @@ const scrollUp = keyframes`
 	100% { transform: translateY(-50%); }
 `;
 
-export const Button = styled.div`
+export const PillButton = styled.button`
   display: inline-block;
   border-radius: 3px;
   border: 1px solid ${props => props.theme.cornflowerBlue};
@@ -13,8 +13,8 @@ export const Button = styled.div`
   transition: 0.2s all ease-out;
   position: relative;
   overflow: hidden;
-  /* width: 150px; */
   user-select: none;
+  background: white;
 
   ${props => {
     switch (props.color) {
@@ -22,13 +22,13 @@ export const Button = styled.div`
         return `
           background-color: ${props.theme.cornflowerBlue};
           color: white;
-          border: 1px solid ${props.theme.cornflowerBlue}
+          border: 1px solid ${props.theme.cornflowerBlue};
         `;
       case "white":
         return `
           background-color: none;
           color: black;
-          border: 1px solid ${props.theme.cornflowerBlue}
+          border: 1px solid ${props.theme.cornflowerBlue};
         `;
       case "pink-primary":
         return `
@@ -41,7 +41,7 @@ export const Button = styled.div`
         `;
     }
   }}
-
+/* 
   ${props => {
     switch (props.size) {
       case "fill":
@@ -49,7 +49,7 @@ export const Button = styled.div`
       default:
         return `width: 150px;`;
     }
-  }}
+  }} */
 
   &:hover {
     cursor: pointer;

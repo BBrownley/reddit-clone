@@ -4,6 +4,7 @@ export const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 1rem;
+  margin-bottom: 1rem;
 
   @media (max-width: 1075px) {
     grid-template-columns: 1fr 1fr 1fr;
@@ -27,7 +28,7 @@ export const GroupListHeader = styled.div`
     margin-right: 1rem;
   }
   .create-group-button {
-    padding: .625rem 2rem;
+    padding: 0.625rem 2rem;
   }
   @media (max-width: 800px) {
     .create-group-button {

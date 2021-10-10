@@ -1,9 +1,30 @@
 import styled from "styled-components";
+import { PillButton } from "../shared/PillButton.elements";
+
+export const StyledPillButton = styled(PillButton)`
+  background: white;
+  width: auto;
+  padding: 0.25rem 1rem;
+
+  &.send-btn {
+    background: ${props => props.theme.cornflowerBlue};
+    color: white;
+    font-weight: bold;
+  }
+`;
 
 export const Message = styled.div`
   border: 2px solid #333;
   border-radius: 5px;
   padding: 15px;
+
+  .message-actions,
+  .reply-options {
+    display: flex;
+    > * {
+      margin-right: 1rem;
+    }
+  }
 `;
 
 export const Sender = styled.span`
@@ -41,6 +62,12 @@ export const ReplyForm = styled.div`
     margin-top: 1rem;
     div {
       margin-right: 1rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    textarea {
+      width: 100%;
     }
   }
 `;

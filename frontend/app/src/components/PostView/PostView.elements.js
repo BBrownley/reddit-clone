@@ -66,23 +66,23 @@ export const VoteContainer = styled.div`
   }
 `;
 
-export const PostOptions = styled.div`
-  color: #777;
-  margin-top: 10px;
-  & > span {
-    margin-right: 10px;
-    padding: 4px;
-    border-radius: 5px;
-  }
-  .favorite-active {
-    background-color: #eee;
-    color: #333;
-    font-weight: bold;
-    .fa-heart {
-      color: #fc74a4;
-    }
-  }
-`;
+// export const PostOptions = styled.div`
+//   color: #777;
+//   margin-top: 10px;
+//   & > span {
+//     margin-right: 10px;
+//     padding: 4px;
+//     border-radius: 5px;
+//   }
+//   .favorite-active {
+//     background-color: #eee;
+//     color: #333;
+//     font-weight: bold;
+//     .fa-heart {
+//       color: #fc74a4;
+//     }
+//   }
+// `;
 
 export const FollowButton = styled.span`
   border: 1px solid #fc74a4;

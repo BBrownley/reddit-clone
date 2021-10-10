@@ -7,6 +7,8 @@ import {
   removeNotification
 } from "../../reducers/notificationReducer";
 
+import { timedToast } from "../../reducers/toastReducer";
+
 import FormWarning from "../FormWarning/FormWarning";
 
 import { FormContainer, FormHeader, FormField } from "../shared/Form.elements";
@@ -35,6 +37,8 @@ export default function MessageForm() {
     };
     messageService.send(message);
     history.goBack();
+
+    dispatch(timedToast("Message sent"));
   };
 
   const validateForm = () => {
@@ -84,7 +88,7 @@ export default function MessageForm() {
           ></textarea>
         </FormField>
       </form>
-      <button type="submit" form="message-form">
+      <button type="submit" form="message-form" className="primary">
         Send
       </button>
       <FormWarning />

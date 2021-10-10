@@ -29,6 +29,7 @@ import {
 } from "./Comment.elements";
 
 import ButtonGroup from "../shared/ButtonGroup.elements";
+import { PillButton } from "../shared/PillButton.elements";
 
 export default function Comment(props) {
   const level = props.level || 1;
@@ -165,6 +166,7 @@ export default function Comment(props) {
 
   const handleRemoveComment = async () => {
     setRemoved(true);
+    setEditing(false);
     commentsService.remove(props.comment.comment_id);
   };
 
@@ -202,23 +204,15 @@ export default function Comment(props) {
 
   return (
     <Container child={props.child} key={props.comment.comment_id}>
-      {/* <div>
-        <img
-          src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
-          width="35"
-          height="35"
-          alt="user profile image"
-        ></img>
-      </div> */}
       <MainContent>
-        <Link to={`/users/${props.comment.user_id}`} className="disp-blk">
+        <Link to={`/users/${props.comment.user_id}`} className="comment-user">
           {props.comment.username}
         </Link>
         <span className="comment">
           {removed ? "Comment removed" : commentBody}
         </span>
         {!removed && (
-          <div className="comment-options">
+          <div className="comment-actions">
             <div>
               <CommentVotes>
                 <CommentVoteButton
@@ -237,7 +231,7 @@ export default function Comment(props) {
 
             {!removed && currentUser.userId !== null && (
               <>
-                <ButtonGroup className="button-group">
+                <ul className="reply-del-edit">
                   <div>
                     {replying === false && (
                       <li onClick={() => handleSetReplying()}>
@@ -267,9 +261,7 @@ export default function Comment(props) {
                       </div>
                     </>
                   )}
-                </ButtonGroup>
-
-                <div className="break"></div>
+                </ul>
               </>
             )}
           </div>
@@ -283,8 +275,12 @@ export default function Comment(props) {
             />
             <div className="form-bottom">
               <div>
-                <button onClick={() => handleReplyComment()}>Send</button>
-                <button onClick={() => setReplying(false)}>Cancel</button>
+                <PillButton onClick={() => handleReplyComment()} color="blue">
+                  Send
+                </PillButton>
+                <PillButton onClick={() => setReplying(false)}>
+                  Cancel
+                </PillButton>
               </div>
               <span className="warning">{commentFormWarning}</span>
             </div>
@@ -299,10 +295,12 @@ export default function Comment(props) {
             />
             <div className="form-bottom">
               <div>
-                <button onClick={() => handleEditComment()}>
+                <PillButton onClick={() => handleEditComment()} color="blue">
                   Edit comment
-                </button>
-                <button onClick={() => setEditing(false)}>Cancel</button>
+                </PillButton>
+                <PillButton onClick={() => setEditing(false)}>
+                  Cancel
+                </PillButton>
               </div>
               <span className="warning">{commentFormWarning}</span>
             </div>

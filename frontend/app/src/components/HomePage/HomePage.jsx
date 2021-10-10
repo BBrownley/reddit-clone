@@ -9,6 +9,7 @@ import Link from "../shared/NavLink.elements";
 import FontAwesome from "react-fontawesome";
 
 import PostList from "../PostList/PostList";
+import LoadingMessage from "../LoadingMessage/LoadingMessage";
 
 import postService from "../../services/posts";
 
@@ -114,6 +115,7 @@ export default function HomePage() {
             up to date with the content you love ❤️
           </h2>
         )}
+        {loading && <LoadingMessage />}
         {!loading && (
           <PostList searchBy="title" searchTerm="" posts={postsToDisplay} />
         )}
@@ -128,11 +130,17 @@ export default function HomePage() {
               </button>
             )}
 
-            <span>
-              Page{" "}
-              <input type="text" value={pageInput} onChange={handlePageInput} />{" "}
-              of {maxPages}
-            </span>
+            {!loading && (
+              <span>
+                Page{" "}
+                <input
+                  type="text"
+                  value={pageInput}
+                  onChange={handlePageInput}
+                />{" "}
+                of {maxPages}
+              </span>
+            )}
             {currentPage < maxPages && (
               <button
                 className="pagination-button next"

@@ -21,10 +21,7 @@ const getAll = async () => {
 
 const getGroupByName = async groupName => {
   try {
-    const req = await axios.get(
-      `${baseUrl}/groups/${groupName}`,
-      config
-    );
+    const req = await axios.get(`${baseUrl}/groups/${groupName}`, config);
     return req.data;
   } catch (exception) {
     return false;
@@ -39,11 +36,7 @@ const create = async groupData => {
   };
 
   try {
-    const req = await axios.post(
-      `${baseUrl}/groups/create`,
-      groupData,
-      config
-    );
+    const req = await axios.post(`${baseUrl}/groups/create`, groupData, config);
 
     return req.data;
   } catch (error) {
@@ -63,7 +56,7 @@ const subscribeToGroup = async group => {
   try {
     const req = await axios.post(
       `${baseUrl}/groups/subscribe`,
-      { id: group.id },
+      { id: group.group_id },
       config
     );
     return req.data;
@@ -78,15 +71,12 @@ const unsubscribe = async group => {
   };
 
   try {
-    const req = await axios.delete(
-      `${baseUrl}/groups/subscription`,
-      {
-        data: {
-          id: group.group_id
-        },
-        headers
-      }
-    );
+    const req = await axios.delete(`${baseUrl}/groups/subscription`, {
+      data: {
+        id: group.group_id
+      },
+      headers
+    });
     return req.data;
   } catch (error) {
     return { error: error.response.data.error };
@@ -103,10 +93,7 @@ const getUserSubscriptions = async () => {
   };
 
   try {
-    const req = await axios.get(
-      `${baseUrl}/groups/subscriptions`,
-      config
-    );
+    const req = await axios.get(`${baseUrl}/groups/subscriptions`, config);
 
     return req.data;
   } catch (error) {
