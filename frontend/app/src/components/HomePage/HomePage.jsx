@@ -123,7 +123,7 @@ export default function HomePage() {
           <>
             {currentPage > 1 && (
               <button
-                className="pagination-button previous"
+                className="primary pagination-button previous"
                 onClick={handlePrevButton}
               >
                 Previous
@@ -143,7 +143,7 @@ export default function HomePage() {
             )}
             {currentPage < maxPages && (
               <button
-                className="pagination-button next"
+                className="primary pagination-button next"
                 onClick={handleNextButton}
               >
                 Next

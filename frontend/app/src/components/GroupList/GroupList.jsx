@@ -165,7 +165,7 @@ const GroupList = () => {
         <Pagination>
           {currentPage > 1 && (
             <button
-              className="pagination-button previous"
+              className="primary pagination-button previous"
               onClick={handlePrevButton}
             >
               Previous
@@ -179,7 +179,7 @@ const GroupList = () => {
           </span>
           {currentPage < maxPages && (
             <button
-              className="pagination-button next"
+              className="primary pagination-button next"
               onClick={handleNextButton}
             >
               Next

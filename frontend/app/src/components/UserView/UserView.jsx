@@ -268,7 +268,7 @@ export default function UserView() {
             <Pagination>
               {currentPage > 1 && (
                 <button
-                  className="pagination-button previous"
+                  className="primary pagination-button previous"
                   onClick={handlePrevButton}
                 >
                   Previous
@@ -286,7 +286,7 @@ export default function UserView() {
               </span>
               {currentPage < maxPages && (
                 <button
-                  className="pagination-button next"
+                  className="primary pagination-button next"
                   onClick={handleNextButton}
                 >
                   Next

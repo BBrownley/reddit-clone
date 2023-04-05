@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { Body, Wrapper } from "./components/shared/Body.elements";
 
 import { initializePosts } from "./reducers/postsReducer";
 import { initializeUserPosts } from "./reducers/userPostsReducer";
-import { initializeGroups } from "./reducers/groupsReducer";
 import { initializeVotes as initializePostVotes } from "./reducers/userPostVotesReducer";
 import { setUser, initializeFollows } from "./reducers/userReducer";
 import { initializeSubscriptions } from "./reducers/groupSubscribesReducer";
@@ -28,7 +27,6 @@ import Toast from "./components/Toast/Toast";
 import SingleGroupView from "./components/SingleGroupView/SingleGroupView";
 import Sandbox from "./components/Sandbox";
 
-import redditto from "./redditto.png";
 import HomePage from "./components/HomePage/HomePage";
 
 const App = () => {
@@ -36,15 +34,11 @@ const App = () => {
 
   const [loading, setLoading] = useState(true);
 
-  const user = useSelector(state => {
-    return state.user;
-  });
-
   const toast = useSelector(state => state.toast);
 
   useEffect(() => {
     const initialize = async () => {
-      const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+      const loggedUser = JSON.parse(localStorage.getItem("loggedUser")) || null;
       if (loggedUser) {
         dispatch(setUser(loggedUser));
         dispatch(initializePosts());

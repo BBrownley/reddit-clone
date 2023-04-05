@@ -180,7 +180,7 @@ const Post = ({ post, options, expand, viewMode }) => {
                   )}
                   {user && (
                     <span>
-                      {userOwnsPost ? (
+                      {userOwnsPost && viewMode ? (
                         <ul className="post-actions">
                           {viewMode && editing === false && (
                             <li onClick={() => setEditing(true)}>Edit</li>

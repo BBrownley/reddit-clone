@@ -27,7 +27,7 @@ const GroupActions = ({ group }) => {
     if (loggedUser.userId !== null) {
       history.push(`/create?group=${group.group_name}`);
     } else {
-      dispatch(setRedirectPath("/create"));
+      dispatch(setRedirectPath(`/create?group=${group.group_name}`));
       history.push({
         pathname: "/login",
         state: { headerMessage: "Log in to create a post", creatingPost: true }

@@ -1,5 +1,3 @@
-import postsReducer from "./reducers/postsReducer";
-import groupsReducer from "./reducers/groupsReducer";
 import userReducer from "./reducers/userReducer";
 import userPostsReducer from "./reducers/userPostsReducer";
 import userPostVotesReducer from "./reducers/userPostVotesReducer";

@@ -5,6 +5,11 @@ export const Container = styled.div`
   .new-thread textarea {
     height: 10rem;
   }
+
+  .login-comment-msg {
+    margin: 2rem 0;
+    font-size: 1.5rem;
+  }
 `;
 
 export const StyledFormContainer = styled(FormContainer)`

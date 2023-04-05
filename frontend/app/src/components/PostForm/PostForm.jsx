@@ -132,7 +132,7 @@ const PostForm = () => {
               </div>
             </FormField>
 
-            <button type="submit" form="post-form">
+            <button type="submit" form="post-form" className="primary">
               Create Post
             </button>
           </div>

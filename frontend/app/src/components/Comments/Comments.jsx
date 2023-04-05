@@ -105,12 +105,14 @@ export default function Comments({ postId, submitterId, postTitle }) {
   return (
     <Container>
       {(() => {
-        if (!currentUser) {
+        if (!currentUser.userId) {
           return (
-            <>
-              <Link onClick={handleLoginRedirect}>Log in</Link> to post a
-              comment
-            </>
+            <div className="login-comment-msg">
+              <Link onClick={handleLoginRedirect}>
+                <strong>Log in</strong>
+              </Link>{" "}
+              to post a comment
+            </div>
           );
         } else {
           return (

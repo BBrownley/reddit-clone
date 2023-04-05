@@ -1,10 +1,3 @@
-let baseUrl;
-const production = true;
+const { REACT_APP_BASE_URL } = process.env;
 
-if (production) {
-  baseUrl = "https://redditto-api.herokuapp.com";
-} else {
-  baseUrl = "http://localhost:5000";
-}
-
-export default baseUrl;
+export default REACT_APP_BASE_URL || "http://localhost:5000";

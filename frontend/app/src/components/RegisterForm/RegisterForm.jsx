@@ -167,7 +167,7 @@ const RegisterForm = () => {
           ></input>
         </FormField>
       </form>
-      <button type="submit" form="register-form">
+      <button type="submit" form="register-form" className="primary">
         Register
       </button>
       <FormWarning />
